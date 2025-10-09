@@ -1,10 +1,46 @@
 import React from 'react';
 import { ClockIcon, UserIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { Service } from '../../types';
 
-const TimelineTab = ({ service }) => {
+type TimelineEventType = 'system' | 'manual' | string;
+
+interface TimelineEvent {
+  id: string;
+  action: string;
+  timestamp: string;
+  responsible?: string;
+  details?: string;
+  user?: string;
+  type: TimelineEventType;
+}
+
+const isTimelineLike = (entry: unknown): entry is Partial<TimelineEvent> & {
+  id?: string | number;
+  action?: string;
+  timestamp?: string;
+} => {
+  if (typeof entry !== 'object' || entry === null) {
+    return false;
+  }
+
+  const candidate = entry as Record<string, unknown>;
+  return (
+    typeof candidate.action === 'string' &&
+    typeof candidate.timestamp === 'string'
+  );
+};
+
+const normalizeId = (id: string | number | undefined, fallback: string) =>
+  id !== undefined ? String(id) : fallback;
+
+interface TimelineTabProps {
+  service: Service;
+}
+
+const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
   // Gerar timeline completa com eventos do serviço
-  const generateTimelineEvents = (service) => {
-    const events = [];
+  const generateTimelineEvents = (service: Service): TimelineEvent[] => {
+    const events: TimelineEvent[] = [];
     
     // Evento de abertura
     events.push({
@@ -40,16 +76,42 @@ const TimelineTab = ({ service }) => {
     }
     
     // Eventos de histórico existentes
-    if (service.history) {
-      events.push(...service.history.map(event => ({ ...event, type: 'system' })));
+    if (Array.isArray(service.history)) {
+      events.push(
+        ...service.history.map((event) => ({
+          id: normalizeId(event.id, `history-${event.action}-${event.timestamp}`),
+          action: event.action,
+          timestamp: event.timestamp,
+          responsible: event.responsible,
+          details: 'details' in event ? (event as { details?: string }).details : undefined,
+          type: 'system',
+        }))
+      );
     }
     
     // Logs existentes
-    if (service.logs) {
-      events.push(...service.logs.map(log => ({ ...log, type: 'manual' })));
+    if (Array.isArray(service.logs)) {
+      events.push(
+        ...service.logs
+          .filter(isTimelineLike)
+          .map((log) => ({
+            id: normalizeId(
+              log.id,
+              `log-${log.action}-${log.timestamp}`
+            ),
+            action: log.action!,
+            timestamp: log.timestamp!,
+            responsible: log.responsible,
+            details: log.details,
+            user: log.user,
+            type: (log.type as TimelineEventType) ?? 'manual',
+          }))
+      );
     }
     
-    return events.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    return events.sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
   };
 
   const timelineEvents = generateTimelineEvents(service);

@@ -1,7 +1,14 @@
 import React from 'react';
 import ServiceCard from './ServiceCard';
+import { Service } from '../types';
 
-const ServiceGrid = ({ services, onServiceSelect, selectedService }) => {
+interface ServiceGridProps {
+  services: Service[];
+  onServiceSelect: (service: Service) => void;
+  selectedService?: Service | null;
+}
+
+const ServiceGrid: React.FC<ServiceGridProps> = ({ services, onServiceSelect, selectedService: _selectedService }) => {
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-6">
