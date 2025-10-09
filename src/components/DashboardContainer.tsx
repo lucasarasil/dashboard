@@ -71,27 +71,23 @@ const DashboardContainer = () => {
 
    {/* Conteúdo principal */}
    <div className="flex-1 overflow-hidden flex flex-col">
-    {/* Barra superior com botão de menu */}
-    <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    {/* Barra superior com botão de menu - REMOVIDA duplicação do título */}
+    <div className="bg-white border-b border-gray-200 px-4 py-2 md:py-3 flex items-center">
      <button
       onClick={() => setIsMenuOpen(!isMenuOpen)}
       className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
       title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
      >
       {isMenuOpen ? (
-       <XMarkIcon className="h-6 w-6 text-gray-700" />
+       <XMarkIcon className="h-5 w-5 md:h-6 md:w-6 text-gray-700" />
       ) : (
-       <Bars3Icon className="h-6 w-6 text-gray-700" />
+       <Bars3Icon className="h-5 w-5 md:h-6 md:w-6 text-gray-700" />
       )}
      </button>
-     <h1 className="text-lg font-semibold text-gray-900">
-      Dashboard Operacional
-     </h1>
-     <div className="w-10"></div> {/* Spacer para centralizar o título */}
     </div>
 
     {/* Dashboard ativo */}
-    <div className="flex-1 overflow-hidden">{renderDashboard()}</div>
+    <div className="flex-1 overflow-auto">{renderDashboard()}</div>
    </div>
   </div>
  );

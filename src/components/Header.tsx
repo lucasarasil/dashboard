@@ -35,60 +35,70 @@ const Header: React.FC<HeaderProps> = ({
  };
 
  return (
-  <header className="bg-white border-b border-gray-200 px-6 py-4">
-   {/* Primeira linha - Título e KPIs */}
-   <div className="flex items-center justify-between mb-6">
-    <h1 className="text-3xl font-bold text-gray-900">Dashboard Operacional</h1>
+  <header className="bg-white border-b border-gray-200 shadow-sm flex-shrink-0">
+   <div className="px-3 md:px-6 py-2 md:py-3 space-y-2 md:space-y-3">
+    {/* Primeira linha - Título e Alertas */}
+    <div className="flex items-center justify-between">
+     <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+      Dashboard Operacional
+     </h1>
 
-    <div className="flex items-center space-x-4">
-     {/* Badge de alertas críticos */}
-     {criticalAlertsCount > 0 && (
-      <div className="relative">
-       <BellIcon className="h-6 w-6 text-red-500" />
-       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-        {criticalAlertsCount}
-       </span>
+     <div className="flex items-center space-x-2 md:space-x-3">
+      {/* Badge de alertas críticos */}
+      {criticalAlertsCount > 0 && (
+       <div className="relative">
+        <BellIcon className="h-4 w-4 md:h-5 md:w-5 text-red-500" />
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] md:text-xs rounded-full h-3.5 w-3.5 md:h-4 md:w-4 flex items-center justify-center font-medium">
+         {criticalAlertsCount}
+        </span>
+       </div>
+      )}
+
+      <div className="flex items-center space-x-1.5 text-[11px] md:text-sm text-gray-600">
+       <ExclamationTriangleIcon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+       <span className="font-medium">{criticalAlertsCount} críticos</span>
       </div>
-     )}
-
-     <div className="flex items-center space-x-2 text-sm text-gray-600">
-      <ExclamationTriangleIcon className="h-4 w-4" />
-      <span>{criticalAlertsCount} críticos</span>
      </div>
     </div>
-   </div>
 
-   {/* KPIs */}
-   <div className="mb-6">
-    <KPICards services={services} />
-   </div>
-
-   {/* Filtros hierárquicos */}
-   <div className="mb-4">
-    <HierarchicalFilters
-     onSupervisorChange={onSupervisorChange}
-     onLeaderChange={onLeaderChange}
-     onStatusChange={onStatusChange}
-     onSearch={handleSearch}
-     services={services}
-     selectedSupervisor={selectedSupervisor}
-     selectedLeader={selectedLeader}
-    />
-   </div>
-
-   {/* Estatísticas rápidas */}
-   <div className="flex items-center space-x-6 text-sm">
-    <div className="flex items-center space-x-1">
-     <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-     <span className="text-gray-600">{streetCallsCount} Chamados de Rua</span>
+    {/* KPIs - Scroll horizontal em telas pequenas */}
+    <div className="overflow-x-auto -mx-3 px-3 md:mx-0 md:px-0 scrollbar-hide">
+     <div className="min-w-max md:min-w-0">
+      <KPICards services={services} />
+     </div>
     </div>
-    <div className="flex items-center space-x-1">
-     <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-     <span className="text-gray-600">{appropriationsCount} Apropriações</span>
+
+    {/* Filtros hierárquicos */}
+    <div>
+     <HierarchicalFilters
+      onSupervisorChange={onSupervisorChange}
+      onLeaderChange={onLeaderChange}
+      onStatusChange={onStatusChange}
+      onSearch={handleSearch}
+      services={services}
+      selectedSupervisor={selectedSupervisor}
+      selectedLeader={selectedLeader}
+     />
     </div>
-    <div className="text-gray-400">•</div>
-    <div className="text-gray-600">
-     Total: {services.length} serviços ativos
+
+    {/* Estatísticas rápidas */}
+    <div className="flex flex-wrap items-center gap-2 md:gap-4 text-[11px] md:text-sm pb-1">
+     <div className="flex items-center space-x-1.5">
+      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+      <span className="text-gray-600 font-medium">
+       {streetCallsCount} Chamados de Rua
+      </span>
+     </div>
+     <div className="flex items-center space-x-1.5">
+      <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+      <span className="text-gray-600 font-medium">
+       {appropriationsCount} Apropriações
+      </span>
+     </div>
+     <div className="hidden sm:block text-gray-400">•</div>
+     <div className="text-gray-600 font-medium">
+      Total: {services.length} serviços ativos
+     </div>
     </div>
    </div>
   </header>

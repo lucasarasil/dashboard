@@ -14,9 +14,9 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
  selectedService: _selectedService,
 }) => {
  return (
-  <div className="h-full overflow-y-auto">
-   <div className="p-6">
-    <div className="space-y-3">
+  <div className="h-full overflow-y-auto bg-gray-50">
+   <div className="p-3 md:p-4 lg:p-6">
+    <div className="space-y-2 md:space-y-3">
      {services.map((service) => (
       <ServiceCard
        key={service.id}

@@ -191,7 +191,7 @@ const Dashboard1_SaudeGeral = () => {
  };
 
  return (
-  <div className="h-full flex flex-col">
+  <div className="h-screen flex flex-col">
    <Header
     services={filteredServices}
     onSearch={handleSearch}
@@ -206,10 +206,10 @@ const Dashboard1_SaudeGeral = () => {
     selectedLeader={selectedLeader}
    />
 
-   <main className="flex-1 relative overflow-hidden">
+   <main className="flex-1 overflow-hidden">
     <div className="h-full flex">
      {/* Lista de serviços */}
-     <div className="flex-1">
+     <div className="flex-1 overflow-auto">
       <ServiceGrid
        services={filteredServices}
        onServiceSelect={handleServiceSelect}
