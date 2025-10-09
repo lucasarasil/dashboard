@@ -51,7 +51,7 @@ const ActionsTab = ({ service }) => {
     <h3 className="text-lg font-medium text-gray-900">Ações Manuais</h3>
     <button
      onClick={() => setShowActionForm(true)}
-     className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
+     className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
     >
      <PlusIcon className="h-4 w-4" />
      <span>Nova Ação</span>
@@ -127,7 +127,7 @@ const ActionsTab = ({ service }) => {
        </button>
        <button
         type="submit"
-        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
        >
         Executar Ação
        </button>
