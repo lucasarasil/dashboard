@@ -1,18 +1,14 @@
 "use client";
-import React, { useState } from "react";
-import {
- MagnifyingGlassIcon,
- FunnelIcon,
- ExclamationTriangleIcon,
- BellIcon,
-} from "@heroicons/react/24/outline";
-import KPICards from "./KPICards";
-import HierarchicalFilters from "./HierarchicalFilters";
-
-interface HeaderProps {
+import React from 'react';
+import { 
+  ExclamationTriangleIcon,
+  BellIcon
+} from '@heroicons/react/24/outline';
+import KPICards from './KPICards';
+import HierarchicalFilters from './HierarchicalFilters';interface HeaderProps {
  services: any[];
  onSearch: (term: string) => void;
- onFilterChange: (filterKey: string) => void;
+ onFilterChange?: (filterKey: string) => void;
  onSupervisorChange: (id: string) => void;
  onLeaderChange: (id: string) => void;
  onStatusChange: (status: string) => void;
@@ -26,7 +22,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
  services,
  onSearch,
- onFilterChange,
+ onFilterChange: _onFilterChange,
  onSupervisorChange,
  onLeaderChange,
  onStatusChange,
@@ -36,17 +32,8 @@ const Header: React.FC<HeaderProps> = ({
  selectedSupervisor,
  selectedLeader,
 }) => {
- const [searchTerm, setSearchTerm] = useState("");
- const [activeFilter, setActiveFilter] = useState("all");
-
  const handleSearch = (term: string) => {
-  setSearchTerm(term);
   onSearch(term);
- };
-
- const handleFilterClick = (filterKey: string) => {
-  setActiveFilter(filterKey);
-  onFilterChange(filterKey);
  };
 
  return (

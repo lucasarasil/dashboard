@@ -165,7 +165,7 @@ const ActionsTab = ({ service }) => {
       Nenhuma ação manual registrada
      </h4>
      <p className="text-gray-500">
-      Clique em "Nova Ação" para registrar uma ação manual.
+      Clique em &quot;Nova Ação&quot; para registrar uma ação manual.
      </p>
     </div>
    )}

@@ -38,7 +38,7 @@ const MapTab = ({ service }) => {
   },
  ];
 
- const getLocationIcon = (type, status) => {
+ const getLocationIcon = (type: string, _status: string) => {
   switch (type) {
    case "branch":
     return <BuildingOfficeIcon className="h-5 w-5 text-blue-500" />;
