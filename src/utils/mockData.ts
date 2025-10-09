@@ -1,51 +1,7 @@
-// Tipos
-interface Alert {
- id: number;
- title: string;
- description: string;
- severity: string;
- status: string;
- timestamp: string;
-}
-
-interface HistoryEvent {
- id: number;
- action: string;
- timestamp: string;
- responsible: string;
- type: string;
-}
-
-interface Location {
- id: string;
- name: string;
- type: string;
- address: string;
- status: string;
-}
-
-interface Service {
- id: string;
- serviceName: string;
- status: string;
- vehiclePlate: string;
- branch: string;
- driver: string;
- hasAlert: boolean;
- needsReview: boolean;
- actionTaken: boolean;
- elapsedTime: number;
- slaProgress: number;
- serviceType: string;
- order: number;
- history: HistoryEvent[];
- alerts: Alert[];
- logs: unknown[];
- locations: Location[];
-}
+import { Service } from "../types";
 
 // Função para gerar dados mock com 81 serviços (41 chamados + 40 apropriações)
-export const generateMockServices = () => {
+export const generateMockServices = (): Service[] => {
  const services: Service[] = [];
 
  // Tipos de serviços para chamados de rua

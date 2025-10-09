@@ -16,7 +16,7 @@ export interface Service {
  order: number;
  history: HistoryEvent[];
  alerts: Alert[];
- logs: unknown[];
+ logs: LogEntry[];
  locations: Location[];
 }
 
@@ -30,11 +30,22 @@ export interface Alert {
 }
 
 export interface HistoryEvent {
- id: number;
+ id: string | number;
  action: string;
  timestamp: string;
- responsible: string;
+ responsible?: string;
+ details?: string;
  type: string;
+}
+
+export interface LogEntry {
+ id?: string | number;
+ action: string;
+ timestamp: string;
+ responsible?: string;
+ details?: string;
+ user?: string;
+ type?: string;
 }
 
 export interface Location {
