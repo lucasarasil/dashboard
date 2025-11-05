@@ -1,13 +1,40 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import ServiceGrid from "./ServiceGrid";
-import ServiceDetailDrawer from "./ServiceDetailDrawer";
-import ActionModal from "./ActionModal";
+import React, { useState, useEffect, useCallback } from "react";
+import Header from "./header";
+import ServiceGrid from "./service_grid";
+import ServiceDetailDrawer from "./service_detail_drawer";
+import ActionModal from "./action_modal";
 
-// Importar a lógica do App.js
-import { generateMockServices } from "../utils/mockData";
-import { Service } from "../types";
+import { generateMockServices } from "@/utils/mock_data";
+import { Service } from "@/types/service";
+
+// Static supervisor and leader data used for branch mapping. Kept outside the
+// component so they are stable across renders and do not cause hook dependency
+// churn.
+const SUPERVISORS = [
+ { id: "sup1", branches: ["Jandira", "Curitiba", "Jacarepaguá"] },
+ { id: "sup2", branches: ["Ponta Grossa", "Santos", "Limão-Zona N"] },
+ { id: "sup3", branches: ["Feira de Santa", "Itajai", "Goiânia"] },
+];
+
+const LEADERS = [
+ { id: "led1", branch: "Jandira" },
+ { id: "led2", branch: "Curitiba" },
+ { id: "led3", branch: "Ponta Grossa" },
+ { id: "led4", branch: "Santos" },
+ { id: "led5", branch: "Feira de Santa" },
+ { id: "led6", branch: "Itajai" },
+];
+
+const getSupervisorBranches = (supervisorId: string) => {
+ const supervisor = SUPERVISORS.find((s) => s.id === supervisorId);
+ return supervisor ? supervisor.branches : [];
+};
+
+const getLeaderBranch = (leaderId: string) => {
+ const leader = LEADERS.find((l) => l.id === leaderId);
+ return leader ? leader.branch : "";
+};
 
 const Dashboard1_SaudeGeral = () => {
  const [services, setServices] = useState<Service[]>(() =>
@@ -20,16 +47,13 @@ const Dashboard1_SaudeGeral = () => {
  const [searchTerm, setSearchTerm] = useState("");
  const [activeFilter, setActiveFilter] = useState("all");
 
- // Handlers para filtros hierárquicos
  const [selectedSupervisor, setSelectedSupervisor] = useState("");
  const [selectedLeader, setSelectedLeader] = useState("");
 
- // Calcular alertas críticos
  const criticalAlertsCount = filteredServices.filter(
   (service) => service.status === "critical" || service.hasAlert
  ).length;
 
- // Contadores por tipo
  const streetCallsCount = filteredServices.filter(
   (s) => s.serviceType === "street_call"
  ).length;
@@ -37,13 +61,11 @@ const Dashboard1_SaudeGeral = () => {
   (s) => s.serviceType === "appropriation"
  ).length;
 
- // Função de busca
  const handleSearch = (term) => {
   setSearchTerm(term);
   filterServices(term, activeFilter, selectedSupervisor, selectedLeader);
  };
 
- // Função de filtro
  const handleFilterChange = (filter) => {
   setActiveFilter(filter);
   filterServices(searchTerm, filter, selectedSupervisor, selectedLeader);
@@ -65,83 +87,66 @@ const Dashboard1_SaudeGeral = () => {
   filterServices(searchTerm, status, selectedSupervisor, selectedLeader);
  };
 
- // Função para filtrar serviços
- const filterServices = (search, filter, supervisorId = "", leaderId = "") => {
-  let filtered = [...services];
+ const filterServices = useCallback(
+  (search, filter, supervisorId = "", leaderId = "") => {
+   let filtered = [...services];
 
-  // Aplicar filtro de status
-  if (filter !== "all") {
-   filtered = filtered.filter((service) => service.status === filter);
-  }
+   if (filter !== "all") {
+    filtered = filtered.filter((service) => service.status === filter);
+   }
 
-  // Aplicar filtro de supervisor/líder baseado em filiais
-  if (supervisorId) {
-   const supervisorBranches = getSupervisorBranches(supervisorId);
-   filtered = filtered.filter((service) =>
-    supervisorBranches.includes(service.branch)
-   );
-  }
+   if (supervisorId) {
+    const supervisorBranches = getSupervisorBranches(supervisorId);
+    filtered = filtered.filter((service) =>
+     supervisorBranches.includes(service.branch)
+    );
+   }
 
-  if (leaderId) {
-   const leaderBranch = getLeaderBranch(leaderId);
-   filtered = filtered.filter((service) => service.branch === leaderBranch);
-  }
+   if (leaderId) {
+    const leaderBranch = getLeaderBranch(leaderId);
+    filtered = filtered.filter((service) => service.branch === leaderBranch);
+   }
 
-  // Aplicar busca
-  if (search) {
-   const searchLower = search.toLowerCase();
-   filtered = filtered.filter(
-    (service) =>
-     service.id.toLowerCase().includes(searchLower) ||
-     service.serviceName.toLowerCase().includes(searchLower) ||
-     service.vehiclePlate.toLowerCase().includes(searchLower) ||
-     service.branch.toLowerCase().includes(searchLower) ||
-     (service.driver && service.driver.toLowerCase().includes(searchLower))
-   );
-  }
+   if (search) {
+    const searchLower = search.toLowerCase();
+    filtered = filtered.filter(
+     (service) =>
+      service.id.toLowerCase().includes(searchLower) ||
+      service.serviceName.toLowerCase().includes(searchLower) ||
+      service.vehiclePlate.toLowerCase().includes(searchLower) ||
+      service.branch.toLowerCase().includes(searchLower) ||
+      (service.driver && service.driver.toLowerCase().includes(searchLower))
+    );
+   }
 
-  setFilteredServices(filtered);
- };
+   // Only update state if result changed to avoid unnecessary re-renders.
+   setFilteredServices((prev) => {
+    const isEqual =
+     prev.length === filtered.length &&
+     prev.every((p, i) => p.id === filtered[i].id);
+    return isEqual ? prev : filtered;
+   });
+  },
+  [services]
+ );
 
- // Função para obter filiais do supervisor
- const getSupervisorBranches = (supervisorId) => {
-  const supervisors = [
-   {
-    id: "sup1",
-    branches: ["Jandira", "Curitiba", "Jacarepaguá"],
-   },
-   {
-    id: "sup2",
-    branches: ["Ponta Grossa", "Santos", "Limão-Zona N"],
-   },
-   {
-    id: "sup3",
-    branches: ["Feira de Santa", "Itajai", "Goiânia"],
-   },
-  ];
-  const supervisor = supervisors.find((s) => s.id === supervisorId);
-  return supervisor ? supervisor.branches : [];
- };
-
- // Função para obter filial do líder
- const getLeaderBranch = (leaderId) => {
-  const leaders = [
-   { id: "led1", branch: "Jandira" },
-   { id: "led2", branch: "Curitiba" },
-   { id: "led3", branch: "Ponta Grossa" },
-   { id: "led4", branch: "Santos" },
-   { id: "led5", branch: "Feira de Santa" },
-   { id: "led6", branch: "Itajai" },
-  ];
-  const leader = leaders.find((l) => l.id === leaderId);
-  return leader ? leader.branch : "";
- };
-
- // Inicializar serviços filtrados
+ // getSupervisorBranches and getLeaderBranch are now defined above as stable
+ // helpers (outside the component) so they don't affect hook deps.
+ // Call filterServices when inputs that affect the filtered list change.
+ // Do NOT include the `filterServices` function itself in the dependency array
+ // because it is recreated on every render and would cause an infinite update
+ // loop. We intentionally list the state values used for filtering instead.
  useEffect(() => {
-  filterServices(searchTerm, activeFilter);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, []);
+  filterServices(searchTerm, activeFilter, selectedSupervisor, selectedLeader);
+  // Depend on the memoized `filterServices` and the input state values so the
+  // effect runs when inputs or the function (which depends on `services`) change.
+ }, [
+  filterServices,
+  searchTerm,
+  activeFilter,
+  selectedSupervisor,
+  selectedLeader,
+ ]);
 
  // Selecionar serviço
  const handleServiceSelect = (service: Service) => {

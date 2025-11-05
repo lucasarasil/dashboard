@@ -5,7 +5,7 @@ import {
  ArrowTrendingDownIcon,
  MinusIcon,
 } from "@heroicons/react/24/outline";
-import { getStatusColor } from "../utils/clusterData";
+import { getStatusColor } from "../utils/cluster_data";
 
 interface RankingCardProps {
  clusters: any[];

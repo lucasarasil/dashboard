@@ -14,14 +14,14 @@ import {
  EyeSlashIcon,
  StopIcon,
 } from "@heroicons/react/24/outline";
-import KpiCard from "./KpiCard";
-import ClusterTable from "./ClusterTable";
-import RankingCard from "./RankingCard";
+import KpiCard from "./kpi_card";
+import ClusterTable from "./cluster_table";
+import RankingCard from "./ranking_card";
 import {
  clusters,
  calculateHealthScore,
  supervisores,
-} from "../utils/clusterData";
+} from "../utils/cluster_data";
 
 interface Cluster {
  id: string;

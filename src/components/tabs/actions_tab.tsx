@@ -60,10 +60,10 @@ const ActionsTab = ({ service }) => {
 
    {/* Formulário de nova ação */}
    {showActionForm && (
-    <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
+    <div className="mb-6 p-4 bg-gray-950 rounded-lg border">
      <form onSubmit={handleSubmitAction} className="space-y-4">
       <div>
-       <label className="block text-sm font-medium text-gray-700 mb-2">
+       <label className="block text-sm font-medium text-gray-300 mb-2">
         Tipo de Ação
        </label>
        <select
@@ -83,7 +83,7 @@ const ActionsTab = ({ service }) => {
 
       {newAction.type === "assign" && (
        <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
          Atribuir para
         </label>
         <select
@@ -102,7 +102,7 @@ const ActionsTab = ({ service }) => {
       )}
 
       <div>
-       <label className="block text-sm font-medium text-gray-700 mb-2">
+       <label className="block text-sm font-medium text-gray-300 mb-2">
         Descrição
        </label>
        <textarea

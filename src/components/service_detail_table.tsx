@@ -1,18 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import TimelineTab from "./tabs/TimelineTab";
-import AlertsTab from "./tabs/AlertsTab";
-import ActionsTab from "./tabs/ActionsTab";
-import InteractiveMapTab from "./tabs/InteractiveMapTab";
+import TimelineTab from "./tabs/timeline_tab";
+import AlertsTab from "./tabs/alerts_tab";
+import ActionsTab from "./tabs/actions_tab";
+import InteractiveMapTab from "./tabs/interactive_map_tab";
+import {
+ BellIcon,
+ BoltIcon,
+ ClockIcon,
+ UserIcon,
+} from "@heroicons/react/24/outline";
 
 const ServiceDetailTabs = ({ service }) => {
  const [activeTab, setActiveTab] = useState("timeline");
 
  const tabs = [
-  { key: "timeline", label: "Histórico", icon: "📋" },
-  { key: "alerts", label: "Alertas", icon: "⚠️" },
-  { key: "actions", label: "Ações", icon: "🎯" },
-  { key: "map", label: "Atrelar Prestador", icon: "🗺️" },
+  { key: "timeline", label: "Histórico", icon: ClockIcon },
+  { key: "alerts", label: "Alertas", icon: BellIcon },
+  { key: "actions", label: "Ações", icon: BoltIcon },
+  { key: "map", label: "Atrelar Prestador", icon: UserIcon },
  ];
 
  return (
@@ -28,8 +34,12 @@ const ServiceDetailTabs = ({ service }) => {
         activeTab === tab.key ? "tab-active" : "tab-inactive"
        }`}
       >
-       <span className="mr-2">{tab.icon}</span>
-       {tab.label}
+       <div className="flex">
+        <span className="mr-2">
+         <tab.icon className="h-5 w-5" />
+        </span>
+        {tab.label}
+       </div>
       </button>
      ))}
     </nav>

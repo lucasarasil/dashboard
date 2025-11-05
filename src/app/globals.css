@@ -50,7 +50,7 @@
  }
 
  .tab-active {
-  @apply border-blue-500 text-blue-600;
+  @apply border-green-500 text-green-600;
  }
 
  .tab-inactive {

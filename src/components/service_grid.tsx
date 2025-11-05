@@ -1,6 +1,6 @@
 import React from "react";
-import ServiceCard from "./ServiceCard";
-import { Service } from "../types";
+import ServiceCard from "./service_card";
+import { Service } from "../types/service";
 
 interface ServiceGridProps {
  services: Service[];

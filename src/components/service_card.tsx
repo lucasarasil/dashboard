@@ -24,7 +24,7 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    case "critical":
     return "status-error";
    default:
-    return "bg-gray-100 text-gray-800";
+    return "bg-gray-950 text-gray-100";
   }
  };
 

@@ -45,14 +45,14 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
 
  return (
   <div
-   className={`w-64 bg-white shadow-lg border-r border-gray-200 h-full flex flex-col transition-transform duration-300 ease-in-out ${
+   className={`w-64 bg-gray-950 shadow-lg border-r border-gray-200 h-full flex flex-col transition-transform duration-300 ease-in-out ${
     isOpen ? "translate-x-0" : "-translate-x-full"
    } fixed left-0 top-0 z-50`}
   >
    {/* Header do menu */}
    <div className="p-6 border-b border-gray-200">
-    <h2 className="text-xl font-bold text-gray-900">Dashboards</h2>
-    <p className="text-sm text-gray-500 mt-1">Visão operacional</p>
+    <h2 className="text-xl font-bold text-gray-200">Dashboards</h2>
+    <p className="text-sm text-gray-300 mt-1">Visão operacional</p>
    </div>
 
    {/* Itens do menu */}
@@ -61,10 +61,10 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
      <button
       key={item.id}
       onClick={() => onDashboardChange(item.id)}
-      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+      className={`cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
        activeDashboard === item.id
         ? `${item.bgColor} ${item.borderColor} border-2 ${item.color}`
-        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+        : "text-gray-300 hover:bg-gray-900 hover:text-gray-200"
       }`}
      >
       <item.icon

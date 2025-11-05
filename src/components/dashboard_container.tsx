@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import DashboardMenu from "./DashboardMenu";
-import Dashboard1_SaudeGeral from "./Dashboard1_SaudeGeral";
-import Dashboard2_Cluster from "./Dashboard2_Cluster";
+import DashboardMenu from "./dashboard_menu";
+import Dashboard1_SaudeGeral from "./dashboard_overview_health";
+import Dashboard2_Cluster from "./dashboard_cluster";
 
 const DashboardContainer = () => {
  const [activeDashboard, setActiveDashboard] = useState("operacoes-criticas");
@@ -75,7 +75,7 @@ const DashboardContainer = () => {
     <div className="bg-white border-b border-gray-200 px-4 py-2 md:py-3 flex items-center">
      <button
       onClick={() => setIsMenuOpen(!isMenuOpen)}
-      className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+      className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
       title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
      >
       {isMenuOpen ? (

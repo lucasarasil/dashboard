@@ -1,4 +1,4 @@
-import { Service } from "../types";
+import { Service } from "../types/service";
 
 // Função para gerar dados mock com 81 serviços (41 chamados + 40 apropriações)
 export const generateMockServices = (): Service[] => {

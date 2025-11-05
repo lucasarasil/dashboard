@@ -4,7 +4,7 @@ import {
  UserIcon,
  CheckCircleIcon,
 } from "@heroicons/react/24/outline";
-import { Service } from "../../types";
+import { Service } from "../../types/service";
 
 type TimelineEventType = "system" | "manual" | string;
 

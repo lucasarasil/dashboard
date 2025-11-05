@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { ExclamationTriangleIcon, BellIcon } from "@heroicons/react/24/outline";
-import KPICards from "./KPICards";
-import HierarchicalFilters from "./HierarchicalFilters";
+import KPICards from "./kpi_card_list";
+import HierarchicalFilters from "./hierarchical_filters";
 interface HeaderProps {
  services: any[];
  onSearch: (term: string) => void;
