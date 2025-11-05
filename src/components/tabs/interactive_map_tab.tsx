@@ -273,7 +273,7 @@ const InteractiveMapTab = ({ service }) => {
 
    {/* Modal de confirmação */}
    {showAssignModal && (
-    <div className="fixed inset-0 bg-black bg-opacity-25 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-slate-950/50 bg-opacity-25 z-50 flex items-center justify-center">
      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
       <h4 className="text-lg font-medium text-gray-900 mb-4">
        Confirmar Atribuição

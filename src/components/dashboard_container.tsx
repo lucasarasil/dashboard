@@ -57,7 +57,7 @@ const DashboardContainer = () => {
    {/* Overlay */}
    {isMenuOpen && (
     <div
-     className="fixed inset-0 bg-black bg-opacity-25 z-40"
+     className="fixed inset-0 bg-slate-950/50 bg-opacity-25 z-40"
      onClick={() => setIsMenuOpen(false)}
     />
    )}

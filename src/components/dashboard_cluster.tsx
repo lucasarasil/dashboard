@@ -440,7 +440,7 @@ const Dashboard2_Cluster = () => {
 
    {/* Modal de detalhes do cluster */}
    {showClusterModal && selectedCluster && (
-    <div className="fixed inset-0 bg-black bg-opacity-25 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-slate-950/50 bg-opacity-25 z-50 flex items-center justify-center p-4">
      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
        <h3 className="text-xl font-bold text-gray-900">Detalhes do Cluster</h3>

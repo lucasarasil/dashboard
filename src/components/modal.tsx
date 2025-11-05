@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
     {/* Overlay */}
     <div
-     className="fixed inset-0 bg-black bg-opacity-25 transition-opacity"
+     className="fixed inset-0 bg-slate-950/50 bg-opacity-25 transition-opacity"
      onClick={onClose}
     />
 
