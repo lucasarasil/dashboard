@@ -34,21 +34,21 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
     {/* Overlay */}
     <div
-     className="fixed inset-0 bg-slate-950/50 bg-opacity-25 transition-opacity"
+     className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
      onClick={onClose}
     />
 
     {/* Modal content */}
-    <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+    <div className="relative transform overflow-hidden rounded-lg bg-dark-secondary border border-border-primary text-left shadow-dark-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+     <div className="bg-dark-secondary px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-       <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+       <h3 className="text-lg font-medium text-text-primary">{title}</h3>
        <button
         onClick={onClose}
-        className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+        className="p-2 hover:bg-dark-tertiary rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
        >
-        <XMarkIcon className="h-5 w-5 text-gray-500" />
+        <XMarkIcon className="h-5 w-5 text-text-muted" />
        </button>
       </div>
 

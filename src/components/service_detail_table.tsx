@@ -22,24 +22,22 @@ const ServiceDetailTabs = ({ service }) => {
  ];
 
  return (
-  <div className="h-full flex flex-col bg-zinc-900">
+  <div className="h-full flex flex-col bg-dark-secondary">
    {/* Tab Navigation */}
-   <div className="border-b border-gray-200">
+   <div className="border-b border-border-primary bg-dark-tertiary">
     <nav className="flex space-x-8 px-6" aria-label="Tabs">
      {tabs.map((tab) => (
       <button
        key={tab.key}
        onClick={() => setActiveTab(tab.key)}
-       className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
-        activeTab === tab.key ? "tab-active" : "tab-inactive"
+       className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center gap-2 ${
+        activeTab === tab.key
+         ? "border-mottu-500 text-mottu-500 bg-mottu-500/5"
+         : "border-transparent text-text-secondary hover:text-text-primary hover:border-border-secondary"
        }`}
       >
-       <div className="flex">
-        <span className="mr-2">
-         <tab.icon className="h-5 w-5" />
-        </span>
-        {tab.label}
-       </div>
+       <tab.icon className="h-5 w-5" />
+       {tab.label}
       </button>
      ))}
     </nav>

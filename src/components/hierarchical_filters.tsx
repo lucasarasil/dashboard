@@ -120,14 +120,14 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
    {/* Linha 1: Dropdowns e Busca */}
    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
     <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-     <FunnelIcon className="h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+     <FunnelIcon className="h-4 w-4 md:h-5 md:w-5 text-text-muted" />
 
      {/* Dropdown Supervisor */}
      <div className="relative flex-1 sm:flex-initial">
       <select
        value={selectedSupervisor}
        onChange={(e) => handleSupervisorChange(e.target.value)}
-       className="w-full sm:w-auto appearance-none bg-white border border-gray-300 rounded-lg px-3 md:px-4 py-1.5 md:py-2 pr-8 text-xs md:text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+       className="w-full sm:w-auto appearance-none bg-dark-tertiary border border-border-primary text-text-primary rounded-lg px-3 md:px-4 py-1.5 md:py-2 pr-8 text-xs md:text-sm focus:ring-2 focus:ring-mottu-500/50 focus:border-mottu-500 transition-colors"
       >
        <option value="">Supervisor</option>
        {supervisors.map((supervisor) => (
@@ -136,7 +136,7 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
         </option>
        ))}
       </select>
-      <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-gray-400 pointer-events-none" />
+      <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted pointer-events-none" />
      </div>
 
      {/* Dropdown Líder */}
@@ -145,10 +145,10 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
        value={selectedLeader}
        onChange={(e) => handleLeaderChange(e.target.value)}
        disabled={!selectedSupervisor}
-       className={`w-full sm:w-auto appearance-none border rounded-lg px-3 md:px-4 py-1.5 md:py-2 pr-8 text-xs md:text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+       className={`w-full sm:w-auto appearance-none border rounded-lg px-3 md:px-4 py-1.5 md:py-2 pr-8 text-xs md:text-sm focus:ring-2 focus:ring-mottu-500/50 focus:border-mottu-500 transition-colors ${
         !selectedSupervisor
-         ? "bg-gray-100 border-gray-200 text-gray-400"
-         : "bg-white border-gray-300"
+         ? "bg-dark-primary border-border-primary text-text-muted cursor-not-allowed"
+         : "bg-dark-tertiary border-border-primary text-text-primary"
        }`}
       >
        <option value="">Líder</option>
@@ -158,44 +158,44 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
         </option>
        ))}
       </select>
-      <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-gray-400 pointer-events-none" />
+      <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted pointer-events-none" />
      </div>
     </div>
 
     {/* Busca */}
     <form onSubmit={handleSearch} className="relative flex-1 sm:max-w-xs">
      <div className="relative">
-      <MagnifyingGlassIcon className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-gray-400" />
+      <MagnifyingGlassIcon className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted" />
       <input
        type="text"
        placeholder="Buscar..."
        value={searchTerm}
        onChange={(e) => setSearchTerm(e.target.value)}
-       className="w-full pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 border border-gray-300 rounded-lg text-xs md:text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+       className="w-full pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 bg-dark-tertiary border border-border-primary text-text-primary placeholder:text-text-muted rounded-lg text-xs md:text-sm focus:ring-2 focus:ring-mottu-500/50 focus:border-mottu-500 transition-colors"
       />
      </div>
     </form>
    </div>
 
    {/* Linha 2: Status - Scroll horizontal em mobile */}
-   <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+   <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
     <div className="flex space-x-1 md:space-x-2 min-w-max md:min-w-0">
      {statusOptions.map((status) => (
       <button
        key={status.key}
        onClick={() => handleStatusChange(status.key)}
-       className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
+       className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 whitespace-nowrap border ${
         selectedStatus === status.key
-         ? "bg-primary-100 text-primary-700 border border-primary-200"
-         : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+         ? "bg-mottu-500/10 text-mottu-500 border-mottu-500/30 shadow-sm"
+         : "bg-dark-tertiary text-text-secondary border-border-primary hover:bg-dark-hover hover:text-text-primary hover:border-border-secondary"
        }`}
       >
        {status.label}
        <span
-        className={`ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ${
+        className={`ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs font-semibold ${
          selectedStatus === status.key
-          ? "bg-primary-200 text-primary-800"
-          : "bg-gray-200 text-gray-600"
+          ? "bg-mottu-500/20 text-mottu-400"
+          : "bg-dark-hover text-text-muted"
         }`}
        >
         {status.count}

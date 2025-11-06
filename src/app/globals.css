@@ -1,63 +1,202 @@
 @import "tailwindcss";
 
 @theme {
- --color-primary-50: #eff6ff;
- --color-primary-100: #dbeafe;
- --color-primary-200: #bfdbfe;
- --color-primary-300: #93c5fd;
- --color-primary-400: #60a5fa;
- --color-primary-500: #3b82f6;
- --color-primary-600: #2563eb;
- --color-primary-700: #1d4ed8;
- --color-primary-800: #1e40af;
- --color-primary-900: #1e3a8a;
- --color-primary-950: #172554;
+ /* === PALETA MOTTU DARK MODE === */
+
+ /* Backgrounds */
+ --color-dark-primary: #0b0e0e;
+ --color-dark-secondary: #111414;
+ --color-dark-tertiary: #1a1d1d;
+
+ /* Textos */
+ --color-text-primary: #e6e6e6;
+ --color-text-secondary: #a7afa9;
+ --color-text-muted: #6b7570;
+
+ /* Mottu Green (Accent principal) */
+ --color-mottu-green-50: #e8f5e9;
+ --color-mottu-green-100: #c8e6c9;
+ --color-mottu-green-200: #a5d6a7;
+ --color-mottu-green-300: #81c784;
+ --color-mottu-green-400: #66bb6a;
+ --color-mottu-green-500: #00c853;
+ --color-mottu-green-600: #00b248;
+ --color-mottu-green-700: #009b3d;
+ --color-mottu-green-800: #008532;
+ --color-mottu-green-900: #006e27;
+
+ /* Mottu Yellow (Accent secundário) */
+ --color-mottu-yellow-50: #fffde7;
+ --color-mottu-yellow-100: #fff9c4;
+ --color-mottu-yellow-200: #fff59d;
+ --color-mottu-yellow-300: #fff176;
+ --color-mottu-yellow-400: #ffee58;
+ --color-mottu-yellow-500: #f9d923;
+ --color-mottu-yellow-600: #f9c910;
+ --color-mottu-yellow-700: #f9b900;
+ --color-mottu-yellow-800: #e6a800;
+ --color-mottu-yellow-900: #cc9600;
+
+ /* Status Colors (Dark Mode Friendly) */
+ --color-error: #ff5252;
+ --color-warning: #ffb74d;
+ --color-success: #00c853;
+ --color-info: #29b6f6;
+
+ /* Borders & Dividers */
+ --color-border-primary: #2a2d2d;
+ --color-border-secondary: #3a3d3d;
+ --color-divider: #1f2222;
 }
 
 @layer base {
  * {
   font-family: var(--font-inter, "Inter"), sans-serif;
  }
+
+ body {
+  background-color: #0b0e0e;
+  color: #e6e6e6;
+ }
+
+ /* Scrollbar customizada dark */
+ ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+ }
+
+ ::-webkit-scrollbar-track {
+  background: #111414;
+ }
+
+ ::-webkit-scrollbar-thumb {
+  background: #2a2d2d;
+  border-radius: 5px;
+ }
+
+ ::-webkit-scrollbar-thumb:hover {
+  background: #3a3d3d;
+ }
 }
 
 @layer components {
+ /* === DESIGN SYSTEM: COLOR PSYCHOLOGY === */
+ /* 
+  * VERDE MOTTU (#00C853): Sucesso, ações positivas, saúde boa
+  * AMARELO (#F9D923): Atenção, moderado, requer observação
+  * VERMELHO (#FF5252): Crítico, erro, urgente
+  * AZUL (#29B6F6): Informação, neutro, dados
+  * ROXO (#9C27B0): Apropriações, processos especiais
+  */
+
+ /* === THRESHOLDS PADRONIZADOS === */
+ /*
+  * Saúde/SLA/Adesão (quanto maior, melhor):
+  *   >= 90%: Verde (excelente)
+  *   >= 80%: Verde claro (bom)
+  *   >= 70%: Amarelo (atenção)
+  *   < 70%: Vermelho (crítico)
+  *
+  * Atrasos/Faltas/Problemas (quanto menor, melhor):
+  *   < 5%: Verde (excelente)
+  *   < 10%: Verde claro (bom)
+  *   < 20%: Amarelo (atenção)
+  *   >= 20%: Vermelho (crítico)
+  */
+
+ /* === CARDS === */
  .card {
-  @apply bg-white rounded-xl shadow-sm border border-gray-200;
+  @apply bg-[#111414] rounded-xl border border-[#2A2D2D] shadow-lg shadow-black/20;
  }
 
+ .card-elevated {
+  @apply bg-[#1A1D1D] rounded-xl border border-[#3A3D3D] shadow-xl shadow-black/30;
+ }
+
+ /* === BUTTONS === */
  .btn-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200;
+  @apply bg-[#00C853] text-[#0B0E0E] px-4 py-2 rounded-lg font-semibold 
+           hover:bg-[#00B248] active:bg-[#009B3D] 
+           transition-all duration-200 
+           shadow-lg shadow-[#00C853]/20 hover:shadow-[#00C853]/30;
  }
 
  .btn-secondary {
-  @apply bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200;
+  @apply bg-[#1A1D1D] text-[#E6E6E6] px-4 py-2 rounded-lg font-medium 
+           border border-[#3A3D3D] 
+           hover:bg-[#2A2D2D] hover:border-[#00C853]/40
+           transition-all duration-200;
  }
 
+ .btn-outline {
+  @apply bg-transparent text-[#00C853] px-4 py-2 rounded-lg font-medium 
+           border border-[#00C853] 
+           hover:bg-[#00C853]/10 
+           transition-all duration-200;
+ }
+
+ /* === STATUS BADGES === */
  .status-badge {
-  @apply px-2 py-1 rounded-full text-xs font-medium;
+  @apply px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5;
  }
 
  .status-success {
-  @apply bg-green-100 text-green-800;
+  @apply bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/20;
  }
 
  .status-warning {
-  @apply bg-yellow-100 text-yellow-800;
+  @apply bg-[#F9D923]/10 text-[#F9D923] border border-[#F9D923]/20;
  }
 
  .status-error {
-  @apply bg-red-100 text-red-800;
+  @apply bg-[#FF5252]/10 text-[#FF5252] border border-[#FF5252]/20;
  }
 
+ .status-info {
+  @apply bg-[#29B6F6]/10 text-[#29B6F6] border border-[#29B6F6]/20;
+ }
+
+ /* === TABS === */
  .tab-active {
-  @apply border-green-500 text-green-600;
+  @apply border-[#00C853] text-[#00C853] bg-[#00C853]/5;
  }
 
  .tab-inactive {
-  @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300;
+  @apply border-transparent text-[#A7AFA9] 
+           hover:text-[#E6E6E6] hover:border-[#3A3D3D];
  }
 
- /* Hide scrollbar but keep functionality */
+ /* === INPUTS === */
+ .input-dark {
+  @apply bg-[#111414] border border-[#2A2D2D] rounded-lg 
+           text-[#E6E6E6] placeholder:text-[#6B7570]
+           focus:border-[#00C853] focus:ring-2 focus:ring-[#00C853]/20
+           transition-all duration-200;
+ }
+
+ /* === KPI CARDS === */
+ .kpi-card {
+  @apply bg-[#111414] rounded-lg border border-[#2A2D2D] p-4
+           hover:border-[#3A3D3D] hover:shadow-lg hover:shadow-black/30
+           transition-all duration-200;
+ }
+
+ .kpi-card-critical {
+  @apply bg-[#FF5252]/5 border-[#FF5252]/20 
+           hover:border-[#FF5252]/30 hover:shadow-[#FF5252]/10;
+ }
+
+ .kpi-card-warning {
+  @apply bg-[#F9D923]/5 border-[#F9D923]/20 
+           hover:border-[#F9D923]/30 hover:shadow-[#F9D923]/10;
+ }
+
+ .kpi-card-success {
+  @apply bg-[#00C853]/5 border-[#00C853]/20 
+           hover:border-[#00C853]/30 hover:shadow-[#00C853]/10;
+ }
+
+ /* === UTILITY === */
  .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -66,4 +205,49 @@
  .scrollbar-hide::-webkit-scrollbar {
   display: none;
  }
+
+ .glass-effect {
+  @apply bg-[#111414]/80 backdrop-blur-md border border-[#2A2D2D]/50;
+ }
+
+ .gradient-mottu {
+  background: linear-gradient(135deg, #00c853 0%, #009b3d 100%);
+ }
+
+ .text-gradient-mottu {
+  background: linear-gradient(135deg, #00c853 0%, #f9d923 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+ }
+}
+
+/* === ANIMAÇÕES === */
+@keyframes pulse-green {
+ 0%,
+ 100% {
+  opacity: 1;
+ }
+ 50% {
+  opacity: 0.5;
+ }
+}
+
+@keyframes slide-up {
+ from {
+  transform: translateY(10px);
+  opacity: 0;
+ }
+ to {
+  transform: translateY(0);
+  opacity: 1;
+ }
+}
+
+.animate-pulse-green {
+ animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-slide-up {
+ animation: slide-up 0.3s ease-out;
 }

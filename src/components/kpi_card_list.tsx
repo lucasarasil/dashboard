@@ -4,6 +4,8 @@ import {
  UserGroupIcon,
  CheckCircleIcon,
  BellIcon,
+ ArrowTrendingUpIcon,
+ ArrowTrendingDownIcon,
 } from "@heroicons/react/24/outline";
 
 interface KPICardsProps {
@@ -11,7 +13,6 @@ interface KPICardsProps {
 }
 
 const KPICards: React.FC<KPICardsProps> = ({ services }) => {
- // Use useMemo to prevent recalculation and ensure consistent server/client values
  const kpis = useMemo(() => {
   const totalActive = services.length;
   const criticalCount = services.filter(
@@ -20,7 +21,7 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
   const criticalPercentage =
    totalActive > 0 ? Math.round((criticalCount / totalActive) * 100) : 0;
 
-  const slaMet = services.filter((s: any) => s.slaProgress < 80).length;
+  const slaMet = services.filter((s: any) => s.slaProgress >= 80).length;
   const slaPercentage =
    totalActive > 0 ? Math.round((slaMet / totalActive) * 100) : 0;
 
@@ -35,7 +36,6 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
    (s: any) => s.hasAlert && !s.actionTaken
   ).length;
 
-  // Use deterministic values based on services to avoid hydration mismatch
   const idleProviders = Math.min(
    services.filter((s: any) => s.status === "open").length,
    10
@@ -45,47 +45,56 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
    10
   );
 
+  // Psicologia das cores para dark mode
   const kpis = [
    {
     title: "% Críticos",
     value: `${criticalPercentage}%`,
     icon: ExclamationTriangleIcon,
-    color: criticalPercentage > 20 ? "text-red-600" : "text-orange-600",
-    bgColor: criticalPercentage > 20 ? "bg-red-50" : "bg-orange-50",
+    color: criticalPercentage > 20 ? "text-rose-400" : "text-amber-400",
+    bgColor: criticalPercentage > 20 ? "bg-rose-500/10" : "bg-amber-500/10",
     borderColor:
-     criticalPercentage > 20 ? "border-red-200" : "border-orange-200",
+     criticalPercentage > 20 ? "border-rose-400/20" : "border-amber-400/20",
+    trend: criticalPercentage > 20 ? ("up" as const) : ("down" as const),
    },
    {
     title: "% SLA Cumprido",
     value: `${slaPercentage}%`,
     icon: CheckCircleIcon,
-    color: slaPercentage > 80 ? "text-green-600" : "text-yellow-600",
-    bgColor: slaPercentage > 80 ? "bg-green-50" : "bg-yellow-50",
-    borderColor: slaPercentage > 80 ? "border-green-200" : "border-yellow-200",
+    color: slaPercentage >= 80 ? "text-emerald-400" : "text-amber-400",
+    bgColor: slaPercentage >= 80 ? "bg-emerald-500/10" : "bg-amber-500/10",
+    borderColor:
+     slaPercentage >= 80 ? "border-emerald-400/20" : "border-amber-400/20",
+    trend: slaPercentage >= 80 ? ("up" as const) : ("down" as const),
    },
    {
     title: "Apropriações Finalizadas",
     value: appropriationsFinished,
     icon: CheckCircleIcon,
-    color: "text-green-600",
-    bgColor: "bg-green-50",
-    borderColor: "border-green-200",
+    color: "text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-400/20",
+    trend: "up" as const,
    },
    {
     title: "Chamados Abertos",
     value: streetCallsOpen,
     icon: ExclamationTriangleIcon,
-    color: streetCallsOpen > 10 ? "text-red-600" : "text-orange-600",
-    bgColor: streetCallsOpen > 10 ? "bg-red-50" : "bg-orange-50",
-    borderColor: streetCallsOpen > 10 ? "border-red-200" : "border-orange-200",
+    color: streetCallsOpen > 10 ? "text-rose-400" : "text-amber-400",
+    bgColor: streetCallsOpen > 10 ? "bg-rose-500/10" : "bg-amber-500/10",
+    borderColor:
+     streetCallsOpen > 10 ? "border-rose-400/20" : "border-amber-400/20",
+    trend: streetCallsOpen > 10 ? ("up" as const) : ("neutral" as const),
    },
    {
     title: "Alertas Não Tratados",
     value: alertsNotTreated,
     icon: BellIcon,
-    color: alertsNotTreated > 5 ? "text-red-600" : "text-yellow-600",
-    bgColor: alertsNotTreated > 5 ? "bg-red-50" : "bg-yellow-50",
-    borderColor: alertsNotTreated > 5 ? "border-red-200" : "border-yellow-200",
+    color: alertsNotTreated > 5 ? "text-rose-400" : "text-amber-400",
+    bgColor: alertsNotTreated > 5 ? "bg-rose-500/10" : "bg-amber-500/10",
+    borderColor:
+     alertsNotTreated > 5 ? "border-rose-400/20" : "border-amber-400/20",
+    trend: alertsNotTreated > 5 ? ("up" as const) : ("down" as const),
    },
    {
     title: "Prestadores Offline",
@@ -93,56 +102,96 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
     icon: UserGroupIcon,
     color:
      offlineProviders > 5
-      ? "text-red-600"
+      ? "text-rose-400"
       : offlineProviders > 3
-      ? "text-yellow-600"
-      : "text-green-600",
+      ? "text-amber-400"
+      : "text-emerald-400",
     bgColor:
      offlineProviders > 5
-      ? "bg-red-50"
+      ? "bg-rose-500/10"
       : offlineProviders > 3
-      ? "bg-yellow-50"
-      : "bg-green-50",
+      ? "bg-amber-500/10"
+      : "bg-emerald-500/10",
     borderColor:
      offlineProviders > 5
-      ? "border-red-200"
+      ? "border-rose-400/20"
       : offlineProviders > 3
-      ? "border-yellow-200"
-      : "border-green-200",
+      ? "border-amber-400/20"
+      : "border-emerald-400/20",
+    trend:
+     offlineProviders > 5
+      ? ("up" as const)
+      : offlineProviders > 3
+      ? ("neutral" as const)
+      : ("down" as const),
    },
    {
     title: "Prestadores Ociosos",
     value: idleProviders,
     icon: UserGroupIcon,
-    color: idleProviders > 3 ? "text-red-600" : "text-blue-600",
-    bgColor: idleProviders > 3 ? "bg-red-50" : "bg-blue-50",
-    borderColor: idleProviders > 3 ? "border-red-200" : "border-blue-200",
+    color: idleProviders > 3 ? "text-rose-400" : "text-blue-400",
+    bgColor: idleProviders > 3 ? "bg-rose-500/10" : "bg-blue-500/10",
+    borderColor:
+     idleProviders > 3 ? "border-rose-400/20" : "border-blue-400/20",
+    trend: idleProviders > 3 ? ("up" as const) : ("down" as const),
    },
   ];
 
   return kpis;
  }, [services]);
 
+ const getTrendIcon = (trend: "up" | "down" | "neutral") => {
+  switch (trend) {
+   case "up":
+    return ArrowTrendingUpIcon;
+   case "down":
+    return ArrowTrendingDownIcon;
+   default:
+    return null;
+  }
+ };
+
  return (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
-   {kpis.map((kpi, index) => (
-    <div
-     key={index}
-     className={`flex items-center space-x-2 px-2 md:px-3 py-2 md:py-2.5 rounded-lg border ${kpi.bgColor} ${kpi.borderColor} transition-all hover:shadow-md`}
-    >
-     <kpi.icon className={`h-5 w-5 md:h-4 md:w-4 flex-shrink-0 ${kpi.color}`} />
-     <div className="flex flex-col min-w-0 flex-1">
-      <div
-       className={`text-base md:text-lg font-bold ${kpi.color} leading-tight`}
-      >
-       {kpi.value}
-      </div>
-      <div className="text-[10px] md:text-xs text-gray-600 truncate leading-tight">
-       {kpi.title}
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+   {kpis.map((kpi, index) => {
+    const TrendIcon = getTrendIcon(kpi.trend);
+
+    return (
+     <div
+      key={index}
+      className={`group flex items-center space-x-3 px-3 py-3 rounded-xl border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-black/20 ${kpi.bgColor} ${kpi.borderColor} hover:border-emerald-400/30 relative overflow-hidden`}
+     >
+      {/* Efeito de gradiente sutil no hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+      <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
+       <div
+        className={`p-2 rounded-lg bg-black/20 border border-[#2A2D2D] group-hover:border-emerald-400/20 transition-colors duration-300`}
+       >
+        <kpi.icon
+         className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}
+        />
+       </div>
+
+       <div className="flex flex-col min-w-0 flex-1">
+        <div
+         className={`text-lg font-bold ${kpi.color} leading-tight transition-colors duration-300`}
+        >
+         {kpi.value}
+        </div>
+        <div className="text-xs text-slate-400 truncate leading-tight group-hover:text-slate-300 transition-colors duration-300">
+         {kpi.title}
+        </div>
+       </div>
+
+       {/* Ícone de tendência */}
+       {TrendIcon && (
+        <TrendIcon className={`h-3 w-3 ${kpi.color} opacity-70`} />
+       )}
       </div>
      </div>
-    </div>
-   ))}
+    );
+   })}
   </div>
  );
 };

@@ -20,7 +20,6 @@ const DashboardContainer = () => {
   setIsMenuOpen(false);
  };
 
- // Fechar menu de perfil ao clicar fora
  useEffect(() => {
   const handleClickOutside = (event: MouseEvent) => {
    if (
@@ -45,22 +44,20 @@ const DashboardContainer = () => {
  const handleLogout = () => {
   console.log("Deslogando...");
   setIsProfileMenuOpen(false);
-  // Adicionar lógica de logout aqui
  };
 
  const handleLanguageChange = () => {
   console.log("Mudando idioma...");
   setIsProfileMenuOpen(false);
-  // Adicionar lógica de mudança de idioma aqui
  };
 
  const renderDashboard = () => {
   switch (activeDashboard) {
    case "saude-geral":
     return (
-     <div className="flex-1 flex items-center justify-center bg-gray-50">
+     <div className="flex-1 flex items-center justify-center bg-[#0B0E0E]">
       <div className="text-center">
-       <div className="text-gray-400 mb-4">
+       <div className="text-[#6B7570] mb-4">
         <svg
          className="mx-auto h-16 w-16"
          fill="none"
@@ -75,10 +72,10 @@ const DashboardContainer = () => {
          />
         </svg>
        </div>
-       <h3 className="text-xl font-semibold text-gray-900 mb-2">
+       <h3 className="text-xl font-semibold text-[#E6E6E6] mb-2">
         Dashboard em Desenvolvimento
        </h3>
-       <p className="text-gray-500">Saúde Geral será implementado em breve</p>
+       <p className="text-[#A7AFA9]">Saúde Geral será implementado em breve</p>
       </div>
      </div>
     );
@@ -92,11 +89,11 @@ const DashboardContainer = () => {
  };
 
  return (
-  <div className="h-screen bg-gray-950 flex relative w-full">
+  <div className="h-screen bg-[#0B0E0E] flex relative w-full">
    {/* Overlay */}
    {isMenuOpen && (
     <div
-     className="fixed inset-0 bg-slate-950/50 bg-opacity-25 z-40"
+     className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300"
      onClick={() => setIsMenuOpen(false)}
     />
    )}
@@ -110,77 +107,82 @@ const DashboardContainer = () => {
 
    {/* Conteúdo principal */}
    <div className="flex-1 overflow-hidden flex flex-col">
-    {/* Barra superior com botão de menu e perfil */}
-    <div className="bg-zinc-900 border-b border-gray-200 px-4 py-2 md:py-3 flex items-center justify-between">
-     {/* Botão menu à esquerda */}
-     <div className="flex items-center">
+    {/* Barra superior */}
+    <div className="bg-[#111414] border-b border-[#2A2D2D] px-4 py-3 flex items-center justify-between shadow-lg shadow-black/20">
+     {/* Botão menu */}
+     <div className="flex items-center gap-3">
       <button
        onClick={() => setIsMenuOpen(!isMenuOpen)}
-       className="p-2 rounded-lg hover:bg-zinc-800 transition-colors duration-200 cursor-pointer"
+       className="p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
        title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
       >
        {isMenuOpen ? (
-        <XMarkIcon className="h-5 w-5 md:h-6 md:w-6 text-gray-300" />
+        <XMarkIcon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
        ) : (
-        <Bars3Icon className="h-5 w-5 md:h-6 md:w-6 text-gray-300" />
+        <Bars3Icon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
        )}
       </button>
      </div>
 
-     {/* Texto "mottu" no centro */}
+     {/* Logo/Título no centro */}
      <div className="absolute left-1/2 transform -translate-x-1/2">
-      <span className="text-gray-300 font-medium text-lg">
-       Dashboard Operacional
-      </span>
+      <div className="flex items-center gap-2">
+       <div className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse-green"></div>
+       <span className="text-[#E6E6E6] font-bold text-lg tracking-wide">
+        Dashboard Operacional
+       </span>
+      </div>
      </div>
 
-     {/* Perfil com menu dropdown */}
+     {/* Perfil */}
      <div className="ml-auto relative" ref={profileMenuRef}>
       <button
        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-       className="flex items-center space-x-2 p-1 rounded-lg hover:bg-zinc-800 transition-colors duration-200 cursor-pointer"
+       className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
       >
        <img
         src={userData.avatar}
         alt="Avatar"
-        className="w-8 h-8 rounded-full border-2 border-zinc-600"
+        className="w-9 h-9 rounded-full border-2 border-[#2A2D2D] group-hover:border-[#00C853] transition-all duration-200"
        />
-       <span className="text-gray-300 text-sm font-medium hidden sm:block">
+       <span className="text-[#E6E6E6] text-sm font-medium hidden sm:block">
         {userData.name}
        </span>
        <ChevronDownIcon
-        className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${
+        className={`h-4 w-4 text-[#A7AFA9] group-hover:text-[#00C853] transition-all duration-200 ${
          isProfileMenuOpen ? "rotate-180" : ""
         }`}
        />
       </button>
 
-      {/* Menu dropdown do perfil */}
+      {/* Menu dropdown */}
       {isProfileMenuOpen && (
-       <div className="absolute right-0 top-full mt-2 w-64 bg-zinc-800 border border-zinc-700 rounded-lg shadow-2xl shadow-black/50 backdrop-blur-sm z-50 overflow-hidden">
-        {/* Header do menu */}
-        <div className="p-4 border-b border-zinc-700 bg-zinc-900/50">
-         <div className="flex items-center space-x-3">
+       <div className="absolute right-0 top-full mt-2 w-72 bg-[#111414] border border-[#2A2D2D] rounded-xl shadow-2xl shadow-black/40 z-50 overflow-hidden animate-slide-up">
+        {/* Header */}
+        <div className="p-4 border-b border-[#2A2D2D] bg-[#0B0E0E]/50">
+         <div className="flex items-center gap-3">
           <img
            src={userData.avatar}
            alt="Avatar"
-           className="w-10 h-10 rounded-full border-2 border-zinc-600"
+           className="w-12 h-12 rounded-full border-2 border-[#00C853]"
           />
           <div className="flex-1 min-w-0">
-           <p className="text-gray-100 font-medium truncate">{userData.name}</p>
-           <p className="text-gray-400 text-sm truncate">{userData.email}</p>
+           <p className="text-[#E6E6E6] font-semibold truncate">
+            {userData.name}
+           </p>
+           <p className="text-[#A7AFA9] text-sm truncate">{userData.email}</p>
           </div>
          </div>
         </div>
 
-        {/* Opções do menu */}
+        {/* Opções */}
         <div className="p-2">
          <button
           onClick={handleLanguageChange}
-          className="w-full flex items-center space-x-3 px-3 py-2 text-gray-300 rounded-lg hover:bg-zinc-700 transition-colors duration-200 text-left"
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#E6E6E6] rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 text-left group"
          >
           <svg
-           className="h-5 w-5"
+           className="h-5 w-5 text-[#A7AFA9] group-hover:text-[#00C853]"
            fill="none"
            viewBox="0 0 24 24"
            stroke="currentColor"
@@ -197,7 +199,7 @@ const DashboardContainer = () => {
 
          <button
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 px-3 py-2 text-red-400 rounded-lg hover:bg-red-900/20 transition-colors duration-200 text-left"
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#FF5252] rounded-lg hover:bg-[#FF5252]/10 transition-all duration-200 text-left group"
          >
           <svg
            className="h-5 w-5"
@@ -221,7 +223,7 @@ const DashboardContainer = () => {
     </div>
 
     {/* Dashboard ativo */}
-    <div className="flex-1 overflow-auto">{renderDashboard()}</div>
+    <div className="flex-1 overflow-auto bg-[#0B0E0E]">{renderDashboard()}</div>
    </div>
   </div>
  );

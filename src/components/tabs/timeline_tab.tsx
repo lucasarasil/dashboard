@@ -125,22 +125,22 @@ const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
  const getEventIcon = (type) => {
   switch (type) {
    case "system":
-    return <ClockIcon className="h-4 w-4 text-blue-500" />;
+    return <ClockIcon className="h-4 w-4 text-blue-400" />;
    case "manual":
-    return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+    return <CheckCircleIcon className="h-4 w-4 text-mottu-500" />;
    default:
-    return <ClockIcon className="h-4 w-4 text-gray-500" />;
+    return <ClockIcon className="h-4 w-4 text-text-muted" />;
   }
  };
 
  const getEventColor = (type) => {
   switch (type) {
    case "system":
-    return "bg-blue-50 border-blue-200";
+    return "bg-blue-500/10 border-blue-500/30";
    case "manual":
-    return "bg-green-50 border-green-200";
+    return "bg-mottu-500/10 border-mottu-500/30";
    default:
-    return "bg-gray-50 border-gray-200";
+    return "bg-dark-tertiary/50 border-border-primary";
   }
  };
 
@@ -151,7 +151,7 @@ const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
      <div key={event.id} className="relative">
       {/* Timeline line */}
       {index < timelineEvents.length - 1 && (
-       <div className="absolute left-4 top-8 w-0.5 h-16 bg-gray-200"></div>
+       <div className="absolute left-4 top-8 w-0.5 h-16 bg-border-primary"></div>
       )}
 
       <div
@@ -160,29 +160,31 @@ const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
        )}`}
       >
        {/* Event icon */}
-       <div className="flex-shrink-0 w-8 h-8 bg-white rounded-full flex items-center justify-center border-2 border-current">
+       <div className="flex-shrink-0 w-8 h-8 bg-dark-secondary rounded-full flex items-center justify-center border-2 border-current">
         {getEventIcon(event.type)}
        </div>
 
        {/* Event content */}
        <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-         <h4 className="text-sm font-medium text-gray-900">{event.action}</h4>
-         <time className="text-xs text-gray-500">
+         <h4 className="text-sm font-medium text-text-primary">
+          {event.action}
+         </h4>
+         <time className="text-xs text-text-muted">
           {new Date(event.timestamp).toLocaleString("pt-BR")}
          </time>
         </div>
 
         {event.details && (
-         <p className="text-sm text-gray-700 mt-1">{event.details}</p>
+         <p className="text-sm text-text-secondary mt-1">{event.details}</p>
         )}
 
         <div className="mt-1 flex items-center space-x-2">
-         <UserIcon className="h-3 w-3 text-gray-400" />
-         <span className="text-xs text-gray-600">
+         <UserIcon className="h-3 w-3 text-text-muted" />
+         <span className="text-xs text-text-secondary">
           {event.responsible || event.user}
          </span>
-         <span className="text-xs text-gray-400">
+         <span className="text-xs text-text-muted">
           • {event.type === "system" ? "Sistema" : "Manual"}
          </span>
         </div>
@@ -194,11 +196,11 @@ const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
 
    {timelineEvents.length === 0 && (
     <div className="text-center py-8">
-     <ClockIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-     <h4 className="text-lg font-medium text-gray-900 mb-2">
+     <ClockIcon className="mx-auto h-12 w-12 text-text-muted mb-4" />
+     <h4 className="text-lg font-medium text-text-primary mb-2">
       Nenhum evento registrado
      </h4>
-     <p className="text-gray-500">
+     <p className="text-text-secondary">
       A timeline aparecerá aqui conforme eventos são registrados.
      </p>
     </div>

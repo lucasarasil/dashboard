@@ -63,11 +63,12 @@ interface KPIThresholds {
  attention: number;
 }
 
-interface KPIColors {
- text: string;
- bg: string;
- border: string;
-}
+// Deprecated: kept for reference during migration
+// interface KPIColors {
+//  text: string;
+//  bg: string;
+//  border: string;
+// }
 
 interface Leader {
  id: string;
@@ -146,20 +147,32 @@ const Dashboard2_Cluster = () => {
  const getKPIColorsHigherIsBad = (
   value: number,
   thresholds: KPIThresholds
- ): KPIColors => {
+ ): {
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  trend: "up" | "down" | "neutral";
+ } => {
   if (value >= thresholds.critical) {
-   return { text: "text-red-600", bg: "bg-red-50", border: "border-red-200" };
+   return {
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+    trend: "down",
+   };
   } else if (value >= thresholds.attention) {
    return {
-    text: "text-orange-600",
-    bg: "bg-orange-50",
-    border: "border-orange-200",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/20",
+    trend: "down",
    };
   } else {
    return {
-    text: "text-green-600",
-    bg: "bg-green-50",
-    border: "border-green-200",
+    color: "text-mottu-500",
+    bgColor: "bg-mottu-500/10",
+    borderColor: "border-mottu-500/20",
+    trend: "up",
    };
   }
  };
@@ -168,20 +181,32 @@ const Dashboard2_Cluster = () => {
  const getKPIColorsLowerIsBad = (
   value: number,
   thresholds: KPIThresholds
- ): KPIColors => {
+ ): {
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  trend: "up" | "down" | "neutral";
+ } => {
   if (value <= thresholds.critical) {
-   return { text: "text-red-600", bg: "bg-red-50", border: "border-red-200" };
+   return {
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+    trend: "down",
+   };
   } else if (value <= thresholds.attention) {
    return {
-    text: "text-orange-600",
-    bg: "bg-orange-50",
-    border: "border-orange-200",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/20",
+    trend: "down",
    };
   } else {
    return {
-    text: "text-green-600",
-    bg: "bg-green-50",
-    border: "border-green-200",
+    color: "text-mottu-500",
+    bgColor: "bg-mottu-500/10",
+    borderColor: "border-mottu-500/20",
+    trend: "up",
    };
   }
  };
@@ -249,36 +274,50 @@ const Dashboard2_Cluster = () => {
   : [];
 
  // Cores para saúde geral
- const getHealthColors = (score: number): KPIColors => {
+ const getHealthColors = (
+  score: number
+ ): {
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  trend: "up" | "down" | "neutral";
+ } => {
   if (score >= 80)
    return {
-    text: "text-green-600",
-    bg: "bg-green-50",
-    border: "border-green-200",
+    color: "text-mottu-500",
+    bgColor: "bg-mottu-500/10",
+    borderColor: "border-mottu-500/20",
+    trend: "up",
    };
   if (score >= 60)
    return {
-    text: "text-orange-600",
-    bg: "bg-orange-50",
-    border: "border-orange-200",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/20",
+    trend: "neutral",
    };
-  return { text: "text-red-600", bg: "bg-red-50", border: "border-red-200" };
+  return {
+   color: "text-red-400",
+   bgColor: "bg-red-500/10",
+   borderColor: "border-red-500/20",
+   trend: "down",
+  };
  };
 
  return (
-  <div className="h-full overflow-y-auto bg-gray-50">
+  <div className="h-full overflow-y-auto bg-dark-primary">
    {/* Header */}
-   <div className="bg-white border-b border-gray-200 px-6 py-6">
+   <div className="bg-dark-tertiary border-b border-border-primary px-6 py-6">
     <div className="flex items-center justify-between">
      <div>
-      <h1 className="text-3xl font-bold text-gray-900">
+      <h1 className="text-3xl font-bold text-text-primary">
        Performance Regional / Cluster
       </h1>
-      <p className="text-gray-600 mt-1">
+      <p className="text-text-secondary mt-1">
        Visão macro de capacidade operacional
       </p>
      </div>
-     <div className="text-sm text-gray-500">
+     <div className="text-sm text-text-muted">
       Última atualização: {new Date().toLocaleString("pt-BR")}
      </div>
     </div>
@@ -324,71 +363,78 @@ const Dashboard2_Cluster = () => {
       title="Motoristas"
       value={totalDrivers.toLocaleString()}
       icon={TruckIcon}
-      text="text-blue-600"
-      bg="bg-blue-50"
-      border="border-blue-200"
+      color="text-mottu-500"
+      bgColor="bg-mottu-500/10"
+      borderColor="border-mottu-500/20"
+      trend="neutral"
      />
      <KpiCard
       title="Veículos Parados"
       value={totalVehiclesStopped.toLocaleString()}
       icon={StopIcon}
-      text="text-red-600"
-      bg="bg-red-50"
-      border="border-red-200"
+      color="text-red-400"
+      bgColor="bg-red-500/10"
+      borderColor="border-red-500/20"
+      trend="down"
      />
      <KpiCard
       title="Aprop. Andamento"
       value={totalAppropriationsInProgress.toLocaleString()}
       icon={BellIcon}
-      text="text-purple-600"
-      bg="bg-purple-50"
-      border="border-purple-200"
+      color="text-yellow-400"
+      bgColor="bg-yellow-500/10"
+      borderColor="border-yellow-500/20"
+      trend="neutral"
      />
      <KpiCard
       title="Aprop. Finalizadas"
       value={totalAppropriationsFinalized.toLocaleString()}
       icon={CheckCircleIcon}
-      text="text-green-600"
-      bg="bg-green-50"
-      border="border-green-200"
+      color="text-mottu-500"
+      bgColor="bg-mottu-500/10"
+      borderColor="border-mottu-500/20"
+      trend="up"
      />
      <KpiCard
       title="Fora do Raio"
       value={totalAppropriationsOutOfRadius.toLocaleString()}
       icon={MapPinIcon}
-      text="text-orange-600"
-      bg="bg-orange-50"
-      border="border-orange-200"
+      color="text-red-400"
+      bgColor="bg-red-500/10"
+      borderColor="border-red-500/20"
+      trend="down"
      />
      <KpiCard
       title="> 60 Dias"
       value={totalAppropriationsOver60Days.toLocaleString()}
       icon={CalendarIcon}
-      text="text-red-600"
-      bg="bg-red-50"
-      border="border-red-200"
+      color="text-red-400"
+      bgColor="bg-red-500/10"
+      borderColor="border-red-500/20"
+      trend="down"
      />
      <KpiCard
       title="Não Visitadas"
       value={totalAppropriationsNotVisited.toLocaleString()}
       icon={EyeSlashIcon}
-      text="text-yellow-600"
-      bg="bg-yellow-50"
-      border="border-yellow-200"
+      color="text-yellow-400"
+      bgColor="bg-yellow-500/10"
+      borderColor="border-yellow-500/20"
+      trend="down"
      />
     </div>
 
     {/* Filtros */}
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-dark-secondary rounded-2xl shadow-dark-sm border border-border-primary p-6">
      <div className="flex items-center space-x-4">
-      <FunnelIcon className="h-5 w-5 text-gray-400" />
-      <span className="text-sm font-medium text-gray-700">Filtros:</span>
+      <FunnelIcon className="h-5 w-5 text-text-muted" />
+      <span className="text-sm font-medium text-text-primary">Filtros:</span>
 
       {/* Filtro Supervisor */}
       <select
        value={selectedSupervisor}
        onChange={(e) => handleSupervisorChange(e.target.value)}
-       className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+       className="px-4 py-2 bg-dark-tertiary text-text-primary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500/50 focus:border-mottu-500"
       >
        <option value="">Todos os Supervisores</option>
        {supervisores.map((sup) => (
@@ -403,7 +449,7 @@ const Dashboard2_Cluster = () => {
        value={selectedLeader}
        onChange={(e) => handleLeaderChange(e.target.value)}
        disabled={!selectedSupervisor}
-       className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+       className="px-4 py-2 bg-dark-tertiary text-text-primary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500/50 focus:border-mottu-500 disabled:bg-dark-primary disabled:text-text-muted disabled:border-border-primary disabled:cursor-not-allowed"
       >
        <option value="">Todos os Líderes</option>
        {availableLeaders.map((leader) => (
@@ -416,7 +462,7 @@ const Dashboard2_Cluster = () => {
       <div className="flex-1"></div>
 
       {/* Info de resultados */}
-      <span className="text-sm text-gray-600">
+      <span className="text-sm text-text-secondary">
        {filteredClusters.length} cluster
        {filteredClusters.length !== 1 ? "s" : ""} exibido
        {filteredClusters.length !== 1 ? "s" : ""}
@@ -440,13 +486,15 @@ const Dashboard2_Cluster = () => {
 
    {/* Modal de detalhes do cluster */}
    {showClusterModal && selectedCluster && (
-    <div className="fixed inset-0 bg-slate-950/50 bg-opacity-25 z-50 flex items-center justify-center p-4">
-     <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+     <div className="bg-dark-secondary border border-border-primary rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-dark-lg">
       <div className="flex items-center justify-between mb-4">
-       <h3 className="text-xl font-bold text-gray-900">Detalhes do Cluster</h3>
+       <h3 className="text-xl font-bold text-text-primary">
+        Detalhes do Cluster
+       </h3>
        <button
         onClick={() => setShowClusterModal(false)}
-        className="text-gray-400 hover:text-gray-600"
+        className="text-text-muted hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-mottu-500/50 rounded-md"
        >
         ✕
        </button>
@@ -454,56 +502,64 @@ const Dashboard2_Cluster = () => {
 
       <div className="space-y-4">
        <div>
-        <h4 className="font-semibold text-gray-900">{selectedCluster.nome}</h4>
-        <p className="text-gray-600">{selectedCluster.filial}</p>
+        <h4 className="font-semibold text-text-primary">
+         {selectedCluster.nome}
+        </h4>
+        <p className="text-text-secondary">{selectedCluster.filial}</p>
        </div>
 
        <div className="grid grid-cols-2 gap-4">
         <div>
-         <span className="text-sm text-gray-500">Líder:</span>
-         <p className="font-medium">{selectedCluster.lider}</p>
+         <span className="text-sm text-text-muted">Líder:</span>
+         <p className="font-medium text-text-primary">
+          {selectedCluster.lider}
+         </p>
         </div>
         <div>
-         <span className="text-sm text-gray-500">Supervisor:</span>
-         <p className="font-medium">{selectedCluster.supervisor}</p>
+         <span className="text-sm text-text-muted">Supervisor:</span>
+         <p className="font-medium text-text-primary">
+          {selectedCluster.supervisor}
+         </p>
         </div>
         <div>
-         <span className="text-sm text-gray-500">Motoristas:</span>
-         <p className="font-medium">
+         <span className="text-sm text-text-muted">Motoristas:</span>
+         <p className="font-medium text-text-primary">
           {selectedCluster.motoristas} / {selectedCluster.motoristasNecessarios}
          </p>
         </div>
         <div>
-         <span className="text-sm text-gray-500">Status:</span>
-         <p className="font-medium capitalize">{selectedCluster.status}</p>
+         <span className="text-sm text-text-muted">Status:</span>
+         <p className="font-medium capitalize text-text-primary">
+          {selectedCluster.status}
+         </p>
         </div>
        </div>
 
        {/* Comparação D-1 */}
-       <div className="pt-4 border-t">
-        <h5 className="font-semibold text-gray-900 mb-3">
+       <div className="pt-4 border-t border-border-primary">
+        <h5 className="font-semibold text-text-primary mb-3">
          Comparação D-1 (Dia Anterior)
         </h5>
         <div className="grid grid-cols-2 gap-3 text-sm">
          <div>
-          <span className="text-gray-500">Atrasos:</span>
+          <span className="text-text-muted">Atrasos:</span>
           <span
            className={`ml-2 font-medium ${
             selectedCluster.atrasos < selectedCluster.d1.atrasos
-             ? "text-green-600"
-             : "text-red-600"
+             ? "text-mottu-500"
+             : "text-red-400"
            }`}
           >
            {selectedCluster.d1.atrasos}% → {selectedCluster.atrasos}%
           </span>
          </div>
          <div>
-          <span className="text-gray-500">SLA:</span>
+          <span className="text-text-muted">SLA:</span>
           <span
            className={`ml-2 font-medium ${
             selectedCluster.sla > selectedCluster.d1.sla
-             ? "text-green-600"
-             : "text-red-600"
+             ? "text-mottu-500"
+             : "text-red-400"
            }`}
           >
            {selectedCluster.d1.sla}% → {selectedCluster.sla}%
@@ -512,8 +568,8 @@ const Dashboard2_Cluster = () => {
         </div>
        </div>
 
-       <div className="pt-4 border-t">
-        <p className="text-sm text-gray-500">
+       <div className="pt-4 border-t border-border-primary">
+        <p className="text-sm text-text-muted">
          Detalhes completos e ações serão implementados em breve.
         </p>
        </div>

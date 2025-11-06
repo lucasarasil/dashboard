@@ -18,13 +18,13 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
  const getStatusColor = (status) => {
   switch (status) {
    case "completed":
-    return "status-success";
+    return "bg-mottu-500/10 text-mottu-500 border border-mottu-500/20";
    case "in_progress":
-    return "status-warning";
+    return "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20";
    case "critical":
-    return "status-error";
+    return "bg-red-500/10 text-red-400 border border-red-500/20";
    default:
-    return "bg-gray-950 text-gray-100";
+    return "bg-dark-tertiary text-text-secondary border border-border-primary";
   }
  };
 
@@ -45,8 +45,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   if (hasAlert) {
    return (
     <div className="flex items-center space-x-1">
-     <ExclamationTriangleIcon className="h-4 w-4 text-red-500" />
-     <span className="text-xs text-red-600 font-medium">Alerta</span>
+     <ExclamationTriangleIcon className="h-4 w-4 text-red-400" />
+     <span className="text-xs text-red-400 font-medium">Alerta</span>
     </div>
    );
   }
@@ -57,8 +57,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   if (needsReview) {
    return (
     <div className="flex items-center space-x-1">
-     <ClockIcon className="h-4 w-4 text-yellow-500" />
-     <span className="text-xs text-yellow-600 font-medium">Revisão</span>
+     <ClockIcon className="h-4 w-4 text-yellow-400" />
+     <span className="text-xs text-yellow-400 font-medium">Revisão</span>
     </div>
    );
   }
@@ -69,8 +69,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   if (actionTaken) {
    return (
     <div className="flex items-center space-x-1">
-     <CheckCircleIcon className="h-4 w-4 text-green-500" />
-     <span className="text-xs text-green-600 font-medium">Ação tomada</span>
+     <CheckCircleIcon className="h-4 w-4 text-mottu-500" />
+     <span className="text-xs text-mottu-500 font-medium">Ação tomada</span>
     </div>
    );
   }
@@ -98,8 +98,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    return {
     type: "Cadastro",
     icon: BuildingOfficeIcon,
-    color: "text-purple-600",
-    bgColor: "bg-purple-100",
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/10",
    };
   }
 
@@ -112,8 +112,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    return {
     type: "Casa",
     icon: HomeIcon,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/10",
    };
   } else if (
    serviceName.includes("Pneu") ||
@@ -123,8 +123,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    return {
     type: "Rua",
     icon: MapIcon,
-    color: "text-green-600",
-    bgColor: "bg-green-100",
+    color: "text-mottu-500",
+    bgColor: "bg-mottu-500/10",
    };
   } else if (
    serviceName.includes("Carburador") ||
@@ -133,15 +133,15 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    return {
     type: "Satélite",
     icon: SunIcon,
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-100",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/10",
    };
   } else {
    return {
     type: "Pernoite",
     icon: MapPinIcon,
-    color: "text-indigo-600",
-    bgColor: "bg-indigo-100",
+    color: "text-indigo-400",
+    bgColor: "bg-indigo-500/10",
    };
   }
  };
@@ -165,10 +165,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   return (
    <div
     onClick={() => onClick(service)}
-    className={`card p-3 md:p-4 hover:shadow-lg transition-all duration-200 cursor-pointer group ${
-     isCritical
-      ? "border-l-4 border-l-red-500 bg-red-50 hover:bg-red-100"
-      : "hover:border-primary-300"
+    className={`bg-dark-secondary border rounded-xl p-3 md:p-4 hover:shadow-dark-lg hover:border-mottu-500/30 transition-all duration-200 cursor-pointer group ${
+     isCritical ? "border-red-500/50 bg-red-500/5" : "border-border-primary"
     }`}
    >
     <div className="flex items-center justify-between gap-3">
@@ -176,21 +174,21 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
      <div className="flex items-center space-x-2 md:space-x-4 flex-1 min-w-0">
       {/* Ícone com cor baseada em alerta/ordem e tipo de serviço */}
       <div
-       className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
+       className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 border ${
         isCritical
-         ? "bg-red-100 border-2 border-red-200"
+         ? "bg-red-500/10 border-red-500/30"
          : service.status === "in_progress"
-         ? "bg-yellow-100 border-2 border-yellow-200"
-         : "bg-green-100 border-2 border-green-200"
+         ? "bg-yellow-500/10 border-yellow-500/30"
+         : "bg-mottu-500/10 border-mottu-500/30"
        }`}
       >
        <div
         className={`${
          isCritical
-          ? "text-red-600"
+          ? "text-red-400"
           : service.status === "in_progress"
-          ? "text-yellow-600"
-          : "text-green-600"
+          ? "text-yellow-400"
+          : "text-mottu-500"
         }`}
        >
         {getServiceIcon(service.serviceName)}
@@ -200,7 +198,7 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
       {/* Informações do serviço */}
       <div className="flex-1 min-w-0">
        <div className="flex items-center flex-wrap gap-2 mb-1">
-        <h3 className="font-bold text-base md:text-lg text-gray-900 group-hover:text-primary-700 transition-colors">
+        <h3 className="font-bold text-base md:text-lg text-text-primary group-hover:text-mottu-500 transition-colors">
          #{service.id}
         </h3>
         <span
@@ -212,19 +210,19 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
          <span className="capitalize">{service.status.replace("_", " ")}</span>
         </span>
         {isCritical && (
-         <span className="bg-red-100 text-red-800 text-[10px] md:text-xs font-bold px-2 py-0.5 md:py-1 rounded-full">
+         <span className="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] md:text-xs font-bold px-2 py-0.5 md:py-1 rounded-full">
           CRÍTICO
          </span>
         )}
        </div>
-       <p className="text-xs md:text-sm font-medium text-gray-700 mb-1.5 md:mb-2 truncate">
+       <p className="text-xs md:text-sm font-medium text-text-secondary mb-1.5 md:mb-2 truncate">
         {service.serviceName}
        </p>
 
        {/* Tipo de endereço */}
        <div className="flex items-center flex-wrap gap-1.5 md:gap-2 mb-1.5 md:mb-2">
         <div
-         className={`flex items-center space-x-1 px-1.5 md:px-2 py-0.5 md:py-1 rounded-full ${addressType.bgColor}`}
+         className={`flex items-center space-x-1 px-1.5 md:px-2 py-0.5 md:py-1 rounded-full border ${addressType.bgColor} border-opacity-20`}
         >
          <addressType.icon className={`h-3 w-3 ${addressType.color}`} />
          <span
@@ -233,18 +231,18 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
           {addressType.type}
          </span>
         </div>
-        <span className="text-[10px] md:text-xs text-gray-500">
+        <span className="text-[10px] md:text-xs text-text-muted">
          {service.vehiclePlate}
         </span>
-        <span className="text-[10px] md:text-xs text-gray-500">•</span>
-        <span className="text-[10px] md:text-xs text-gray-500 truncate">
+        <span className="text-[10px] md:text-xs text-text-muted">•</span>
+        <span className="text-[10px] md:text-xs text-text-muted truncate">
          {service.branch}
         </span>
        </div>
 
        {/* Motorista */}
        {service.driver && (
-        <div className="flex items-center space-x-1 text-[10px] md:text-xs text-gray-500">
+        <div className="flex items-center space-x-1 text-[10px] md:text-xs text-text-muted">
          <UserIcon className="h-3 w-3" />
          <span className="truncate">{service.driver}</span>
         </div>
@@ -263,16 +261,16 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
 
       {/* Tempo restante SLA */}
       <div className="text-center">
-       <div className="text-[10px] md:text-xs text-gray-500 mb-0.5 md:mb-1">
+       <div className="text-[10px] md:text-xs text-text-muted mb-0.5 md:mb-1">
         Restante
        </div>
        <div
         className={`text-xs md:text-sm font-bold ${
          service.slaProgress > 80
-          ? "text-red-600"
+          ? "text-red-400"
           : service.slaProgress > 60
-          ? "text-yellow-600"
-          : "text-green-600"
+          ? "text-yellow-400"
+          : "text-mottu-500"
         }`}
        >
         {slaTimeLeft}
@@ -281,18 +279,18 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
 
       {/* Barra de progresso SLA */}
       <div className="w-16 md:w-24">
-       <div className="flex justify-between text-[10px] md:text-xs text-gray-500 mb-0.5 md:mb-1">
+       <div className="flex justify-between text-[10px] md:text-xs text-text-muted mb-0.5 md:mb-1">
         <span>SLA</span>
         <span>{service.slaProgress}%</span>
        </div>
-       <div className="w-full bg-gray-200 rounded-full h-1.5 md:h-2">
+       <div className="w-full bg-dark-tertiary rounded-full h-1.5 md:h-2 border border-border-primary">
         <div
          className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${
           service.slaProgress > 80
            ? "bg-red-500"
            : service.slaProgress > 60
            ? "bg-yellow-500"
-           : "bg-green-500"
+           : "bg-mottu-500"
          }`}
          style={{ width: `${Math.min(service.slaProgress, 100)}%` }}
         ></div>
@@ -318,10 +316,10 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
       </div>
      </div>
      <div>
-      <h3 className="font-semibold text-gray-900 group-hover:text-primary-700 transition-colors">
+      <h3 className="font-semibold text-text-primary group-hover:text-mottu-500 transition-colors">
        #{service.id}
       </h3>
-      <p className="text-sm text-gray-600">{service.serviceName}</p>
+      <p className="text-sm text-text-secondary">{service.serviceName}</p>
      </div>
     </div>
 
@@ -340,17 +338,17 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    {/* Informações principais */}
    <div className="grid grid-cols-2 gap-3 mb-3">
     <div className="flex items-center space-x-2 text-sm">
-     <TruckIcon className="h-4 w-4 text-gray-400" />
-     <span className="text-gray-600">{service.vehiclePlate}</span>
+     <TruckIcon className="h-4 w-4 text-text-muted" />
+     <span className="text-text-secondary">{service.vehiclePlate}</span>
     </div>
     <div className="flex items-center space-x-2 text-sm">
-     <MapPinIcon className="h-4 w-4 text-gray-400" />
-     <span className="text-gray-600">{service.branch}</span>
+     <MapPinIcon className="h-4 w-4 text-text-muted" />
+     <span className="text-text-secondary">{service.branch}</span>
     </div>
     {service.driver && (
      <div className="flex items-center space-x-2 text-sm col-span-2">
-      <UserIcon className="h-4 w-4 text-gray-400" />
-      <span className="text-gray-600">{service.driver}</span>
+      <UserIcon className="h-4 w-4 text-text-muted" />
+      <span className="text-text-secondary">{service.driver}</span>
      </div>
     )}
    </div>
@@ -364,7 +362,7 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
     </div>
 
     {service.elapsedTime && (
-     <div className="flex items-center space-x-1 text-xs text-gray-500">
+     <div className="flex items-center space-x-1 text-xs text-text-muted">
       <ClockIcon className="h-3 w-3" />
       <span>{service.elapsedTime}min</span>
      </div>
@@ -374,18 +372,18 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
    {/* Barra de progresso SLA */}
    {service.slaProgress && (
     <div className="mt-3">
-     <div className="flex justify-between text-xs text-gray-500 mb-1">
+     <div className="flex justify-between text-xs text-text-muted mb-1">
       <span>SLA</span>
       <span>{service.slaProgress}%</span>
      </div>
-     <div className="w-full bg-gray-200 rounded-full h-1.5">
+     <div className="w-full bg-dark-tertiary rounded-full h-1.5">
       <div
        className={`h-1.5 rounded-full transition-all duration-300 ${
         service.slaProgress > 80
          ? "bg-red-500"
          : service.slaProgress > 60
          ? "bg-yellow-500"
-         : "bg-green-500"
+         : "bg-mottu-500"
        }`}
        style={{ width: `${Math.min(service.slaProgress, 100)}%` }}
       ></div>

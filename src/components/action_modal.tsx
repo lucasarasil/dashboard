@@ -58,7 +58,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
     <div>
      <label
       htmlFor="responsible"
-      className="block text-sm font-medium text-gray-700 mb-1"
+      className="block text-sm font-medium text-text-primary mb-1"
      >
       Responsável
      </label>
@@ -69,7 +69,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.responsible}
       onChange={handleChange}
       required
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
       placeholder="Nome do responsável pela ação"
      />
     </div>
@@ -77,7 +77,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
     <div>
      <label
       htmlFor="actionType"
-      className="block text-sm font-medium text-gray-700 mb-1"
+      className="block text-sm font-medium text-text-primary mb-1"
      >
       Tipo de Ação
      </label>
@@ -87,7 +87,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.actionType}
       onChange={handleChange}
       required
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
      >
       <option value="">Selecione uma ação</option>
       {actionTypes.map((type) => (
@@ -101,7 +101,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
     <div>
      <label
       htmlFor="comment"
-      className="block text-sm font-medium text-gray-700 mb-1"
+      className="block text-sm font-medium text-text-primary mb-1"
      >
       Comentário
      </label>
@@ -111,7 +111,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.comment}
       onChange={handleChange}
       rows={4}
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
       placeholder="Descreva a ação realizada..."
      />
     </div>
