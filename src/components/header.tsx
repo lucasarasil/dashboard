@@ -39,10 +39,6 @@ const Header: React.FC<HeaderProps> = ({
    <div className="px-3 md:px-6 py-2 md:py-3 space-y-2 md:space-y-3">
     {/* Primeira linha - Título e Alertas */}
     <div className="flex items-center justify-between">
-     <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
-      Dashboard Operacional
-     </h1>
-
      <div className="flex items-center space-x-2 md:space-x-3">
       {/* Badge de alertas críticos */}
       {criticalAlertsCount > 0 && (

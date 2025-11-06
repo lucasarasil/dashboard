@@ -22,7 +22,7 @@ const ServiceDetailTabs = ({ service }) => {
  ];
 
  return (
-  <div className="h-full flex flex-col">
+  <div className="h-full flex flex-col bg-zinc-900">
    {/* Tab Navigation */}
    <div className="border-b border-gray-200">
     <nav className="flex space-x-8 px-6" aria-label="Tabs">

@@ -35,13 +35,13 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
     }`}
    >
     <div
-     className={`bg-slate-950 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto ${
+     className={`bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto ${
       isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
      }`}
      onClick={(e) => e.stopPropagation()}
     >
      {/* Header */}
-     <div className="bg-gray-900 border-b border-gray-700 p-6 flex-shrink-0 rounded-t-2xl">
+     <div className="bg-zinc-900 border-b border-gray-700 p-6 flex-shrink-0 rounded-t-2xl">
       <div className="flex items-start justify-between mb-4">
        <div className="flex-1">
         <h2 className="text-2xl font-bold text-gray-300 mb-2">
@@ -54,7 +54,7 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
 
        <button
         onClick={onClose}
-        className="ml-4 text-gray-200 hover:text-gray-900 transition-colors p-2 hover:bg-gray-300 rounded-3xl"
+        className="ml-4 text-gray-200 hover:text-zinc-200 transition-colors p-2 hover:bg-gray-300 rounded-3xl"
         aria-label="Fechar"
        >
         <XMarkIcon className="h-6 w-6" />
@@ -74,35 +74,35 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
      </div>
 
      {/* Info Cards */}
-     <div className="bg-white border-b border-gray-200 p-6 grid grid-cols-2 md:grid-cols-4 gap-4 flex-shrink-0">
+     <div className="bg-zinc-900 border-b border-gray-200 p-6 grid grid-cols-2 md:grid-cols-4 gap-4 flex-shrink-0">
       <div>
-       <p className="text-xs text-gray-500 mb-1">Serviço ID</p>
-       <p className="font-semibold text-gray-900">#{service.id}</p>
+       <p className="text-xs text-slate-300 mb-1">Serviço ID</p>
+       <p className="font-semibold text-zinc-200">#{service.id}</p>
       </div>
 
       <div>
-       <p className="text-xs text-gray-500 mb-1">Status</p>
-       <p className="font-semibold text-gray-900 capitalize">
+       <p className="text-xs text-slate-300 mb-1">Status</p>
+       <p className="font-semibold text-zinc-200 capitalize">
         {service.status.replace("_", " ")}
        </p>
       </div>
 
       <div>
-       <p className="text-xs text-gray-500 mb-1">Placa</p>
-       <p className="font-semibold text-gray-900 uppercase">
+       <p className="text-xs text-slate-300 mb-1">Placa</p>
+       <p className="font-semibold text-zinc-200 uppercase">
         {service.vehiclePlate}
        </p>
       </div>
 
       <div>
-       <p className="text-xs text-gray-500 mb-1">Filial</p>
-       <p className="font-semibold text-gray-900">{service.branch}</p>
+       <p className="text-xs text-slate-300 mb-1">Filial</p>
+       <p className="font-semibold text-zinc-200">{service.branch}</p>
       </div>
 
       {service.driver && (
        <div>
-        <p className="text-xs text-gray-500 mb-1">Motorista</p>
-        <p className="font-semibold text-gray-900">{service.driver}</p>
+        <p className="text-xs text-slate-300 mb-1">Motorista</p>
+        <p className="font-semibold text-zinc-200">{service.driver}</p>
        </div>
       )}
      </div>
