@@ -53,12 +53,12 @@ export default function DashboardPage() {
 
  return (
   <div className="h-screen flex bg-dark-primary">
-   <DashboardMenu activePath="/operacoes" />
+   <DashboardMenu activePath="/" />
 
-   <div className="flex-1 flex flex-col overflow-hidden">
+   <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
     <Header services={filteredServices} onSearch={setSearchTerm} />
 
-    <main className="flex-1 overflow-hidden flex">
+    <main className="flex-1 overflow-hidden flex pt-16 lg:pt-0">
      <ServiceGrid
       services={filteredServices}
       onServiceSelect={handleServiceSelect}

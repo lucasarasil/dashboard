@@ -1,6 +1,5 @@
 import { ServiceEntity, ServiceStatus } from "@/core/entities/service.entity";
 
-// Interface do Use Case (Input/Output)
 export interface FilterServicesInput {
  services: ServiceEntity[];
  filters: {
@@ -17,17 +16,14 @@ export interface FilterServicesOutput {
  criticalCount: number;
 }
 
-// Use Case puro - lógica de negócio isolada
 export class FilterServicesUseCase {
  execute(input: FilterServicesInput): FilterServicesOutput {
   let filtered = [...input.services];
 
-  // Aplicar filtro de status
   if (input.filters.status && input.filters.status !== "all") {
    filtered = this.filterByStatus(filtered, input.filters.status);
   }
 
-  // Aplicar filtro hierárquico (supervisor)
   if (
    input.filters.supervisorBranches &&
    input.filters.supervisorBranches.length > 0
@@ -38,12 +34,10 @@ export class FilterServicesUseCase {
    );
   }
 
-  // Aplicar filtro hierárquico (líder)
   if (input.filters.leaderBranch) {
    filtered = this.filterByLeaderBranch(filtered, input.filters.leaderBranch);
   }
 
-  // Aplicar busca textual
   if (input.filters.searchTerm) {
    filtered = this.filterBySearchTerm(filtered, input.filters.searchTerm);
   }
@@ -96,7 +90,6 @@ export class FilterServicesUseCase {
  }
 }
 
-// Factory para facilitar uso
 export const filterServices = (
  input: FilterServicesInput
 ): FilterServicesOutput => {

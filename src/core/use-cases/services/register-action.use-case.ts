@@ -43,14 +43,12 @@ export class RegisterActionUseCase {
    };
   }
 
-  // Gerar ID da ação
   const actionId = this.generateActionId();
 
-  // Atualizar serviço
   const updatedService: ServiceEntity = {
    ...service,
    actionTaken: true,
-   needsReview: false, // Marcar como revisado após ação
+   needsReview: false,
    updatedAt: new Date(),
   };
 

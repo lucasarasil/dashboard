@@ -339,23 +339,22 @@ export default function ClustersPage() {
      </div>
 
      {/* KPIs Grid */}
-     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
       {kpis.map((kpi, index) => (
        <KpiCard key={index} {...kpi} />
       ))}
      </div>
 
      {/* Tabela de Clusters */}
-     <div className="bg-dark-secondary rounded-xl border border-border-primary">
-      <div className="p-4 border-b border-border-primary">
-       <h2 className="text-lg font-semibold text-text-primary">
+     <div className="bg-dark-secondary rounded-xl border border-border-primary overflow-hidden">
+      <div className="p-3 lg:p-4 border-b border-border-primary">
+       <h2 className="text-base lg:text-lg font-semibold text-text-primary">
         Clusters Regionais
        </h2>
-       <p className="text-text-muted text-sm">
+       <p className="text-text-muted text-xs lg:text-sm">
         Visão consolidada de {clusters.length} clusters
        </p>
-      </div>
-
+      </div>{" "}
       {isLoading ? (
        <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-mottu-500" />
