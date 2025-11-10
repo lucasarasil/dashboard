@@ -116,41 +116,41 @@ export default function OperacoesPage() {
        Visualização dos Serviços:
       </span>
       <div className="flex items-center gap-2 bg-dark-secondary rounded-lg p-1">
-      <button
-       onClick={() => setItemsPerRow(4)}
-       className={`p-2 rounded transition-all ${
-        itemsPerRow === 4
-         ? "bg-mottu-500 text-white"
-         : "text-text-muted hover:text-white hover:bg-dark-tertiary"
-       }`}
-       title="4 colunas"
-      >
-       <Squares2X2Icon className="h-5 w-5" />
-      </button>
-      <button
-       onClick={() => setItemsPerRow(2)}
-       className={`p-2 rounded transition-all ${
-        itemsPerRow === 2
-         ? "bg-mottu-500 text-white"
-         : "text-text-muted hover:text-white hover:bg-dark-tertiary"
-       }`}
-       title="2 colunas"
-      >
-       <ViewColumnsIcon className="h-5 w-5" />
-      </button>
-      <button
-       onClick={() => setItemsPerRow(1)}
-       className={`p-2 rounded transition-all ${
-        itemsPerRow === 1
-         ? "bg-mottu-500 text-white"
-         : "text-text-muted hover:text-white hover:bg-dark-tertiary"
-       }`}
-       title="1 coluna"
-      >
-       <Bars3Icon className="h-5 w-5" />
-      </button>
+       <button
+        onClick={() => setItemsPerRow(4)}
+        className={`p-2 rounded transition-all ${
+         itemsPerRow === 4
+          ? "bg-mottu-500 text-white"
+          : "text-text-muted hover:text-white hover:bg-dark-tertiary"
+        }`}
+        title="4 colunas"
+       >
+        <Squares2X2Icon className="h-5 w-5" />
+       </button>
+       <button
+        onClick={() => setItemsPerRow(2)}
+        className={`p-2 rounded transition-all ${
+         itemsPerRow === 2
+          ? "bg-mottu-500 text-white"
+          : "text-text-muted hover:text-white hover:bg-dark-tertiary"
+        }`}
+        title="2 colunas"
+       >
+        <ViewColumnsIcon className="h-5 w-5" />
+       </button>
+       <button
+        onClick={() => setItemsPerRow(1)}
+        className={`p-2 rounded transition-all ${
+         itemsPerRow === 1
+          ? "bg-mottu-500 text-white"
+          : "text-text-muted hover:text-white hover:bg-dark-tertiary"
+        }`}
+        title="1 coluna"
+       >
+        <Bars3Icon className="h-5 w-5" />
+       </button>
+      </div>
      </div>
-    </div>
     </div>
 
     {/* KPIs Grid - Always fixed layout */}
