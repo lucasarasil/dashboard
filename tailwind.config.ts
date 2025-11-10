@@ -12,16 +12,23 @@ const config: Config = {
    colors: {
     // Dark backgrounds
     dark: {
-     primary: "#0b0e0e",
-     secondary: "#111414",
-     tertiary: "#1a1d1d",
-     hover: "#2a2d2d",
+     primary: "rgb(var(--color-dark-primary) / <alpha-value>)",
+     secondary: "rgb(var(--color-dark-secondary) / <alpha-value>)",
+     tertiary: "rgb(var(--color-dark-tertiary) / <alpha-value>)",
+     hover: "rgb(var(--color-dark-hover) / <alpha-value>)",
+    },
+    // Light backgrounds
+    light: {
+     primary: "rgb(var(--color-light-primary) / <alpha-value>)",
+     secondary: "rgb(var(--color-light-secondary) / <alpha-value>)",
+     tertiary: "rgb(var(--color-light-tertiary) / <alpha-value>)",
+     hover: "rgb(var(--color-light-hover) / <alpha-value>)",
     },
     // Text colors
     text: {
-     primary: "#e6e6e6",
-     secondary: "#a7afa9",
-     muted: "#6b7570",
+     primary: "rgb(var(--color-text-primary) / <alpha-value>)",
+     secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
+     muted: "rgb(var(--color-text-muted) / <alpha-value>)",
     },
     // Mottu Green
     mottu: {

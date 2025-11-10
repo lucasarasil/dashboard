@@ -289,7 +289,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
           </div>
          </div>
 
-         {/* Faltas */}
          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
           <span className="text-text-muted text-xs">Faltas</span>
           <div className="flex items-center justify-between">
@@ -312,7 +311,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
           </div>
          </div>
 
-         {/* SLA */}
          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
           <span className="text-text-muted text-xs">SLA</span>
           <div className="flex items-center justify-between">

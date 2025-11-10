@@ -58,7 +58,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
     <div>
      <label
       htmlFor="responsible"
-      className="block text-sm font-medium text-text-primary mb-1"
+      className="block text-sm font-medium text-text-primary mb-1.5"
      >
       Responsável
      </label>
@@ -69,15 +69,19 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.responsible}
       onChange={handleChange}
       required
-      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+                 text-text-primary placeholder:text-text-muted
+                 transition-all duration-200"
       placeholder="Nome do responsável pela ação"
+      aria-label="Nome do responsável pela ação"
      />
     </div>
 
     <div>
      <label
       htmlFor="actionType"
-      className="block text-sm font-medium text-text-primary mb-1"
+      className="block text-sm font-medium text-text-primary mb-1.5"
      >
       Tipo de Ação
      </label>
@@ -87,7 +91,11 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.actionType}
       onChange={handleChange}
       required
-      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+                 text-text-primary
+                 transition-all duration-200"
+      aria-label="Selecione o tipo de ação"
      >
       <option value="">Selecione uma ação</option>
       {actionTypes.map((type) => (
@@ -101,7 +109,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
     <div>
      <label
       htmlFor="comment"
-      className="block text-sm font-medium text-text-primary mb-1"
+      className="block text-sm font-medium text-text-primary mb-1.5"
      >
       Comentário
      </label>
@@ -111,16 +119,29 @@ const ActionModal: React.FC<ActionModalProps> = ({
       value={formData.comment}
       onChange={handleChange}
       rows={4}
-      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+                 text-text-primary placeholder:text-text-muted
+                 transition-all duration-200 resize-none"
       placeholder="Descreva a ação realizada..."
+      aria-label="Comentário sobre a ação"
      />
     </div>
 
-    <div className="flex justify-end space-x-3 pt-4">
-     <button type="button" onClick={onClose} className="btn-secondary">
+    <div className="flex justify-end space-x-3 pt-4 border-t border-border-primary">
+     <button
+      type="button"
+      onClick={onClose}
+      className="btn-secondary"
+      aria-label="Cancelar registro de ação"
+     >
       Cancelar
      </button>
-     <button type="submit" className="btn-primary">
+     <button
+      type="submit"
+      className="btn-primary"
+      aria-label="Confirmar registro de ação"
+     >
       Registrar Ação
      </button>
     </div>

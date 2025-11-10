@@ -166,7 +166,7 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
 
       <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
        <div
-        className={`p-2 rounded-lg bg-black/20 border border-[#2A2D2D] group-hover:border-emerald-400/20 transition-colors duration-300`}
+        className={`p-2 rounded-lg bg-dark-primary/20 light:bg-light-primary/20 border border-border-primary light:border-border-primary-light group-hover:border-mottu-400/20 transition-colors duration-300`}
        >
         <kpi.icon
          className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}

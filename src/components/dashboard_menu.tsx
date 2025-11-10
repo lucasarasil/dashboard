@@ -36,25 +36,25 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
 
  return (
   <div
-   className={`w-64 bg-[#111414] h-full flex flex-col transition-all duration-300 ease-in-out ${
+   className={`w-64 bg-dark-secondary light:bg-light-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
     isOpen ? "translate-x-0" : "-translate-x-full"
-   } fixed left-0 top-0 z-50 shadow-2xl shadow-black/50 backdrop-blur-sm border-r border-[#1e3730]`}
+   } fixed left-0 top-0 z-50 shadow-2xl light:shadow-light backdrop-blur-sm border-r border-border-primary light:border-border-primary-light`}
   >
    {/* Header */}
-   <div className="p-6 border-b border-[#1e3730] bg-gradient-to-b from-[#1A1D1D] to-[#111414]">
+   <div className="p-6 border-b border-border-primary light:border-border-primary-light bg-gradient-to-b from-dark-tertiary to-dark-secondary light:from-light-tertiary light:to-light-secondary">
     <div className="flex items-center gap-3 mb-2">
-     <div className="w-10 h-10 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-lg shadow-[#00C853]/30">
-      <ChartBarIcon className="h-6 w-6 text-[#0B0E0E]" />
+     <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
+      <ChartBarIcon className="h-6 w-6 text-dark-primary" />
      </div>
      <div>
-      <h2 className="text-xl font-bold text-[#E6E6E6]">Dashboards</h2>
-      <p className="text-xs text-[#A7AFA9]">Visão operacional</p>
+      <h2 className="text-xl font-bold text-text-primary">Dashboards</h2>
+      <p className="text-xs text-text-secondary">Visão operacional</p>
      </div>
     </div>
    </div>
 
    {/* Itens do menu */}
-   <nav className="flex-1 p-4 space-y-2">
+   <nav className="flex-1 p-4 space-y-2" aria-label="Menu de dashboards">
     {menuItems.map((item) => {
      const isActive = activeDashboard === item.id;
      const isComingSoon = item.id === "saude-geral";
@@ -63,32 +63,44 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
       <button
        key={item.id}
        onClick={() => onDashboardChange(item.id)}
-       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${
-        isActive
-         ? "bg-gradient-to-r from-[#00C853]/20 to-[#00E676]/10 border-l-4 border-[#00E676] text-[#E6E6E6] shadow-lg shadow-[#00C853]/10"
-         : "text-[#A7AFA9] hover:bg-[#1A1D1D] hover:text-[#00E676] border-l-4 border-transparent hover:border-[#00C853]/50 hover:shadow-md hover:shadow-[#00C853]/5"
+       disabled={isComingSoon}
+       aria-current={isActive ? "page" : undefined}
+       aria-label={`${item.label}${isComingSoon ? " - Em breve" : ""}${
+        isActive ? " - Ativo" : ""
        }`}
+       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden
+        focus-visible:ring-2 focus-visible:ring-mottu-500 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-primary light:focus-visible:ring-offset-light-primary
+        ${isComingSoon ? "cursor-not-allowed opacity-60" : ""}
+        ${
+         isActive
+          ? "bg-gradient-to-r from-mottu-500/20 to-mottu-400/10 border-l-4 border-mottu-400 text-text-primary shadow-lg shadow-mottu-500/10"
+          : "text-text-secondary hover:bg-dark-tertiary light:hover:bg-light-tertiary hover:text-mottu-400 border-l-4 border-transparent hover:border-mottu-500/50 hover:shadow-md hover:shadow-mottu-500/5"
+        }`}
       >
        {/* Efeito de brilho sutil no hover */}
-       <div className="absolute inset-0 bg-gradient-to-r from-[#00C853]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+       <div className="absolute inset-0 bg-gradient-to-r from-mottu-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
        <item.icon
         className={`h-5 w-5 transition-all duration-300 relative z-10 ${
          isActive
-          ? "text-[#00E676] scale-110"
-          : "text-[#6B7570] group-hover:text-[#00E676] group-hover:scale-105"
+          ? "text-mottu-400 scale-110"
+          : "text-text-muted group-hover:text-mottu-400 group-hover:scale-105"
         }`}
+        aria-hidden="true"
        />
        <span
         className={`font-medium text-sm relative z-10 transition-all duration-300 ${
-         isActive ? "text-[#00E676]" : "group-hover:text-[#00E676]"
+         isActive ? "text-mottu-400" : "group-hover:text-mottu-400"
         }`}
        >
         {item.label}
        </span>
 
        {isComingSoon && (
-        <span className="ml-auto text-[10px] bg-[#1A1D1D] text-[#00C853] px-2 py-1 rounded-full border border-[#00C853]/30 relative z-10 group-hover:bg-[#00C853]/10 group-hover:border-[#00C853]/50 transition-all duration-300">
+        <span
+         className="ml-auto text-[10px] bg-dark-tertiary light:bg-light-tertiary text-mottu-500 px-2 py-1 rounded-full border border-mottu-500/30 relative z-10 group-hover:bg-mottu-500/10 group-hover:border-mottu-500/50 transition-all duration-300"
+         aria-hidden="true"
+        >
          Em breve
         </span>
        )}
@@ -98,15 +110,15 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
    </nav>
 
    {/* Footer */}
-   <div className="p-4 border-t border-[#1e3730] bg-[#0B0E0E]/50">
+   <div className="p-4 border-t border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
     <div className="flex items-center justify-between">
-     <div className="text-xs text-[#6B7570]">
+     <div className="text-xs text-text-muted">
       Sistema Operacional
       <br />
-      <span className="text-[#00C853] font-semibold">v1.0.0</span>
+      <span className="text-mottu-500 font-semibold">v1.0.0</span>
      </div>
-     <div className="w-8 h-8 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-md shadow-[#00C853]/30">
-      <span className="text-[#0B0E0E] font-bold text-xs">M</span>
+     <div className="w-8 h-8 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-md shadow-mottu-500/30">
+      <span className="text-dark-primary font-bold text-xs">M</span>
      </div>
     </div>
    </div>

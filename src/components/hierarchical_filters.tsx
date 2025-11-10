@@ -28,7 +28,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
  const [selectedStatus, setSelectedStatus] = useState("all");
  const [searchTerm, setSearchTerm] = useState("");
 
- // Mock data para supervisores e líderes baseados em filiais
  const supervisors = [
   {
    id: "sup1",
@@ -117,12 +116,10 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
 
  return (
   <div className="space-y-3">
-   {/* Linha 1: Dropdowns e Busca */}
    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
     <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
      <FunnelIcon className="h-4 w-4 md:h-5 md:w-5 text-text-muted" />
 
-     {/* Dropdown Supervisor */}
      <div className="relative flex-1 sm:flex-initial">
       <select
        value={selectedSupervisor}
@@ -139,7 +136,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
       <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted pointer-events-none" />
      </div>
 
-     {/* Dropdown Líder */}
      <div className="relative flex-1 sm:flex-initial">
       <select
        value={selectedLeader}
@@ -162,7 +158,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
      </div>
     </div>
 
-    {/* Busca */}
     <form onSubmit={handleSearch} className="relative flex-1 sm:max-w-xs">
      <div className="relative">
       <MagnifyingGlassIcon className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted" />
@@ -177,7 +172,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
     </form>
    </div>
 
-   {/* Linha 2: Status - Scroll horizontal em mobile */}
    <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
     <div className="flex space-x-1 md:space-x-2 min-w-max md:min-w-0">
      {statusOptions.map((status) => (

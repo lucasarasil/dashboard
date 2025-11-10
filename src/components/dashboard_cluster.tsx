@@ -21,6 +21,7 @@ import {
  clusters,
  calculateHealthScore,
  supervisores,
+ getStatusColor,
 } from "../utils/cluster_data";
 
 interface Cluster {
@@ -472,10 +473,49 @@ const Dashboard2_Cluster = () => {
 
     {/* Tabela de clusters - Full width */}
     <div>
-     <ClusterTable
-      clusters={filteredClusters}
-      onClusterSelect={handleClusterSelect}
-     />
+     {/* ClusterTable expects ClusterDTO shape; map our Cluster[] to ClusterDTO[] */}
+     {/**
+      * Map each Cluster to ClusterDTO required by ClusterTable.
+      * - saude.score is calculated per-cluster using calculateHealthScore([cluster])
+      * - saude.cores uses getStatusColor(cluster.status)
+      */}
+     {(() => {
+      const dtoClusters = filteredClusters.map((c) => ({
+       id: c.id,
+       nome: c.nome,
+       filial: c.filial,
+       lider: c.lider,
+       supervisor: c.supervisor,
+       saude: {
+        score: calculateHealthScore([c]),
+        status: c.status,
+        cores: getStatusColor(c.status),
+       },
+       metricas: {
+        atrasos: c.atrasos,
+        faltas: c.faltas,
+        sla: c.sla,
+       },
+       recursos: {
+        motoristas: {
+         atual: c.motoristas,
+         necessario: c.motoristasNecessarios,
+        },
+        veiculosParados: c.veiculosParados,
+       },
+      }));
+
+      return (
+       <ClusterTable
+        clusters={dtoClusters}
+        onClusterSelect={(dto) => {
+         // find original Cluster by id and pass to existing handler
+         const orig = filteredClusters.find((fc) => fc.id === dto.id);
+         if (orig) handleClusterSelect(orig);
+        }}
+       />
+      );
+     })()}
     </div>
 
     {/* Ranking e tendências - Full width */}

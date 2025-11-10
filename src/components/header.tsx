@@ -35,23 +35,23 @@ const Header: React.FC<HeaderProps> = ({
  };
 
  return (
-  <header className="bg-[#111414] border-b border-[#2A2D2D] shadow-lg shadow-black/20 flex-shrink-0">
+  <header className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light shadow-lg light:shadow-light flex-shrink-0">
    <div className="px-4 md:px-6 py-3 md:py-4 space-y-3 md:space-y-4">
     {/* Alertas críticos */}
     <div className="flex items-center justify-between">
      <div className="flex items-center gap-3">
       {criticalAlertsCount > 0 && (
        <div className="relative animate-pulse-green">
-        <BellIcon className="h-5 w-5 text-[#FF5252]" />
-        <span className="absolute -top-1 -right-1 bg-[#FF5252] text-[#0B0E0E] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-[#FF5252]/50">
+        <BellIcon className="h-5 w-5 text-red-500 light:text-red-600" />
+        <span className="absolute -top-1 -right-1 bg-red-500 light:bg-red-600 text-dark-primary light:text-light-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
          {criticalAlertsCount}
         </span>
        </div>
       )}
 
-      <div className="flex items-center gap-2 text-sm text-[#A7AFA9]">
+      <div className="flex items-center gap-2 text-sm text-text-secondary">
        <ExclamationTriangleIcon className="h-4 w-4" />
-       <span className="font-semibold text-[#FF5252]">
+       <span className="font-semibold text-red-500 light:text-red-600">
         {criticalAlertsCount}
        </span>
        <span>críticos</span>
@@ -82,19 +82,19 @@ const Header: React.FC<HeaderProps> = ({
     {/* Estatísticas */}
     <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm pb-1">
      <div className="flex items-center gap-2">
-      <span className="w-2 h-2 bg-[#29B6F6] rounded-full shadow-sm shadow-[#29B6F6]/50"></span>
-      <span className="text-[#A7AFA9] font-medium">
+      <span className="w-2 h-2 bg-blue-500 light:bg-blue-600 rounded-full shadow-sm shadow-blue-500/50"></span>
+      <span className="text-text-secondary font-medium">
        {streetCallsCount} Chamados de Rua
       </span>
      </div>
      <div className="flex items-center gap-2">
-      <span className="w-2 h-2 bg-[#FF5252] rounded-full shadow-sm shadow-[#FF5252]/50"></span>
-      <span className="text-[#A7AFA9] font-medium">
+      <span className="w-2 h-2 bg-red-500 light:bg-red-600 rounded-full shadow-sm shadow-red-500/50"></span>
+      <span className="text-text-secondary font-medium">
        {appropriationsCount} Apropriações
       </span>
      </div>
-     <div className="hidden sm:block text-[#3A3D3D]">•</div>
-     <div className="text-[#E6E6E6] font-semibold">
+     <div className="hidden sm:block text-text-muted">•</div>
+     <div className="text-text-primary font-semibold">
       Total: {services.length} serviços ativos
      </div>
     </div>
