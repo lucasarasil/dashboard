@@ -321,93 +321,99 @@ export default function ClustersPage() {
    <div className="flex-1 flex flex-col overflow-hidden">
     <Header services={[]} onSearch={() => {}} />
 
-    <main className="flex-1 overflow-auto p-6 space-y-6">
-     {/* Título e Info */}
-     <div className="flex items-center justify-between">
-      <div>
-       <h1 className="text-2xl font-bold text-text-primary mb-1">
-        Performance Regional / Cluster
-       </h1>
-       <p className="text-text-muted text-sm">
-        Visão macro de capacidade operacional
-       </p>
-      </div>
-      <div className="text-right">
-       <p className="text-text-muted text-xs">Última atualização:</p>
-       <p className="text-text-secondary text-sm font-medium">{currentDate}</p>
-      </div>
-     </div>
+    <div className="min-h-screen bg-dark-primary">
+     <DashboardMenu activePath="/clusters" />
 
-     {/* KPIs Grid */}
-     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
-      {kpis.map((kpi, index) => (
-       <KpiCard key={index} {...kpi} />
-      ))}
-     </div>
-
-     {/* Tabela de Clusters */}
-     <div className="bg-dark-secondary rounded-xl border border-border-primary overflow-hidden">
-      <div className="p-3 lg:p-4 border-b border-border-primary">
-       <h2 className="text-base lg:text-lg font-semibold text-text-primary">
-        Clusters Regionais
-       </h2>
-       <p className="text-text-muted text-xs lg:text-sm">
-        Visão consolidada de {clusters.length} clusters
-       </p>
-      </div>{" "}
-      {isLoading ? (
-       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-mottu-500" />
+     <main className="px-4 lg:px-6 py-4 space-y-4 lg:space-y-6">
+      {/* Título e Info */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+       <div>
+        <h1 className="text-xl lg:text-2xl font-bold text-text-primary mb-1">
+         Performance Regional / Cluster
+        </h1>
+        <p className="text-text-muted text-xs lg:text-sm">
+         Visão macro de capacidade operacional
+        </p>
        </div>
-      ) : (
-       <ClusterTable clusters={clusters} />
-      )}
-     </div>
-
-     {/* Grid: Críticos + Variações */}
-     <div className="grid lg:grid-cols-2 gap-6">
-      {/* Top 5 Clusters Críticos */}
-      <div className="bg-dark-secondary rounded-xl border border-border-primary p-6">
-       <h2 className="text-lg font-semibold text-text-primary mb-2">
-        Top 5 Clusters Críticos
-       </h2>
-       <p className="text-text-muted text-sm mb-6">
-        Baseado em atrasos, faltas, SLA e produtividade
-       </p>
-
-       <div className="space-y-4">
-        {criticalClusters.map((cluster, index) => (
-         <CriticalClusterCard
-          key={cluster.id}
-          cluster={cluster}
-          rank={index + 1}
-         />
-        ))}
+       <div className="text-left lg:text-right">
+        <p className="text-text-muted text-xs">Última atualização:</p>
+        <p className="text-text-secondary text-xs lg:text-sm font-medium">
+         {currentDate}
+        </p>
        </div>
       </div>
 
-      {/* Variações D-1 */}
-      <div className="bg-dark-secondary rounded-xl border border-border-primary p-6">
-       <h2 className="text-lg font-semibold text-text-primary mb-2">
-        Variações D-1 (vs. Dia Anterior)
-       </h2>
-       <p className="text-text-muted text-sm mb-6">
-        Comparação com o dia anterior
-       </p>
+      {/* KPIs Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
+       {kpis.map((kpi, index) => (
+        <KpiCard key={index} {...kpi} />
+       ))}
+      </div>
 
-       <div className="grid sm:grid-cols-2 gap-4">
-        {variations.map((v, index) => (
-         <ClusterVariationCard
-          key={index}
-          cluster={v.cluster}
-          atrasoVariation={v.atrasoVariation}
-          slaVariation={v.slaVariation}
-         />
-        ))}
+      {/* Tabela de Clusters */}
+      <div className="bg-dark-secondary rounded-xl border border-border-primary overflow-hidden">
+       <div className="p-3 lg:p-4 border-b border-border-primary">
+        <h2 className="text-base lg:text-lg font-semibold text-text-primary">
+         Clusters Regionais
+        </h2>
+        <p className="text-text-muted text-xs lg:text-sm">
+         Visão consolidada de {clusters.length} clusters
+        </p>
+       </div>{" "}
+       {isLoading ? (
+        <div className="flex items-center justify-center h-64">
+         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-mottu-500" />
+        </div>
+       ) : (
+        <ClusterTable clusters={clusters} />
+       )}
+      </div>
+
+      {/* Grid: Críticos + Variações */}
+      <div className="grid lg:grid-cols-2 gap-6">
+       {/* Top 5 Clusters Críticos */}
+       <div className="bg-dark-secondary rounded-xl border border-border-primary p-6">
+        <h2 className="text-lg font-semibold text-text-primary mb-2">
+         Top 5 Clusters Críticos
+        </h2>
+        <p className="text-text-muted text-sm mb-6">
+         Baseado em atrasos, faltas, SLA e produtividade
+        </p>
+
+        <div className="space-y-4">
+         {criticalClusters.map((cluster, index) => (
+          <CriticalClusterCard
+           key={cluster.id}
+           cluster={cluster}
+           rank={index + 1}
+          />
+         ))}
+        </div>
+       </div>
+
+       {/* Variações D-1 */}
+       <div className="bg-dark-secondary rounded-xl border border-border-primary p-6">
+        <h2 className="text-lg font-semibold text-text-primary mb-2">
+         Variações D-1 (vs. Dia Anterior)
+        </h2>
+        <p className="text-text-muted text-sm mb-6">
+         Comparação com o dia anterior
+        </p>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+         {variations.map((v, index) => (
+          <ClusterVariationCard
+           key={index}
+           cluster={v.cluster}
+           atrasoVariation={v.atrasoVariation}
+           slaVariation={v.slaVariation}
+          />
+         ))}
+        </div>
        </div>
       </div>
-     </div>
-    </main>
+     </main>
+    </div>
    </div>
   </div>
  );

@@ -7,10 +7,7 @@ import {
  ServiceGrid,
  ServiceDetailDrawer,
 } from "@/presentation/components/features/services";
-import {
- DashboardMenu,
- Header,
-} from "@/presentation/components/features/dashboard";
+import { DashboardMenu } from "@/presentation/components/features/dashboard";
 import { ActionModal } from "@/presentation/components/common";
 import { ServiceEntity } from "@/core/entities/service.entity";
 
@@ -52,26 +49,22 @@ export default function DashboardPage() {
  }
 
  return (
-  <div className="h-screen flex bg-dark-primary">
-   <DashboardMenu activePath="/" />
+  <div className="min-h-screen bg-dark-primary">
+   <DashboardMenu activePath="/" onSearch={setSearchTerm} />
 
-   <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
-    <Header services={filteredServices} onSearch={setSearchTerm} />
+   <main className="flex overflow-hidden h-screen">
+    <ServiceGrid
+     services={filteredServices}
+     onServiceSelect={handleServiceSelect}
+     isLoading={isLoading}
+    />
 
-    <main className="flex-1 overflow-hidden flex pt-16 lg:pt-0">
-     <ServiceGrid
-      services={filteredServices}
-      onServiceSelect={handleServiceSelect}
-      isLoading={isLoading}
-     />
-
-     <ServiceDetailDrawer
-      service={selectedService}
-      isOpen={isDrawerOpen}
-      onClose={handleCloseDrawer}
-     />
-    </main>
-   </div>
+    <ServiceDetailDrawer
+     service={selectedService}
+     isOpen={isDrawerOpen}
+     onClose={handleCloseDrawer}
+    />
+   </main>
 
    <ActionModal
     isOpen={isActionModalOpen}
