@@ -1,1721 +1,2134 @@
-diff --git a/src/app/globals.css b/src/app/globals.css
-index 0c17166..0ec82e5 100644
---- a/src/app/globals.css
-+++ b/src/app/globals.css
-@@ -3,16 +3,26 @@
- @theme {
-  /* === PALETA MOTTU DARK MODE === */
- 
-- /* Backgrounds */
-+ /* Backgrounds - Dark */
-  --color-dark-primary: #0b0e0e;
-  --color-dark-secondary: #111414;
-  --color-dark-tertiary: #1a1d1d;
- 
-- /* Textos */
-+ /* Backgrounds - Light */
-+ --color-light-primary: #ffffff;
-+ --color-light-secondary: #f5f7f6;
-+ --color-light-tertiary: #e8ebea;
-+
-+ /* Textos - Dark Mode */
-  --color-text-primary: #e6e6e6;
-  --color-text-secondary: #a7afa9;
-  --color-text-muted: #6b7570;
- 
-+ /* Textos - Light Mode */
-+ --color-text-primary-light: #1a1d1d;
-+ --color-text-secondary-light: #4a5350;
-+ --color-text-muted-light: #6b7570;
-+
-  /* Mottu Green (Accent principal) */
-  --color-mottu-green-50: #e8f5e9;
-  --color-mottu-green-100: #c8e6c9;
-@@ -47,6 +57,15 @@
-  --color-border-primary: #2a2d2d;
-  --color-border-secondary: #3a3d3d;
-  --color-divider: #1f2222;
-+
-+ /* Borders & Dividers - Light Mode */
-+ --color-border-primary-light: #d0d5d3;
-+ --color-border-secondary-light: #b8bfbc;
-+ --color-divider-light: #e8ebea;
-+
-+ /* Shadows */
-+ --shadow-dark: rgba(0, 0, 0, 0.3);
-+ --shadow-light: rgba(0, 0, 0, 0.1);
- }
- 
- @layer base {
-@@ -54,11 +73,18 @@
-   font-family: var(--font-inter, "Inter"), sans-serif;
-  }
- 
-+ /* Dark mode (default) */
-  body {
-   background-color: #0b0e0e;
-   color: #e6e6e6;
-  }
- 
-+ /* Light mode */
-+ .light body {
-+  background-color: #ffffff;
-+  color: #1a1d1d;
-+ }
-+
-  /* Scrollbar customizada dark */
-  ::-webkit-scrollbar {
-   width: 10px;
-@@ -69,14 +95,26 @@
-   background: #111414;
-  }
- 
-+ .light ::-webkit-scrollbar-track {
-+  background: #f5f7f6;
-+ }
-+
-  ::-webkit-scrollbar-thumb {
-   background: #2a2d2d;
-   border-radius: 5px;
-  }
- 
-+ .light ::-webkit-scrollbar-thumb {
-+  background: #d0d5d3;
-+ }
-+
-  ::-webkit-scrollbar-thumb:hover {
-   background: #3a3d3d;
-  }
-+
-+ .light ::-webkit-scrollbar-thumb:hover {
-+  background: #b8bfbc;
-+ }
- }
- 
- @layer components {
-diff --git a/src/app/layout.tsx b/src/app/layout.tsx
-index bfbb7c0..c44528e 100644
---- a/src/app/layout.tsx
-+++ b/src/app/layout.tsx
-@@ -1,5 +1,6 @@
- import type { Metadata } from "next";
- import { Geist, Geist_Mono, Inter } from "next/font/google";
-+import { ThemeProvider } from "@/contexts/theme_context";
- import "./globals.css";
- 
- const geistSans = Geist({
-@@ -28,11 +29,11 @@ export default function RootLayout({
-  children: React.ReactNode;
- }>) {
-  return (
--  <html lang="pt-BR" className="dark">
-+  <html lang="pt-BR" className="dark" suppressHydrationWarning>
-    <body
-     className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-dark-primary text-text-primary`}
-    >
--    {children}
-+    <ThemeProvider>{children}</ThemeProvider>
-    </body>
-   </html>
-  );
-diff --git a/src/components/action_modal.tsx b/src/components/action_modal.tsx
-index 87b73c6..8092bcc 100644
---- a/src/components/action_modal.tsx
-+++ b/src/components/action_modal.tsx
-@@ -58,7 +58,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
-     <div>
-      <label
-       htmlFor="responsible"
--      className="block text-sm font-medium text-text-primary mb-1"
-+      className="block text-sm font-medium text-text-primary mb-1.5"
-      >
-       Responsável
-      </label>
-@@ -69,15 +69,19 @@ const ActionModal: React.FC<ActionModalProps> = ({
-       value={formData.responsible}
-       onChange={handleChange}
-       required
--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
-+                 text-text-primary placeholder:text-text-muted
-+                 transition-all duration-200"
-       placeholder="Nome do responsável pela ação"
-+      aria-label="Nome do responsável pela ação"
-      />
-     </div>
- 
-     <div>
-      <label
-       htmlFor="actionType"
--      className="block text-sm font-medium text-text-primary mb-1"
-+      className="block text-sm font-medium text-text-primary mb-1.5"
-      >
-       Tipo de Ação
-      </label>
-@@ -87,7 +91,11 @@ const ActionModal: React.FC<ActionModalProps> = ({
-       value={formData.actionType}
-       onChange={handleChange}
-       required
--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
-+                 text-text-primary
-+                 transition-all duration-200"
-+      aria-label="Selecione o tipo de ação"
-      >
-       <option value="">Selecione uma ação</option>
-       {actionTypes.map((type) => (
-@@ -101,7 +109,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
-     <div>
-      <label
-       htmlFor="comment"
--      className="block text-sm font-medium text-text-primary mb-1"
-+      className="block text-sm font-medium text-text-primary mb-1.5"
-      >
-       Comentário
-      </label>
-@@ -111,16 +119,29 @@ const ActionModal: React.FC<ActionModalProps> = ({
-       value={formData.comment}
-       onChange={handleChange}
-       rows={4}
--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
-+                 text-text-primary placeholder:text-text-muted
-+                 transition-all duration-200 resize-none"
-       placeholder="Descreva a ação realizada..."
-+      aria-label="Comentário sobre a ação"
-      />
-     </div>
- 
--    <div className="flex justify-end space-x-3 pt-4">
--     <button type="button" onClick={onClose} className="btn-secondary">
-+    <div className="flex justify-end space-x-3 pt-4 border-t border-border-primary">
-+     <button
-+      type="button"
-+      onClick={onClose}
-+      className="btn-secondary"
-+      aria-label="Cancelar registro de ação"
-+     >
-       Cancelar
-      </button>
--     <button type="submit" className="btn-primary">
-+     <button
-+      type="submit"
-+      className="btn-primary"
-+      aria-label="Confirmar registro de ação"
-+     >
-       Registrar Ação
-      </button>
-     </div>
-diff --git a/src/components/cluster_table.tsx b/src/components/cluster_table.tsx
-index fb141e9..15f39c0 100644
---- a/src/components/cluster_table.tsx
-+++ b/src/components/cluster_table.tsx
-@@ -1,80 +1,251 @@
--"use client";
--import React, { useState } from "react";
-+import React from "react";
- import {
-  ChevronUpIcon,
-  ChevronDownIcon,
-  EyeIcon,
- } from "@heroicons/react/24/outline";
--import { calculateHealthScore } from "../utils/cluster_data";
- 
- interface ClusterTableProps {
-- clusters: any[];
-- onClusterSelect: (cluster: any) => void;
-+ clusters: ClusterDTO[];
-+ onClusterSelect: (cluster: ClusterDTO) => void;
- }
- 
--const ClusterTable: React.FC<ClusterTableProps> = ({
-- clusters,
-- onClusterSelect,
--}) => {
-- const [sortField, setSortField] = useState("healthScore");
-- const [sortDirection, setSortDirection] = useState("asc");
-+interface ClusterDTO {
-+ id: string;
-+ nome: string;
-+ filial: string;
-+ lider: string;
-+ supervisor: string;
-+ saude: {
-+  score: number;
-+  status: string;
-+  cores: {
-+   text: string;
-+   bg: string;
-+   border: string;
-+  };
-+ };
-+ metricas: {
-+  atrasos: number;
-+  faltas: number;
-+  sla: number;
-+ };
-+ recursos: {
-+  motoristas: { atual: number; necessario: number };
-+  veiculosParados: number;
-+ };
-+}
- 
-- const handleSort = (field: string) => {
--  if (sortField === field) {
--   setSortDirection(sortDirection === "asc" ? "desc" : "asc");
--  } else {
-+function useClusterTable(initialClusters: ClusterDTO[]) {
-+ const [sortField, setSortField] = React.useState<
-+  keyof ClusterDTO["saude"] | keyof ClusterDTO["metricas"]
-+ >("score");
-+ const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
-+  "asc"
-+ );
-+ const [clusters, setClusters] = React.useState(initialClusters);
-+
-+ const handleSort = React.useCallback(
-+  (field: typeof sortField) => {
-+   setSortDirection((prev) =>
-+    sortField === field ? (prev === "asc" ? "desc" : "asc") : "desc"
-+   );
-    setSortField(field);
--   setSortDirection(field === "healthScore" ? "asc" : "desc");
+diff --git a/diff.txt b/diff.txt
+deleted file mode 100644
+index eaf8681..0000000
+--- a/diff.txt
++++ /dev/null
+@@ -1,1721 +0,0 @@
+-diff --git a/src/app/globals.css b/src/app/globals.css
+-index 0c17166..0ec82e5 100644
+---- a/src/app/globals.css
+-+++ b/src/app/globals.css
+-@@ -3,16 +3,26 @@
+- @theme {
+-  /* === PALETA MOTTU DARK MODE === */
+- 
+-- /* Backgrounds */
+-+ /* Backgrounds - Dark */
+-  --color-dark-primary: #0b0e0e;
+-  --color-dark-secondary: #111414;
+-  --color-dark-tertiary: #1a1d1d;
+- 
+-- /* Textos */
+-+ /* Backgrounds - Light */
+-+ --color-light-primary: #ffffff;
+-+ --color-light-secondary: #f5f7f6;
+-+ --color-light-tertiary: #e8ebea;
+-+
+-+ /* Textos - Dark Mode */
+-  --color-text-primary: #e6e6e6;
+-  --color-text-secondary: #a7afa9;
+-  --color-text-muted: #6b7570;
+- 
+-+ /* Textos - Light Mode */
+-+ --color-text-primary-light: #1a1d1d;
+-+ --color-text-secondary-light: #4a5350;
+-+ --color-text-muted-light: #6b7570;
+-+
+-  /* Mottu Green (Accent principal) */
+-  --color-mottu-green-50: #e8f5e9;
+-  --color-mottu-green-100: #c8e6c9;
+-@@ -47,6 +57,15 @@
+-  --color-border-primary: #2a2d2d;
+-  --color-border-secondary: #3a3d3d;
+-  --color-divider: #1f2222;
+-+
+-+ /* Borders & Dividers - Light Mode */
+-+ --color-border-primary-light: #d0d5d3;
+-+ --color-border-secondary-light: #b8bfbc;
+-+ --color-divider-light: #e8ebea;
+-+
+-+ /* Shadows */
+-+ --shadow-dark: rgba(0, 0, 0, 0.3);
+-+ --shadow-light: rgba(0, 0, 0, 0.1);
+- }
+- 
+- @layer base {
+-@@ -54,11 +73,18 @@
+-   font-family: var(--font-inter, "Inter"), sans-serif;
 -  }
-- };
-+  },
-+  [sortField]
-+ );
- 
-- // Adicionar health score calculado para cada cluster
-- const clustersWithHealth = clusters.map((cluster: any) => ({
--  ...cluster,
--  healthScore: calculateHealthScore([cluster]),
-- }));
-+ React.useEffect(() => {
-+  const sorted = [...initialClusters].sort((a, b) => {
-+   let aValue: number;
-+   let bValue: number;
- 
-- const sortedClusters = [...clustersWithHealth].sort((a: any, b: any) => {
--  const aValue = a[sortField];
--  const bValue = b[sortField];
-+   if (sortField === "score") {
-+    aValue = a.saude.score;
-+    bValue = b.saude.score;
-+   } else {
-+    aValue = a.metricas[sortField as keyof typeof a.metricas];
-+    bValue = b.metricas[sortField as keyof typeof b.metricas];
-+   }
- 
--  if (sortDirection === "asc") {
--   return aValue - bValue;
--  } else {
--   return bValue - aValue;
+- 
+-+ /* Dark mode (default) */
+-  body {
+-   background-color: #0b0e0e;
+-   color: #e6e6e6;
 -  }
-- });
-+   return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
-+  });
- 
-- // Psicologia das cores para dark mode
-- const getHealthColor = (score: number) => {
--  if (score >= 80) return "text-emerald-400"; // Verde esmeralda - sucesso, confiança
--  if (score >= 60) return "text-amber-400"; // Âmbar - atenção, cautela
--  return "text-rose-400"; // Rosa suave - urgência, mas não agressivo
-- };
-+  setClusters(sorted);
-+ }, [initialClusters, sortField, sortDirection]);
- 
-- const getStatusColor = (
--  value: number,
--  thresholds: { good: number; warning: number }
-- ) => {
--  if (value <= thresholds.good) return "text-emerald-400"; // Bom
--  if (value <= thresholds.warning) return "text-amber-400"; // Atenção
--  return "text-rose-400"; // Crítico
-+ return {
-+  clusters,
-+  sortField,
-+  sortDirection,
-+  handleSort,
-  };
-+}
-+
-+interface SortableHeaderProps {
-+ field: "score" | "atrasos" | "faltas" | "sla";
-+ label: string;
-+ currentField: string;
-+ direction: "asc" | "desc";
-+ onSort: (field: "score" | "atrasos" | "faltas" | "sla") => void;
-+}
-+
-+function SortableHeader({
-+ field,
-+ label,
-+ currentField,
-+ direction,
-+ onSort,
-+}: SortableHeaderProps) {
-+ const isActive = currentField === field;
-+ const Icon = direction === "asc" ? ChevronUpIcon : ChevronDownIcon;
-+
-+ return (
-+  <th
-+   className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors"
-+   onClick={() => onSort(field)}
-+  >
-+   <div className="flex items-center space-x-1 group">
-+    <span>{label}</span>
-+    {isActive ? (
-+     <Icon className="h-4 w-4 text-emerald-400" />
-+    ) : (
-+     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-+      <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
-+     </div>
-+    )}
-+   </div>
-+  </th>
-+ );
-+}
-+
-+interface ClusterRowProps {
-+ cluster: ClusterDTO;
-+ index: number;
-+ onSelect: (cluster: ClusterDTO) => void;
-+}
-+
-+function ClusterRow({ cluster, index, onSelect }: ClusterRowProps) {
-+ const isOdd = index % 2 === 0;
-+ const { saude, metricas, recursos } = cluster;
- 
-- // Função para determinar o background baseado no health score
-  const getRowBackground = (score: number, isOdd: boolean) => {
-   const baseColor = isOdd ? "bg-dark-tertiary/30" : "bg-dark-tertiary/10";
- 
--  if (score < 60)
--   return `${baseColor} bg-rose-950/10 border-l-2 border-l-rose-500/50`; // Crítico
--  if (score < 80)
--   return `${baseColor} bg-amber-950/10 border-l-2 border-l-amber-500/50`; // Atenção
--  return `${baseColor} border-l-2 border-l-emerald-500/30`; // Saudável
-+  if (score < 70) {
-+   return `${baseColor} bg-rose-950/10 border-l-2 border-l-rose-500/50`;
-+  }
-+  if (score < 80) {
-+   return `${baseColor} bg-amber-950/10 border-l-2 border-l-amber-500/50`;
-+  }
-+  return `${baseColor} border-l-2 border-l-emerald-500/30`;
-+ };
-+
-+ const getMetricColor = (value: number, type: "negative" | "positive") => {
-+  if (type === "negative") {
-+   if (value >= 20) return "text-rose-400";
-+   if (value >= 10) return "text-amber-400";
-+   return "text-emerald-400";
-+  } else {
-+   if (value >= 90) return "text-emerald-600";
-+   if (value >= 80) return "text-emerald-400";
-+   if (value >= 70) return "text-amber-400";
-+   return "text-rose-400";
-+  }
-  };
- 
-+ return (
-+  <tr
-+   className={`transition-all duration-200 cursor-pointer hover:bg-dark-tertiary/40 ${getRowBackground(
-+    saude.score,
-+    isOdd
-+   )}`}
-+   onClick={() => onSelect(cluster)}
-+  >
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <div className="font-medium text-text-primary">{cluster.nome}</div>
-+    <div className="text-xs text-text-muted">{cluster.filial}</div>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-+    {cluster.lider}
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-+    {cluster.supervisor}
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <span className={`text-lg font-bold ${saude.cores.text}`}>
-+     {saude.score}%
-+    </span>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <span
-+     className={`text-sm font-medium ${getMetricColor(
-+      metricas.atrasos,
-+      "negative"
-+     )}`}
-+    >
-+     {metricas.atrasos}%
-+    </span>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <span
-+     className={`text-sm font-medium ${getMetricColor(
-+      metricas.faltas,
-+      "negative"
-+     )}`}
-+    >
-+     {metricas.faltas}%
-+    </span>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <span
-+     className={`text-sm font-medium ${getMetricColor(
-+      metricas.sla,
-+      "positive"
-+     )}`}
-+    >
-+     {metricas.sla}%
-+    </span>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
-+    {recursos.motoristas.atual} / {recursos.motoristas.necessario}
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap">
-+    <span
-+     className={`text-sm font-medium ${getMetricColor(
-+      recursos.veiculosParados,
-+      "negative"
-+     )}`}
-+    >
-+     {recursos.veiculosParados}
-+    </span>
-+   </td>
-+   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-+    <button
-+     onClick={(e) => {
-+      e.stopPropagation();
-+      onSelect(cluster);
-+     }}
-+     className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 transition-colors bg-cyan-950/20 hover:bg-cyan-950/40 px-3 py-2 rounded-lg border border-cyan-800/30"
-+    >
-+     <EyeIcon className="h-4 w-4" />
-+     <span>Ver</span>
-+    </button>
-+   </td>
-+  </tr>
-+ );
-+}
-+
-+export default function ClusterTable({
-+ clusters: initialClusters,
-+ onClusterSelect,
-+}: ClusterTableProps) {
-+ const { clusters, sortField, sortDirection, handleSort } =
-+  useClusterTable(initialClusters);
-+
-  return (
-   <div className="bg-dark-secondary rounded-xl shadow-dark-xl border border-border-primary overflow-hidden backdrop-blur-sm">
--   {/* Header da tabela */}
-+   {/* Header */}
-    <div className="bg-dark-tertiary/80 px-6 py-4 border-b border-border-primary">
-     <h3 className="text-lg font-semibold text-text-primary">
-      Clusters Regionais
-@@ -84,12 +255,8 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
-     </p>
-    </div>
- 
--   {/* Tabela */}
-    <div className="overflow-x-auto">
--    <table className="w-full" role="table">
--     <caption className="sr-only">
--      Tabela de clusters com indicadores de saúde e capacidade
--     </caption>
-+    <table className="w-full">
-      <thead className="bg-dark-tertiary/60 border-b border-border-primary">
-       <tr>
-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-@@ -101,368 +268,39 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-         Supervisor
-        </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("healthScore")}
--        aria-sort={
--         sortField === "healthScore"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("healthScore");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Saúde</span>
--         {sortField === "healthScore" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
+- 
+-+ /* Light mode */
+-+ .light body {
+-+  background-color: #ffffff;
+-+  color: #1a1d1d;
+-+ }
+-+
+-  /* Scrollbar customizada dark */
+-  ::-webkit-scrollbar {
+-   width: 10px;
+-@@ -69,14 +95,26 @@
+-   background: #111414;
+-  }
+- 
+-+ .light ::-webkit-scrollbar-track {
+-+  background: #f5f7f6;
+-+ }
+-+
+-  ::-webkit-scrollbar-thumb {
+-   background: #2a2d2d;
+-   border-radius: 5px;
+-  }
+- 
+-+ .light ::-webkit-scrollbar-thumb {
+-+  background: #d0d5d3;
+-+ }
+-+
+-  ::-webkit-scrollbar-thumb:hover {
+-   background: #3a3d3d;
+-  }
+-+
+-+ .light ::-webkit-scrollbar-thumb:hover {
+-+  background: #b8bfbc;
+-+ }
+- }
+- 
+- @layer components {
+-diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+-index bfbb7c0..c44528e 100644
+---- a/src/app/layout.tsx
+-+++ b/src/app/layout.tsx
+-@@ -1,5 +1,6 @@
+- import type { Metadata } from "next";
+- import { Geist, Geist_Mono, Inter } from "next/font/google";
+-+import { ThemeProvider } from "@/contexts/theme_context";
+- import "./globals.css";
+- 
+- const geistSans = Geist({
+-@@ -28,11 +29,11 @@ export default function RootLayout({
+-  children: React.ReactNode;
+- }>) {
+-  return (
+--  <html lang="pt-BR" className="dark">
+-+  <html lang="pt-BR" className="dark" suppressHydrationWarning>
+-    <body
+-     className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-dark-primary text-text-primary`}
+-    >
+--    {children}
+-+    <ThemeProvider>{children}</ThemeProvider>
+-    </body>
+-   </html>
+-  );
+-diff --git a/src/components/action_modal.tsx b/src/components/action_modal.tsx
+-index 87b73c6..8092bcc 100644
+---- a/src/components/action_modal.tsx
+-+++ b/src/components/action_modal.tsx
+-@@ -58,7 +58,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
+-     <div>
+-      <label
+-       htmlFor="responsible"
+--      className="block text-sm font-medium text-text-primary mb-1"
+-+      className="block text-sm font-medium text-text-primary mb-1.5"
+-      >
+-       Responsável
+-      </label>
+-@@ -69,15 +69,19 @@ const ActionModal: React.FC<ActionModalProps> = ({
+-       value={formData.responsible}
+-       onChange={handleChange}
+-       required
+--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+-+                 text-text-primary placeholder:text-text-muted
+-+                 transition-all duration-200"
+-       placeholder="Nome do responsável pela ação"
+-+      aria-label="Nome do responsável pela ação"
+-      />
+-     </div>
+- 
+-     <div>
+-      <label
+-       htmlFor="actionType"
+--      className="block text-sm font-medium text-text-primary mb-1"
+-+      className="block text-sm font-medium text-text-primary mb-1.5"
+-      >
+-       Tipo de Ação
+-      </label>
+-@@ -87,7 +91,11 @@ const ActionModal: React.FC<ActionModalProps> = ({
+-       value={formData.actionType}
+-       onChange={handleChange}
+-       required
+--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+-+                 text-text-primary
+-+                 transition-all duration-200"
+-+      aria-label="Selecione o tipo de ação"
+-      >
+-       <option value="">Selecione uma ação</option>
+-       {actionTypes.map((type) => (
+-@@ -101,7 +109,7 @@ const ActionModal: React.FC<ActionModalProps> = ({
+-     <div>
+-      <label
+-       htmlFor="comment"
+--      className="block text-sm font-medium text-text-primary mb-1"
+-+      className="block text-sm font-medium text-text-primary mb-1.5"
+-      >
+-       Comentário
+-      </label>
+-@@ -111,16 +119,29 @@ const ActionModal: React.FC<ActionModalProps> = ({
+-       value={formData.comment}
+-       onChange={handleChange}
+-       rows={4}
+--      className="w-full px-3 py-2 bg-dark-tertiary border border-border-primary rounded-lg focus:ring-2 focus:ring-mottu-500 focus:border-transparent text-text-primary"
+-+      className="w-full px-3 py-2.5 bg-dark-tertiary border border-border-primary rounded-lg 
+-+                 focus:ring-2 focus:ring-mottu-500 focus:border-mottu-500 
+-+                 text-text-primary placeholder:text-text-muted
+-+                 transition-all duration-200 resize-none"
+-       placeholder="Descreva a ação realizada..."
+-+      aria-label="Comentário sobre a ação"
+-      />
+-     </div>
+- 
+--    <div className="flex justify-end space-x-3 pt-4">
+--     <button type="button" onClick={onClose} className="btn-secondary">
+-+    <div className="flex justify-end space-x-3 pt-4 border-t border-border-primary">
+-+     <button
+-+      type="button"
+-+      onClick={onClose}
+-+      className="btn-secondary"
+-+      aria-label="Cancelar registro de ação"
+-+     >
+-       Cancelar
+-      </button>
+--     <button type="submit" className="btn-primary">
+-+     <button
+-+      type="submit"
+-+      className="btn-primary"
+-+      aria-label="Confirmar registro de ação"
+-+     >
+-       Registrar Ação
+-      </button>
+-     </div>
+-diff --git a/src/components/cluster_table.tsx b/src/components/cluster_table.tsx
+-index fb141e9..15f39c0 100644
+---- a/src/components/cluster_table.tsx
+-+++ b/src/components/cluster_table.tsx
+-@@ -1,80 +1,251 @@
+--"use client";
+--import React, { useState } from "react";
+-+import React from "react";
+- import {
+-  ChevronUpIcon,
+-  ChevronDownIcon,
+-  EyeIcon,
+- } from "@heroicons/react/24/outline";
+--import { calculateHealthScore } from "../utils/cluster_data";
+- 
+- interface ClusterTableProps {
+-- clusters: any[];
+-- onClusterSelect: (cluster: any) => void;
+-+ clusters: ClusterDTO[];
+-+ onClusterSelect: (cluster: ClusterDTO) => void;
+- }
+- 
+--const ClusterTable: React.FC<ClusterTableProps> = ({
+-- clusters,
+-- onClusterSelect,
+--}) => {
+-- const [sortField, setSortField] = useState("healthScore");
+-- const [sortDirection, setSortDirection] = useState("asc");
+-+interface ClusterDTO {
+-+ id: string;
+-+ nome: string;
+-+ filial: string;
+-+ lider: string;
+-+ supervisor: string;
+-+ saude: {
+-+  score: number;
+-+  status: string;
+-+  cores: {
+-+   text: string;
+-+   bg: string;
+-+   border: string;
+-+  };
+-+ };
+-+ metricas: {
+-+  atrasos: number;
+-+  faltas: number;
+-+  sla: number;
+-+ };
+-+ recursos: {
+-+  motoristas: { atual: number; necessario: number };
+-+  veiculosParados: number;
+-+ };
+-+}
+- 
+-- const handleSort = (field: string) => {
+--  if (sortField === field) {
+--   setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+--  } else {
+-+function useClusterTable(initialClusters: ClusterDTO[]) {
+-+ const [sortField, setSortField] = React.useState<
+-+  keyof ClusterDTO["saude"] | keyof ClusterDTO["metricas"]
+-+ >("score");
+-+ const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
+-+  "asc"
+-+ );
+-+ const [clusters, setClusters] = React.useState(initialClusters);
+-+
+-+ const handleSort = React.useCallback(
+-+  (field: typeof sortField) => {
+-+   setSortDirection((prev) =>
+-+    sortField === field ? (prev === "asc" ? "desc" : "asc") : "desc"
+-+   );
+-    setSortField(field);
+--   setSortDirection(field === "healthScore" ? "asc" : "desc");
+--  }
+-- };
+-+  },
+-+  [sortField]
+-+ );
+- 
+-- // Adicionar health score calculado para cada cluster
+-- const clustersWithHealth = clusters.map((cluster: any) => ({
+--  ...cluster,
+--  healthScore: calculateHealthScore([cluster]),
+-- }));
+-+ React.useEffect(() => {
+-+  const sorted = [...initialClusters].sort((a, b) => {
+-+   let aValue: number;
+-+   let bValue: number;
+- 
+-- const sortedClusters = [...clustersWithHealth].sort((a: any, b: any) => {
+--  const aValue = a[sortField];
+--  const bValue = b[sortField];
+-+   if (sortField === "score") {
+-+    aValue = a.saude.score;
+-+    bValue = b.saude.score;
+-+   } else {
+-+    aValue = a.metricas[sortField as keyof typeof a.metricas];
+-+    bValue = b.metricas[sortField as keyof typeof b.metricas];
+-+   }
+- 
+--  if (sortDirection === "asc") {
+--   return aValue - bValue;
+--  } else {
+--   return bValue - aValue;
+--  }
+-- });
+-+   return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+-+  });
+- 
+-- // Psicologia das cores para dark mode
+-- const getHealthColor = (score: number) => {
+--  if (score >= 80) return "text-emerald-400"; // Verde esmeralda - sucesso, confiança
+--  if (score >= 60) return "text-amber-400"; // Âmbar - atenção, cautela
+--  return "text-rose-400"; // Rosa suave - urgência, mas não agressivo
+-- };
+-+  setClusters(sorted);
+-+ }, [initialClusters, sortField, sortDirection]);
+- 
+-- const getStatusColor = (
+--  value: number,
+--  thresholds: { good: number; warning: number }
+-- ) => {
+--  if (value <= thresholds.good) return "text-emerald-400"; // Bom
+--  if (value <= thresholds.warning) return "text-amber-400"; // Atenção
+--  return "text-rose-400"; // Crítico
+-+ return {
+-+  clusters,
+-+  sortField,
+-+  sortDirection,
+-+  handleSort,
+-  };
+-+}
+-+
+-+interface SortableHeaderProps {
+-+ field: "score" | "atrasos" | "faltas" | "sla";
+-+ label: string;
+-+ currentField: string;
+-+ direction: "asc" | "desc";
+-+ onSort: (field: "score" | "atrasos" | "faltas" | "sla") => void;
+-+}
+-+
+-+function SortableHeader({
+-+ field,
+-+ label,
+-+ currentField,
+-+ direction,
+-+ onSort,
+-+}: SortableHeaderProps) {
+-+ const isActive = currentField === field;
+-+ const Icon = direction === "asc" ? ChevronUpIcon : ChevronDownIcon;
+-+
+-+ return (
+-+  <th
+-+   className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors"
+-+   onClick={() => onSort(field)}
+-+  >
+-+   <div className="flex items-center space-x-1 group">
+-+    <span>{label}</span>
+-+    {isActive ? (
+-+     <Icon className="h-4 w-4 text-emerald-400" />
+-+    ) : (
+-+     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+-+      <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+-+     </div>
+-+    )}
+-+   </div>
+-+  </th>
+-+ );
+-+}
+-+
+-+interface ClusterRowProps {
+-+ cluster: ClusterDTO;
+-+ index: number;
+-+ onSelect: (cluster: ClusterDTO) => void;
+-+}
+-+
+-+function ClusterRow({ cluster, index, onSelect }: ClusterRowProps) {
+-+ const isOdd = index % 2 === 0;
+-+ const { saude, metricas, recursos } = cluster;
+- 
+-- // Função para determinar o background baseado no health score
+-  const getRowBackground = (score: number, isOdd: boolean) => {
+-   const baseColor = isOdd ? "bg-dark-tertiary/30" : "bg-dark-tertiary/10";
+- 
+--  if (score < 60)
+--   return `${baseColor} bg-rose-950/10 border-l-2 border-l-rose-500/50`; // Crítico
+--  if (score < 80)
+--   return `${baseColor} bg-amber-950/10 border-l-2 border-l-amber-500/50`; // Atenção
+--  return `${baseColor} border-l-2 border-l-emerald-500/30`; // Saudável
+-+  if (score < 70) {
+-+   return `${baseColor} bg-rose-950/10 border-l-2 border-l-rose-500/50`;
+-+  }
+-+  if (score < 80) {
+-+   return `${baseColor} bg-amber-950/10 border-l-2 border-l-amber-500/50`;
+-+  }
+-+  return `${baseColor} border-l-2 border-l-emerald-500/30`;
+-+ };
+-+
+-+ const getMetricColor = (value: number, type: "negative" | "positive") => {
+-+  if (type === "negative") {
+-+   if (value >= 20) return "text-rose-400";
+-+   if (value >= 10) return "text-amber-400";
+-+   return "text-emerald-400";
+-+  } else {
+-+   if (value >= 90) return "text-emerald-600";
+-+   if (value >= 80) return "text-emerald-400";
+-+   if (value >= 70) return "text-amber-400";
+-+   return "text-rose-400";
+-+  }
+-  };
+- 
+-+ return (
+-+  <tr
+-+   className={`transition-all duration-200 cursor-pointer hover:bg-dark-tertiary/40 ${getRowBackground(
+-+    saude.score,
+-+    isOdd
+-+   )}`}
+-+   onClick={() => onSelect(cluster)}
+-+  >
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <div className="font-medium text-text-primary">{cluster.nome}</div>
+-+    <div className="text-xs text-text-muted">{cluster.filial}</div>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+-+    {cluster.lider}
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+-+    {cluster.supervisor}
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <span className={`text-lg font-bold ${saude.cores.text}`}>
+-+     {saude.score}%
+-+    </span>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <span
+-+     className={`text-sm font-medium ${getMetricColor(
+-+      metricas.atrasos,
+-+      "negative"
+-+     )}`}
+-+    >
+-+     {metricas.atrasos}%
+-+    </span>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <span
+-+     className={`text-sm font-medium ${getMetricColor(
+-+      metricas.faltas,
+-+      "negative"
+-+     )}`}
+-+    >
+-+     {metricas.faltas}%
+-+    </span>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <span
+-+     className={`text-sm font-medium ${getMetricColor(
+-+      metricas.sla,
+-+      "positive"
+-+     )}`}
+-+    >
+-+     {metricas.sla}%
+-+    </span>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+-+    {recursos.motoristas.atual} / {recursos.motoristas.necessario}
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap">
+-+    <span
+-+     className={`text-sm font-medium ${getMetricColor(
+-+      recursos.veiculosParados,
+-+      "negative"
+-+     )}`}
+-+    >
+-+     {recursos.veiculosParados}
+-+    </span>
+-+   </td>
+-+   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+-+    <button
+-+     onClick={(e) => {
+-+      e.stopPropagation();
+-+      onSelect(cluster);
+-+     }}
+-+     className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 transition-colors bg-cyan-950/20 hover:bg-cyan-950/40 px-3 py-2 rounded-lg border border-cyan-800/30"
+-+    >
+-+     <EyeIcon className="h-4 w-4" />
+-+     <span>Ver</span>
+-+    </button>
+-+   </td>
+-+  </tr>
+-+ );
+-+}
+-+
+-+export default function ClusterTable({
+-+ clusters: initialClusters,
+-+ onClusterSelect,
+-+}: ClusterTableProps) {
+-+ const { clusters, sortField, sortDirection, handleSort } =
+-+  useClusterTable(initialClusters);
+-+
+-  return (
+-   <div className="bg-dark-secondary rounded-xl shadow-dark-xl border border-border-primary overflow-hidden backdrop-blur-sm">
+--   {/* Header da tabela */}
+-+   {/* Header */}
+-    <div className="bg-dark-tertiary/80 px-6 py-4 border-b border-border-primary">
+-     <h3 className="text-lg font-semibold text-text-primary">
+-      Clusters Regionais
+-@@ -84,12 +255,8 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
+-     </p>
+-    </div>
+- 
+--   {/* Tabela */}
+-    <div className="overflow-x-auto">
+--    <table className="w-full" role="table">
+--     <caption className="sr-only">
+--      Tabela de clusters com indicadores de saúde e capacidade
+--     </caption>
+-+    <table className="w-full">
+-      <thead className="bg-dark-tertiary/60 border-b border-border-primary">
+-       <tr>
+-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+-@@ -101,368 +268,39 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
+-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+-         Supervisor
+-        </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("healthScore")}
+--        aria-sort={
+--         sortField === "healthScore"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("healthScore");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Saúde</span>
+--         {sortField === "healthScore" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("atrasos")}
+--        aria-sort={
+--         sortField === "atrasos"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("atrasos");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>% Atrasos</span>
+--         {sortField === "atrasos" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("faltas")}
+--        aria-sort={
+--         sortField === "faltas"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("faltas");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>% Faltas</span>
+--         {sortField === "faltas" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("sla")}
+--        aria-sort={
+--         sortField === "sla"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("sla");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>% SLA</span>
+--         {sortField === "sla" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("motoristas")}
+--        aria-sort={
+--         sortField === "motoristas"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("motoristas");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Motoristas</span>
+--         {sortField === "motoristas" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("veiculosParados")}
+--        aria-sort={
+--         sortField === "veiculosParados"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("veiculosParados");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Veíc. Parados</span>
+--         {sortField === "veiculosParados" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("carrosAtivos")}
+--        aria-sort={
+--         sortField === "carrosAtivos"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("carrosAtivos");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Carros</span>
+--         {sortField === "carrosAtivos" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("motosAtivas")}
+--        aria-sort={
+--         sortField === "motosAtivas"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("motosAtivas");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Motos</span>
+--         {sortField === "motosAtivas" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("celularesAtivos")}
+--        aria-sort={
+--         sortField === "celularesAtivos"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("celularesAtivos");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Celulares</span>
+--         {sortField === "celularesAtivos" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+--       </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("apropriacoesEmAndamento")}
+--        aria-sort={
+--         sortField === "apropriacoesEmAndamento"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("apropriacoesEmAndamento");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Aprop. And.</span>
+--         {sortField === "apropriacoesEmAndamento" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+-+       <SortableHeader
+-+        field="score"
+-+        label="Saúde"
+-+        currentField={sortField}
+-+        direction={sortDirection}
+-+        onSort={handleSort}
+-+       />
+-+       <SortableHeader
+-+        field="atrasos"
+-+        label="% Atrasos"
+-+        currentField={sortField}
+-+        direction={sortDirection}
+-+        onSort={handleSort}
+-+       />
+-+       <SortableHeader
+-+        field="faltas"
+-+        label="% Faltas"
+-+        currentField={sortField}
+-+        direction={sortDirection}
+-+        onSort={handleSort}
+-+       />
+-+       <SortableHeader
+-+        field="sla"
+-+        label="% SLA"
+-+        currentField={sortField}
+-+        direction={sortDirection}
+-+        onSort={handleSort}
+-+       />
+-+       <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+-+        Motoristas
+-        </th>
+--       <th
+--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
+--        onClick={() => handleSort("apropriacoesFinalizadas")}
+--        aria-sort={
+--         sortField === "apropriacoesFinalizadas"
+--          ? sortDirection === "asc"
+--            ? "ascending"
+--            : "descending"
+--          : "none"
+--        }
+--        tabIndex={0}
+--        onKeyDown={(e) => {
+--         if (e.key === "Enter" || e.key === " ") {
+--          e.preventDefault();
+--          handleSort("apropriacoesFinalizadas");
+--         }
+--        }}
+--       >
+--        <div className="flex items-center space-x-1 group">
+--         <span>Aprop. Fin.</span>
+--         {sortField === "apropriacoesFinalizadas" ? (
+--          sortDirection === "asc" ? (
+--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
+--          ) : (
+--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
+--          )
+--         ) : (
+--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
+--          </div>
+--         )}
+--        </div>
+-+       <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+-+        Veíc. Parados
+-        </th>
+-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+-         Ações
+-@@ -470,122 +308,17 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
+-       </tr>
+-      </thead>
+-      <tbody className="divide-y divide-border-secondary">
+--      {sortedClusters.map((cluster, index) => {
+--       const isOdd = index % 2 === 0;
+--
+--       return (
+--        <tr
+--         key={cluster.id}
+--         className={`transition-all duration-200 cursor-pointer hover:bg-dark-tertiary/40 focus-visible:ring-2 focus-visible:ring-mottu-500 ${getRowBackground(
+--          cluster.healthScore,
+--          isOdd
+--         )}`}
+--         onClick={() => onClusterSelect(cluster)}
+--         tabIndex={0}
+--         onKeyDown={(e) => {
+--          if (e.key === "Enter" || e.key === " ") {
+--           e.preventDefault();
+--           onClusterSelect(cluster);
+--          }
+--         }}
+--        >
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <div className="font-medium text-text-primary">{cluster.nome}</div>
+--          <div className="text-xs text-text-muted">{cluster.filial}</div>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.lider}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.supervisor}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <span
+--           className={`text-lg font-bold ${getHealthColor(
+--            cluster.healthScore
+--           )}`}
+--          >
+--           {cluster.healthScore}%
+--          </span>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <span
+--           className={`text-sm font-medium ${getStatusColor(cluster.atrasos, {
+--            good: 15,
+--            warning: 25,
+--           })}`}
+--          >
+--           {cluster.atrasos}%
+--          </span>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <span
+--           className={`text-sm font-medium ${getStatusColor(cluster.faltas, {
+--            good: 5,
+--            warning: 8,
+--           })}`}
+--          >
+--           {cluster.faltas}%
+--          </span>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <span
+--           className={`text-sm font-medium ${getStatusColor(cluster.sla, {
+--            good: 85,
+--            warning: 75,
+--           })}`}
+--          >
+--           {cluster.sla}%
+--          </span>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.motoristas} / {cluster.motoristasNecessarios}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap">
+--          <span
+--           className={`text-sm font-medium ${getStatusColor(
+--            cluster.veiculosParados,
+--            { good: 5, warning: 10 }
+--           )}`}
+--          >
+--           {cluster.veiculosParados}
+--          </span>
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.carrosAtivos} / {cluster.carrosNecessarios}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.motosAtivas} / {cluster.motasNecessarias}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.celularesAtivos} / {cluster.celularesNecessarios}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.apropriacoesEmAndamento}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+--          {cluster.apropriacoesFinalizadas}
+--         </td>
+--         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+--          <button
+--           onClick={(e) => {
+--            e.stopPropagation();
+--            onClusterSelect(cluster);
+--           }}
+--           className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 transition-colors duration-200 bg-cyan-950/20 hover:bg-cyan-950/40 px-3 py-2 rounded-lg border border-cyan-800/30"
+--          >
+--           <EyeIcon className="h-4 w-4" />
+--           <span>Ver</span>
+--          </button>
+--         </td>
+--        </tr>
+--       );
+--      })}
+-+      {clusters.map((cluster, index) => (
+-+       <ClusterRow
+-+        key={cluster.id}
+-+        cluster={cluster}
+-+        index={index}
+-+        onSelect={onClusterSelect}
+-+       />
+-+      ))}
+-      </tbody>
+-     </table>
+-    </div>
+-   </div>
+-  );
+--};
+--
+--export default ClusterTable;
+-+}
+-diff --git a/src/components/dashboard_cluster.tsx b/src/components/dashboard_cluster.tsx
+-index 03e75b1..e54c849 100644
+---- a/src/components/dashboard_cluster.tsx
+-+++ b/src/components/dashboard_cluster.tsx
+-@@ -21,6 +21,7 @@ import {
+-  clusters,
+-  calculateHealthScore,
+-  supervisores,
+-+ getStatusColor,
+- } from "../utils/cluster_data";
+- 
+- interface Cluster {
+-@@ -472,10 +473,49 @@ const Dashboard2_Cluster = () => {
+- 
+-     {/* Tabela de clusters - Full width */}
+-     <div>
+--     <ClusterTable
+--      clusters={filteredClusters}
+--      onClusterSelect={handleClusterSelect}
+--     />
+-+     {/* ClusterTable expects ClusterDTO shape; map our Cluster[] to ClusterDTO[] */}
+-+     {/**
+-+      * Map each Cluster to ClusterDTO required by ClusterTable.
+-+      * - saude.score is calculated per-cluster using calculateHealthScore([cluster])
+-+      * - saude.cores uses getStatusColor(cluster.status)
+-+      */}
+-+     {(() => {
+-+      const dtoClusters = filteredClusters.map((c) => ({
+-+       id: c.id,
+-+       nome: c.nome,
+-+       filial: c.filial,
+-+       lider: c.lider,
+-+       supervisor: c.supervisor,
+-+       saude: {
+-+        score: calculateHealthScore([c]),
+-+        status: c.status,
+-+        cores: getStatusColor(c.status),
+-+       },
+-+       metricas: {
+-+        atrasos: c.atrasos,
+-+        faltas: c.faltas,
+-+        sla: c.sla,
+-+       },
+-+       recursos: {
+-+        motoristas: {
+-+         atual: c.motoristas,
+-+         necessario: c.motoristasNecessarios,
+-+        },
+-+        veiculosParados: c.veiculosParados,
+-+       },
+-+      }));
+-+
+-+      return (
+-+       <ClusterTable
+-+        clusters={dtoClusters}
+-+        onClusterSelect={(dto) => {
+-+         // find original Cluster by id and pass to existing handler
+-+         const orig = filteredClusters.find((fc) => fc.id === dto.id);
+-+         if (orig) handleClusterSelect(orig);
+-+        }}
+-+       />
+-+      );
+-+     })()}
+-     </div>
+- 
+-     {/* Ranking e tendências - Full width */}
+-diff --git a/src/components/dashboard_container.tsx b/src/components/dashboard_container.tsx
+-index d81f3e3..e13554d 100644
+---- a/src/components/dashboard_container.tsx
+-+++ b/src/components/dashboard_container.tsx
+-@@ -8,8 +8,10 @@ import {
+- import DashboardMenu from "./dashboard_menu";
+- import Dashboard1_SaudeGeral from "./dashboard_overview_health";
+- import Dashboard2_Cluster from "./dashboard_cluster";
+-+import ThemeToggle from "./theme_toggle";
+-+import Image from "next/image";
+- 
+--const DashboardContainer = () => {
+-+const DashboardContainer: React.FC = () => {
+-  const [activeDashboard, setActiveDashboard] = useState("operacoes-criticas");
+-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+-@@ -29,7 +31,6 @@ const DashboardContainer = () => {
+-     setIsProfileMenuOpen(false);
+-    }
+-   };
+--
+-   document.addEventListener("mousedown", handleClickOutside);
+-   return () => document.removeEventListener("mousedown", handleClickOutside);
+-  }, []);
+-@@ -38,7 +39,7 @@ const DashboardContainer = () => {
+-   name: "Enzo Ferracini Patti",
+-   email: "enzo.ferracini@mottu.com.br",
+-   avatar:
+--   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face",
+-+   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
+-  };
+- 
+-  const handleLogout = () => {
+-@@ -55,9 +56,9 @@ const DashboardContainer = () => {
+-   switch (activeDashboard) {
+-    case "saude-geral":
+-     return (
+--     <div className="flex-1 flex items-center justify-center bg-[#0B0E0E]">
+-+     <div className="flex-1 flex items-center justify-center bg-dark-primary light:bg-light-primary">
+-       <div className="text-center">
+--       <div className="text-[#6B7570] mb-4">
+-+       <div className="text-text-muted mb-4">
+-         <svg
+-          className="mx-auto h-16 w-16"
+-          fill="none"
+-@@ -72,10 +73,12 @@ const DashboardContainer = () => {
+-          />
+-         </svg>
 -        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("atrasos")}
--        aria-sort={
--         sortField === "atrasos"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("atrasos");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>% Atrasos</span>
--         {sortField === "atrasos" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("faltas")}
--        aria-sort={
--         sortField === "faltas"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("faltas");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>% Faltas</span>
--         {sortField === "faltas" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("sla")}
--        aria-sort={
--         sortField === "sla"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("sla");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>% SLA</span>
--         {sortField === "sla" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("motoristas")}
--        aria-sort={
--         sortField === "motoristas"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("motoristas");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Motoristas</span>
--         {sortField === "motoristas" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("veiculosParados")}
--        aria-sort={
--         sortField === "veiculosParados"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("veiculosParados");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Veíc. Parados</span>
--         {sortField === "veiculosParados" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("carrosAtivos")}
--        aria-sort={
--         sortField === "carrosAtivos"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("carrosAtivos");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Carros</span>
--         {sortField === "carrosAtivos" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("motosAtivas")}
--        aria-sort={
--         sortField === "motosAtivas"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("motosAtivas");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Motos</span>
--         {sortField === "motosAtivas" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("celularesAtivos")}
--        aria-sort={
--         sortField === "celularesAtivos"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("celularesAtivos");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Celulares</span>
--         {sortField === "celularesAtivos" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
--       </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("apropriacoesEmAndamento")}
--        aria-sort={
--         sortField === "apropriacoesEmAndamento"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("apropriacoesEmAndamento");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Aprop. And.</span>
--         {sortField === "apropriacoesEmAndamento" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
-+       <SortableHeader
-+        field="score"
-+        label="Saúde"
-+        currentField={sortField}
-+        direction={sortDirection}
-+        onSort={handleSort}
-+       />
-+       <SortableHeader
-+        field="atrasos"
-+        label="% Atrasos"
-+        currentField={sortField}
-+        direction={sortDirection}
-+        onSort={handleSort}
-+       />
-+       <SortableHeader
-+        field="faltas"
-+        label="% Faltas"
-+        currentField={sortField}
-+        direction={sortDirection}
-+        onSort={handleSort}
-+       />
-+       <SortableHeader
-+        field="sla"
-+        label="% SLA"
-+        currentField={sortField}
-+        direction={sortDirection}
-+        onSort={handleSort}
-+       />
-+       <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-+        Motoristas
-        </th>
--       <th
--        className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:bg-dark-tertiary/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-mottu-500"
--        onClick={() => handleSort("apropriacoesFinalizadas")}
--        aria-sort={
--         sortField === "apropriacoesFinalizadas"
--          ? sortDirection === "asc"
--            ? "ascending"
--            : "descending"
--          : "none"
--        }
--        tabIndex={0}
--        onKeyDown={(e) => {
--         if (e.key === "Enter" || e.key === " ") {
--          e.preventDefault();
--          handleSort("apropriacoesFinalizadas");
--         }
--        }}
--       >
--        <div className="flex items-center space-x-1 group">
--         <span>Aprop. Fin.</span>
--         {sortField === "apropriacoesFinalizadas" ? (
--          sortDirection === "asc" ? (
--           <ChevronUpIcon className="h-4 w-4 text-emerald-400" />
--          ) : (
--           <ChevronDownIcon className="h-4 w-4 text-rose-400" />
--          )
--         ) : (
--          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
--           <ChevronUpIcon className="h-4 w-4 text-text-secondary" />
--          </div>
--         )}
--        </div>
-+       <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-+        Veíc. Parados
-        </th>
-        <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-         Ações
-@@ -470,122 +308,17 @@ const ClusterTable: React.FC<ClusterTableProps> = ({
-       </tr>
-      </thead>
-      <tbody className="divide-y divide-border-secondary">
--      {sortedClusters.map((cluster, index) => {
--       const isOdd = index % 2 === 0;
--
--       return (
--        <tr
--         key={cluster.id}
--         className={`transition-all duration-200 cursor-pointer hover:bg-dark-tertiary/40 focus-visible:ring-2 focus-visible:ring-mottu-500 ${getRowBackground(
--          cluster.healthScore,
--          isOdd
--         )}`}
--         onClick={() => onClusterSelect(cluster)}
--         tabIndex={0}
--         onKeyDown={(e) => {
--          if (e.key === "Enter" || e.key === " ") {
--           e.preventDefault();
--           onClusterSelect(cluster);
--          }
--         }}
--        >
--         <td className="px-6 py-4 whitespace-nowrap">
--          <div className="font-medium text-text-primary">{cluster.nome}</div>
--          <div className="text-xs text-text-muted">{cluster.filial}</div>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.lider}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.supervisor}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap">
--          <span
--           className={`text-lg font-bold ${getHealthColor(
--            cluster.healthScore
--           )}`}
--          >
--           {cluster.healthScore}%
--          </span>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap">
--          <span
--           className={`text-sm font-medium ${getStatusColor(cluster.atrasos, {
--            good: 15,
--            warning: 25,
--           })}`}
--          >
--           {cluster.atrasos}%
--          </span>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap">
--          <span
--           className={`text-sm font-medium ${getStatusColor(cluster.faltas, {
--            good: 5,
--            warning: 8,
--           })}`}
--          >
--           {cluster.faltas}%
--          </span>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap">
--          <span
--           className={`text-sm font-medium ${getStatusColor(cluster.sla, {
--            good: 85,
--            warning: 75,
--           })}`}
--          >
--           {cluster.sla}%
--          </span>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.motoristas} / {cluster.motoristasNecessarios}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap">
--          <span
--           className={`text-sm font-medium ${getStatusColor(
--            cluster.veiculosParados,
--            { good: 5, warning: 10 }
--           )}`}
--          >
--           {cluster.veiculosParados}
--          </span>
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.carrosAtivos} / {cluster.carrosNecessarios}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.motosAtivas} / {cluster.motasNecessarias}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.celularesAtivos} / {cluster.celularesNecessarios}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.apropriacoesEmAndamento}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
--          {cluster.apropriacoesFinalizadas}
--         </td>
--         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
--          <button
--           onClick={(e) => {
--            e.stopPropagation();
--            onClusterSelect(cluster);
--           }}
--           className="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 transition-colors duration-200 bg-cyan-950/20 hover:bg-cyan-950/40 px-3 py-2 rounded-lg border border-cyan-800/30"
--          >
--           <EyeIcon className="h-4 w-4" />
--           <span>Ver</span>
--          </button>
--         </td>
--        </tr>
--       );
--      })}
-+      {clusters.map((cluster, index) => (
-+       <ClusterRow
-+        key={cluster.id}
-+        cluster={cluster}
-+        index={index}
-+        onSelect={onClusterSelect}
-+       />
-+      ))}
-      </tbody>
-     </table>
-    </div>
-   </div>
-  );
--};
--
--export default ClusterTable;
-+}
-diff --git a/src/components/dashboard_cluster.tsx b/src/components/dashboard_cluster.tsx
-index 03e75b1..e54c849 100644
---- a/src/components/dashboard_cluster.tsx
-+++ b/src/components/dashboard_cluster.tsx
-@@ -21,6 +21,7 @@ import {
-  clusters,
-  calculateHealthScore,
-  supervisores,
-+ getStatusColor,
- } from "../utils/cluster_data";
- 
- interface Cluster {
-@@ -472,10 +473,49 @@ const Dashboard2_Cluster = () => {
- 
-     {/* Tabela de clusters - Full width */}
-     <div>
--     <ClusterTable
--      clusters={filteredClusters}
--      onClusterSelect={handleClusterSelect}
+--       <h3 className="text-xl font-semibold text-[#E6E6E6] mb-2">
+-+       <h3 className="text-xl font-semibold text-text-primary mb-2">
+-         Dashboard em Desenvolvimento
+-        </h3>
+--       <p className="text-[#A7AFA9]">Saúde Geral será implementado em breve</p>
+-+       <p className="text-text-secondary">
+-+        Saúde Geral será implementado em breve
+-+       </p>
+-       </div>
+-      </div>
+-     );
+-@@ -89,11 +92,11 @@ const DashboardContainer = () => {
+-  };
+- 
+-  return (
+--  <div className="h-screen bg-[#0B0E0E] flex relative w-full">
+-+  <div className="h-screen bg-dark-primary light:bg-light-primary flex relative w-full">
+-    {/* Overlay */}
+-    {isMenuOpen && (
+-     <div
+--     className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300"
+-+     className="fixed inset-0 bg-black/60 light:bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300"
+-      onClick={() => setIsMenuOpen(false)}
 -     />
-+     {/* ClusterTable expects ClusterDTO shape; map our Cluster[] to ClusterDTO[] */}
-+     {/**
-+      * Map each Cluster to ClusterDTO required by ClusterTable.
-+      * - saude.score is calculated per-cluster using calculateHealthScore([cluster])
-+      * - saude.cores uses getStatusColor(cluster.status)
-+      */}
-+     {(() => {
-+      const dtoClusters = filteredClusters.map((c) => ({
-+       id: c.id,
-+       nome: c.nome,
-+       filial: c.filial,
-+       lider: c.lider,
-+       supervisor: c.supervisor,
-+       saude: {
-+        score: calculateHealthScore([c]),
-+        status: c.status,
-+        cores: getStatusColor(c.status),
-+       },
-+       metricas: {
-+        atrasos: c.atrasos,
-+        faltas: c.faltas,
-+        sla: c.sla,
-+       },
-+       recursos: {
-+        motoristas: {
-+         atual: c.motoristas,
-+         necessario: c.motoristasNecessarios,
-+        },
-+        veiculosParados: c.veiculosParados,
-+       },
-+      }));
-+
-+      return (
-+       <ClusterTable
-+        clusters={dtoClusters}
-+        onClusterSelect={(dto) => {
-+         // find original Cluster by id and pass to existing handler
-+         const orig = filteredClusters.find((fc) => fc.id === dto.id);
-+         if (orig) handleClusterSelect(orig);
-+        }}
-+       />
-+      );
-+     })()}
-     </div>
- 
-     {/* Ranking e tendências - Full width */}
-diff --git a/src/components/dashboard_container.tsx b/src/components/dashboard_container.tsx
-index d81f3e3..e13554d 100644
---- a/src/components/dashboard_container.tsx
-+++ b/src/components/dashboard_container.tsx
-@@ -8,8 +8,10 @@ import {
- import DashboardMenu from "./dashboard_menu";
- import Dashboard1_SaudeGeral from "./dashboard_overview_health";
- import Dashboard2_Cluster from "./dashboard_cluster";
-+import ThemeToggle from "./theme_toggle";
-+import Image from "next/image";
- 
--const DashboardContainer = () => {
-+const DashboardContainer: React.FC = () => {
-  const [activeDashboard, setActiveDashboard] = useState("operacoes-criticas");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-@@ -29,7 +31,6 @@ const DashboardContainer = () => {
-     setIsProfileMenuOpen(false);
-    }
-   };
--
-   document.addEventListener("mousedown", handleClickOutside);
-   return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-@@ -38,7 +39,7 @@ const DashboardContainer = () => {
-   name: "Enzo Ferracini Patti",
-   email: "enzo.ferracini@mottu.com.br",
-   avatar:
--   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face",
-+   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
-  };
- 
-  const handleLogout = () => {
-@@ -55,9 +56,9 @@ const DashboardContainer = () => {
-   switch (activeDashboard) {
-    case "saude-geral":
-     return (
--     <div className="flex-1 flex items-center justify-center bg-[#0B0E0E]">
-+     <div className="flex-1 flex items-center justify-center bg-dark-primary light:bg-light-primary">
-       <div className="text-center">
--       <div className="text-[#6B7570] mb-4">
-+       <div className="text-text-muted mb-4">
-         <svg
-          className="mx-auto h-16 w-16"
-          fill="none"
-@@ -72,10 +73,12 @@ const DashboardContainer = () => {
-          />
-         </svg>
-        </div>
--       <h3 className="text-xl font-semibold text-[#E6E6E6] mb-2">
-+       <h3 className="text-xl font-semibold text-text-primary mb-2">
-         Dashboard em Desenvolvimento
-        </h3>
--       <p className="text-[#A7AFA9]">Saúde Geral será implementado em breve</p>
-+       <p className="text-text-secondary">
-+        Saúde Geral será implementado em breve
-+       </p>
-       </div>
-      </div>
-     );
-@@ -89,11 +92,11 @@ const DashboardContainer = () => {
-  };
- 
-  return (
--  <div className="h-screen bg-[#0B0E0E] flex relative w-full">
-+  <div className="h-screen bg-dark-primary light:bg-light-primary flex relative w-full">
-    {/* Overlay */}
-    {isMenuOpen && (
-     <div
--     className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300"
-+     className="fixed inset-0 bg-black/60 light:bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300"
-      onClick={() => setIsMenuOpen(false)}
-     />
-    )}
-@@ -108,122 +111,133 @@ const DashboardContainer = () => {
-    {/* Conteúdo principal */}
-    <div className="flex-1 overflow-hidden flex flex-col">
-     {/* Barra superior */}
--    <div className="bg-[#111414] border-b border-[#2A2D2D] px-4 py-3 flex items-center justify-between shadow-lg shadow-black/20">
-+    <div className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light px-4 py-3 flex items-center justify-between shadow-lg light:shadow-light relative">
-      {/* Botão menu */}
-      <div className="flex items-center gap-3">
-       <button
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
--       className="p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
-+       className="p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
-        title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
-+       aria-label={isMenuOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
-       >
-        {isMenuOpen ? (
--        <XMarkIcon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
-+        <XMarkIcon className="h-6 w-6 text-text-secondary group-hover:text-mottu-500" />
-        ) : (
--        <Bars3Icon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
-+        <Bars3Icon className="h-6 w-6 text-text-secondary group-hover:text-mottu-500" />
-        )}
-       </button>
-      </div>
- 
-      {/* Logo/Título no centro */}
--     <div className="absolute left-1/2 transform -translate-x-1/2">
+-    )}
+-@@ -108,122 +111,133 @@ const DashboardContainer = () => {
+-    {/* Conteúdo principal */}
+-    <div className="flex-1 overflow-hidden flex flex-col">
+-     {/* Barra superior */}
+--    <div className="bg-[#111414] border-b border-[#2A2D2D] px-4 py-3 flex items-center justify-between shadow-lg shadow-black/20">
+-+    <div className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light px-4 py-3 flex items-center justify-between shadow-lg light:shadow-light relative">
+-      {/* Botão menu */}
+-      <div className="flex items-center gap-3">
+-       <button
+-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+--       className="p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
+-+       className="p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
+-        title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+-+       aria-label={isMenuOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
+-       >
+-        {isMenuOpen ? (
+--        <XMarkIcon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
+-+        <XMarkIcon className="h-6 w-6 text-text-secondary group-hover:text-mottu-500" />
+-        ) : (
+--        <Bars3Icon className="h-6 w-6 text-[#A7AFA9] group-hover:text-[#00C853]" />
+-+        <Bars3Icon className="h-6 w-6 text-text-secondary group-hover:text-mottu-500" />
+-        )}
+-       </button>
+-      </div>
+- 
+-      {/* Logo/Título no centro */}
+--     <div className="absolute left-1/2 transform -translate-x-1/2">
+--      <div className="flex items-center gap-2">
+--       <div className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse-green"></div>
+--       <span className="text-[#E6E6E6] font-bold text-lg tracking-wide">
+--        Dashboard Operacional
+--       </span>
+--      </div>
+-+     <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-none select-none">
+-+      <div className="w-2 h-2 bg-mottu-500 rounded-full animate-pulse-green" />
+-+      <span className="text-text-primary font-bold text-lg tracking-wide">
+-+       Dashboard Operacional
+-+      </span>
+-      </div>
+- 
+--     {/* Perfil */}
+--     <div className="ml-auto relative" ref={profileMenuRef}>
+--      <button
+--       onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+--       className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
+--      >
+--       <img
+--        src={userData.avatar}
+--        alt="Avatar"
+--        className="w-9 h-9 rounded-full border-2 border-[#2A2D2D] group-hover:border-[#00C853] transition-all duration-200"
+--       />
+--       <span className="text-[#E6E6E6] text-sm font-medium hidden sm:block">
+--        {userData.name}
+--       </span>
+--       <ChevronDownIcon
+--        className={`h-4 w-4 text-[#A7AFA9] group-hover:text-[#00C853] transition-all duration-200 ${
+--         isProfileMenuOpen ? "rotate-180" : ""
+--        }`}
+--       />
+--      </button>
+--
+--      {/* Menu dropdown */}
+--      {isProfileMenuOpen && (
+--       <div className="absolute right-0 top-full mt-2 w-72 bg-[#111414] border border-[#2A2D2D] rounded-xl shadow-2xl shadow-black/40 z-50 overflow-hidden animate-slide-up">
+--        {/* Header */}
+--        <div className="p-4 border-b border-[#2A2D2D] bg-[#0B0E0E]/50">
+--         <div className="flex items-center gap-3">
+--          <img
+--           src={userData.avatar}
+--           alt="Avatar"
+--           className="w-12 h-12 rounded-full border-2 border-[#00C853]"
+--          />
+--          <div className="flex-1 min-w-0">
+--           <p className="text-[#E6E6E6] font-semibold truncate">
+--            {userData.name}
+--           </p>
+--           <p className="text-[#A7AFA9] text-sm truncate">{userData.email}</p>
+-+     {/* Theme Toggle + Perfil */}
+-+     <div className="ml-auto flex items-center gap-3">
+-+      <ThemeToggle />
+-+      <div className="relative" ref={profileMenuRef}>
+-+       <button
+-+        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+-+        className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
+-+        aria-haspopup="true"
+-+        aria-expanded={isProfileMenuOpen}
+-+        aria-label="Abrir menu de perfil"
+-+       >
+-+        <Image
+-+         src={userData.avatar}
+-+         alt="Avatar do usuário"
+-+         width={36}
+-+         height={36}
+-+         className="rounded-full border-2 border-border-primary light:border-border-primary-light group-hover:border-mottu-500 transition-all duration-200"
+-+         priority
+-+        />
+-+        <span className="text-text-primary text-sm font-medium hidden sm:block">
+-+         {userData.name}
+-+        </span>
+-+        <ChevronDownIcon
+-+         className={`h-4 w-4 text-text-secondary group-hover:text-mottu-500 transition-all duration-200 ${
+-+          isProfileMenuOpen ? "rotate-180" : ""
+-+         }`}
+-+        />
+-+       </button>
+-+       {isProfileMenuOpen && (
+-+        <div className="absolute right-0 top-full mt-2 w-72 bg-dark-secondary light:bg-light-secondary border border-border-primary light:border-border-primary-light rounded-xl shadow-2xl light:shadow-light z-50 overflow-hidden animate-slide-up">
+-+         <div className="p-4 border-b border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
+-+          <div className="flex items-center gap-3">
+-+           <Image
+-+            src={userData.avatar}
+-+            alt="Avatar do usuário"
+-+            width={48}
+-+            height={48}
+-+            className="rounded-full border-2 border-mottu-500"
+-+            priority={false}
+-+           />
+-+           <div className="flex-1 min-w-0">
+-+            <p className="text-text-primary font-semibold truncate">
+-+             {userData.name}
+-+            </p>
+-+            <p className="text-text-secondary text-sm truncate">
+-+             {userData.email}
+-+            </p>
+-+           </div>
+-           </div>
+-          </div>
+--        </div>
+--
+--        {/* Opções */}
+--        <div className="p-2">
+--         <button
+--          onClick={handleLanguageChange}
+--          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#E6E6E6] rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 text-left group"
+--         >
+--          <svg
+--           className="h-5 w-5 text-[#A7AFA9] group-hover:text-[#00C853]"
+--           fill="none"
+--           viewBox="0 0 24 24"
+--           stroke="currentColor"
+-+         <div className="p-2">
+-+          <button
+-+           onClick={handleLanguageChange}
+-+           className="w-full flex items-center gap-3 px-3 py-2.5 text-text-primary rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 text-left group"
+-+           aria-label="Mudar idioma"
+-           >
+--           <path
+--            strokeLinecap="round"
+--            strokeLinejoin="round"
+--            strokeWidth={2}
+--            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+--           />
+--          </svg>
+--          <span>Mudar idioma</span>
+--         </button>
+--
+--         <button
+--          onClick={handleLogout}
+--          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#FF5252] rounded-lg hover:bg-[#FF5252]/10 transition-all duration-200 text-left group"
+--         >
+--          <svg
+--           className="h-5 w-5"
+--           fill="none"
+--           viewBox="0 0 24 24"
+--           stroke="currentColor"
+-+           <svg
+-+            className="h-5 w-5 text-text-secondary group-hover:text-mottu-500"
+-+            fill="none"
+-+            viewBox="0 0 24 24"
+-+            stroke="currentColor"
+-+           >
+-+            <path
+-+             strokeLinecap="round"
+-+             strokeLinejoin="round"
+-+             strokeWidth={2}
+-+             d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+-+            />
+-+           </svg>
+-+           <span>Mudar idioma</span>
+-+          </button>
+-+          <button
+-+           onClick={handleLogout}
+-+           className="w-full flex items-center gap-3 px-3 py-2.5 text-red-500 light:text-red-600 rounded-lg hover:bg-red-500/10 light:hover:bg-red-500/10 transition-all duration-200 text-left group"
+-+           aria-label="Deslogar"
+-           >
+--           <path
+--            strokeLinecap="round"
+--            strokeLinejoin="round"
+--            strokeWidth={2}
+--            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+--           />
+--          </svg>
+--          <span>Deslogar</span>
+--         </button>
+-+           <svg
+-+            className="h-5 w-5"
+-+            fill="none"
+-+            viewBox="0 0 24 24"
+-+            stroke="currentColor"
+-+           >
+-+            <path
+-+             strokeLinecap="round"
+-+             strokeLinejoin="round"
+-+             strokeWidth={2}
+-+             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+-+            />
+-+           </svg>
+-+           <span>Deslogar</span>
+-+          </button>
+-+         </div>
+-         </div>
+--       </div>
+--      )}
+-+       )}
+-+      </div>
+-      </div>
+-     </div>
+- 
+-     {/* Dashboard ativo */}
+--    <div className="flex-1 overflow-auto bg-[#0B0E0E]">{renderDashboard()}</div>
+-+    <div className="flex-1 overflow-auto bg-dark-primary light:bg-light-primary">
+-+     {renderDashboard()}
+-+    </div>
+-    </div>
+-   </div>
+-  );
+-diff --git a/src/components/dashboard_menu.tsx b/src/components/dashboard_menu.tsx
+-index 960fd8b..4e01087 100644
+---- a/src/components/dashboard_menu.tsx
+-+++ b/src/components/dashboard_menu.tsx
+-@@ -36,25 +36,25 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
+- 
+-  return (
+-   <div
+--   className={`w-64 bg-[#111414] h-full flex flex-col transition-all duration-300 ease-in-out ${
+-+   className={`w-64 bg-dark-secondary light:bg-light-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
+-     isOpen ? "translate-x-0" : "-translate-x-full"
+--   } fixed left-0 top-0 z-50 shadow-2xl shadow-black/50 backdrop-blur-sm border-r border-[#1e3730]`}
+-+   } fixed left-0 top-0 z-50 shadow-2xl light:shadow-light backdrop-blur-sm border-r border-border-primary light:border-border-primary-light`}
+-   >
+-    {/* Header */}
+--   <div className="p-6 border-b border-[#1e3730] bg-gradient-to-b from-[#1A1D1D] to-[#111414]">
+-+   <div className="p-6 border-b border-border-primary light:border-border-primary-light bg-gradient-to-b from-dark-tertiary to-dark-secondary light:from-light-tertiary light:to-light-secondary">
+-     <div className="flex items-center gap-3 mb-2">
+--     <div className="w-10 h-10 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-lg shadow-[#00C853]/30">
+--      <ChartBarIcon className="h-6 w-6 text-[#0B0E0E]" />
+-+     <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
+-+      <ChartBarIcon className="h-6 w-6 text-dark-primary" />
+-      </div>
+-      <div>
+--      <h2 className="text-xl font-bold text-[#E6E6E6]">Dashboards</h2>
+--      <p className="text-xs text-[#A7AFA9]">Visão operacional</p>
+-+      <h2 className="text-xl font-bold text-text-primary">Dashboards</h2>
+-+      <p className="text-xs text-text-secondary">Visão operacional</p>
+-      </div>
+-     </div>
+-    </div>
+- 
+-    {/* Itens do menu */}
+--   <nav className="flex-1 p-4 space-y-2">
+-+   <nav className="flex-1 p-4 space-y-2" aria-label="Menu de dashboards">
+-     {menuItems.map((item) => {
+-      const isActive = activeDashboard === item.id;
+-      const isComingSoon = item.id === "saude-geral";
+-@@ -63,32 +63,44 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
+-       <button
+-        key={item.id}
+-        onClick={() => onDashboardChange(item.id)}
+--       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${
+--        isActive
+--         ? "bg-gradient-to-r from-[#00C853]/20 to-[#00E676]/10 border-l-4 border-[#00E676] text-[#E6E6E6] shadow-lg shadow-[#00C853]/10"
+--         : "text-[#A7AFA9] hover:bg-[#1A1D1D] hover:text-[#00E676] border-l-4 border-transparent hover:border-[#00C853]/50 hover:shadow-md hover:shadow-[#00C853]/5"
+-+       disabled={isComingSoon}
+-+       aria-current={isActive ? "page" : undefined}
+-+       aria-label={`${item.label}${isComingSoon ? " - Em breve" : ""}${
+-+        isActive ? " - Ativo" : ""
+-        }`}
+-+       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden
+-+        focus-visible:ring-2 focus-visible:ring-mottu-500 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-primary light:focus-visible:ring-offset-light-primary
+-+        ${isComingSoon ? "cursor-not-allowed opacity-60" : ""}
+-+        ${
+-+         isActive
+-+          ? "bg-gradient-to-r from-mottu-500/20 to-mottu-400/10 border-l-4 border-mottu-400 text-text-primary shadow-lg shadow-mottu-500/10"
+-+          : "text-text-secondary hover:bg-dark-tertiary light:hover:bg-light-tertiary hover:text-mottu-400 border-l-4 border-transparent hover:border-mottu-500/50 hover:shadow-md hover:shadow-mottu-500/5"
+-+        }`}
+-       >
+-        {/* Efeito de brilho sutil no hover */}
+--       <div className="absolute inset-0 bg-gradient-to-r from-[#00C853]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+-+       <div className="absolute inset-0 bg-gradient-to-r from-mottu-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+- 
+-        <item.icon
+-         className={`h-5 w-5 transition-all duration-300 relative z-10 ${
+-          isActive
+--          ? "text-[#00E676] scale-110"
+--          : "text-[#6B7570] group-hover:text-[#00E676] group-hover:scale-105"
+-+          ? "text-mottu-400 scale-110"
+-+          : "text-text-muted group-hover:text-mottu-400 group-hover:scale-105"
+-         }`}
+-+        aria-hidden="true"
+-        />
+-        <span
+-         className={`font-medium text-sm relative z-10 transition-all duration-300 ${
+--         isActive ? "text-[#00E676]" : "group-hover:text-[#00E676]"
+-+         isActive ? "text-mottu-400" : "group-hover:text-mottu-400"
+-         }`}
+-        >
+-         {item.label}
+-        </span>
+- 
+-        {isComingSoon && (
+--        <span className="ml-auto text-[10px] bg-[#1A1D1D] text-[#00C853] px-2 py-1 rounded-full border border-[#00C853]/30 relative z-10 group-hover:bg-[#00C853]/10 group-hover:border-[#00C853]/50 transition-all duration-300">
+-+        <span
+-+         className="ml-auto text-[10px] bg-dark-tertiary light:bg-light-tertiary text-mottu-500 px-2 py-1 rounded-full border border-mottu-500/30 relative z-10 group-hover:bg-mottu-500/10 group-hover:border-mottu-500/50 transition-all duration-300"
+-+         aria-hidden="true"
+-+        >
+-          Em breve
+-         </span>
+-        )}
+-@@ -98,15 +110,15 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
+-    </nav>
+- 
+-    {/* Footer */}
+--   <div className="p-4 border-t border-[#1e3730] bg-[#0B0E0E]/50">
+-+   <div className="p-4 border-t border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
+-     <div className="flex items-center justify-between">
+--     <div className="text-xs text-[#6B7570]">
+-+     <div className="text-xs text-text-muted">
+-       Sistema Operacional
+-       <br />
+--      <span className="text-[#00C853] font-semibold">v1.0.0</span>
+-+      <span className="text-mottu-500 font-semibold">v1.0.0</span>
+-      </div>
+--     <div className="w-8 h-8 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-md shadow-[#00C853]/30">
+--      <span className="text-[#0B0E0E] font-bold text-xs">M</span>
+-+     <div className="w-8 h-8 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-md shadow-mottu-500/30">
+-+      <span className="text-dark-primary font-bold text-xs">M</span>
+-      </div>
+-     </div>
+-    </div>
+-diff --git a/src/components/header.tsx b/src/components/header.tsx
+-index 8c24196..785291e 100644
+---- a/src/components/header.tsx
+-+++ b/src/components/header.tsx
+-@@ -35,23 +35,23 @@ const Header: React.FC<HeaderProps> = ({
+-  };
+- 
+-  return (
+--  <header className="bg-[#111414] border-b border-[#2A2D2D] shadow-lg shadow-black/20 flex-shrink-0">
+-+  <header className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light shadow-lg light:shadow-light flex-shrink-0">
+-    <div className="px-4 md:px-6 py-3 md:py-4 space-y-3 md:space-y-4">
+-     {/* Alertas críticos */}
+-     <div className="flex items-center justify-between">
+-      <div className="flex items-center gap-3">
+-       {criticalAlertsCount > 0 && (
+-        <div className="relative animate-pulse-green">
+--        <BellIcon className="h-5 w-5 text-[#FF5252]" />
+--        <span className="absolute -top-1 -right-1 bg-[#FF5252] text-[#0B0E0E] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-[#FF5252]/50">
+-+        <BellIcon className="h-5 w-5 text-red-500 light:text-red-600" />
+-+        <span className="absolute -top-1 -right-1 bg-red-500 light:bg-red-600 text-dark-primary light:text-light-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
+-          {criticalAlertsCount}
+-         </span>
+-        </div>
+-       )}
+- 
+--      <div className="flex items-center gap-2 text-sm text-[#A7AFA9]">
+-+      <div className="flex items-center gap-2 text-sm text-text-secondary">
+-        <ExclamationTriangleIcon className="h-4 w-4" />
+--       <span className="font-semibold text-[#FF5252]">
+-+       <span className="font-semibold text-red-500 light:text-red-600">
+-         {criticalAlertsCount}
+-        </span>
+-        <span>críticos</span>
+-@@ -82,19 +82,19 @@ const Header: React.FC<HeaderProps> = ({
+-     {/* Estatísticas */}
+-     <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm pb-1">
 -      <div className="flex items-center gap-2">
--       <div className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse-green"></div>
--       <span className="text-[#E6E6E6] font-bold text-lg tracking-wide">
--        Dashboard Operacional
+--      <span className="w-2 h-2 bg-[#29B6F6] rounded-full shadow-sm shadow-[#29B6F6]/50"></span>
+--      <span className="text-[#A7AFA9] font-medium">
+-+      <span className="w-2 h-2 bg-blue-500 light:bg-blue-600 rounded-full shadow-sm shadow-blue-500/50"></span>
+-+      <span className="text-text-secondary font-medium">
+-        {streetCallsCount} Chamados de Rua
 -       </span>
 -      </div>
-+     <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-none select-none">
-+      <div className="w-2 h-2 bg-mottu-500 rounded-full animate-pulse-green" />
-+      <span className="text-text-primary font-bold text-lg tracking-wide">
-+       Dashboard Operacional
-+      </span>
-      </div>
- 
--     {/* Perfil */}
--     <div className="ml-auto relative" ref={profileMenuRef}>
--      <button
--       onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
--       className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 group"
--      >
--       <img
--        src={userData.avatar}
--        alt="Avatar"
--        className="w-9 h-9 rounded-full border-2 border-[#2A2D2D] group-hover:border-[#00C853] transition-all duration-200"
--       />
--       <span className="text-[#E6E6E6] text-sm font-medium hidden sm:block">
--        {userData.name}
+-      <div className="flex items-center gap-2">
+--      <span className="w-2 h-2 bg-[#FF5252] rounded-full shadow-sm shadow-[#FF5252]/50"></span>
+--      <span className="text-[#A7AFA9] font-medium">
+-+      <span className="w-2 h-2 bg-red-500 light:bg-red-600 rounded-full shadow-sm shadow-red-500/50"></span>
+-+      <span className="text-text-secondary font-medium">
+-        {appropriationsCount} Apropriações
 -       </span>
--       <ChevronDownIcon
--        className={`h-4 w-4 text-[#A7AFA9] group-hover:text-[#00C853] transition-all duration-200 ${
--         isProfileMenuOpen ? "rotate-180" : ""
--        }`}
--       />
--      </button>
--
--      {/* Menu dropdown */}
--      {isProfileMenuOpen && (
--       <div className="absolute right-0 top-full mt-2 w-72 bg-[#111414] border border-[#2A2D2D] rounded-xl shadow-2xl shadow-black/40 z-50 overflow-hidden animate-slide-up">
--        {/* Header */}
--        <div className="p-4 border-b border-[#2A2D2D] bg-[#0B0E0E]/50">
--         <div className="flex items-center gap-3">
--          <img
--           src={userData.avatar}
--           alt="Avatar"
--           className="w-12 h-12 rounded-full border-2 border-[#00C853]"
--          />
--          <div className="flex-1 min-w-0">
--           <p className="text-[#E6E6E6] font-semibold truncate">
--            {userData.name}
--           </p>
--           <p className="text-[#A7AFA9] text-sm truncate">{userData.email}</p>
-+     {/* Theme Toggle + Perfil */}
-+     <div className="ml-auto flex items-center gap-3">
-+      <ThemeToggle />
-+      <div className="relative" ref={profileMenuRef}>
-+       <button
-+        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-+        className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
-+        aria-haspopup="true"
-+        aria-expanded={isProfileMenuOpen}
-+        aria-label="Abrir menu de perfil"
-+       >
-+        <Image
-+         src={userData.avatar}
-+         alt="Avatar do usuário"
-+         width={36}
-+         height={36}
-+         className="rounded-full border-2 border-border-primary light:border-border-primary-light group-hover:border-mottu-500 transition-all duration-200"
-+         priority
-+        />
-+        <span className="text-text-primary text-sm font-medium hidden sm:block">
-+         {userData.name}
-+        </span>
-+        <ChevronDownIcon
-+         className={`h-4 w-4 text-text-secondary group-hover:text-mottu-500 transition-all duration-200 ${
-+          isProfileMenuOpen ? "rotate-180" : ""
-+         }`}
-+        />
-+       </button>
-+       {isProfileMenuOpen && (
-+        <div className="absolute right-0 top-full mt-2 w-72 bg-dark-secondary light:bg-light-secondary border border-border-primary light:border-border-primary-light rounded-xl shadow-2xl light:shadow-light z-50 overflow-hidden animate-slide-up">
-+         <div className="p-4 border-b border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
-+          <div className="flex items-center gap-3">
-+           <Image
-+            src={userData.avatar}
-+            alt="Avatar do usuário"
-+            width={48}
-+            height={48}
-+            className="rounded-full border-2 border-mottu-500"
-+            priority={false}
-+           />
-+           <div className="flex-1 min-w-0">
-+            <p className="text-text-primary font-semibold truncate">
-+             {userData.name}
-+            </p>
-+            <p className="text-text-secondary text-sm truncate">
-+             {userData.email}
-+            </p>
-+           </div>
-           </div>
-          </div>
--        </div>
--
--        {/* Opções */}
--        <div className="p-2">
--         <button
--          onClick={handleLanguageChange}
--          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#E6E6E6] rounded-lg hover:bg-[#1A1D1D] transition-all duration-200 text-left group"
--         >
--          <svg
--           className="h-5 w-5 text-[#A7AFA9] group-hover:text-[#00C853]"
--           fill="none"
--           viewBox="0 0 24 24"
--           stroke="currentColor"
-+         <div className="p-2">
-+          <button
-+           onClick={handleLanguageChange}
-+           className="w-full flex items-center gap-3 px-3 py-2.5 text-text-primary rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 text-left group"
-+           aria-label="Mudar idioma"
-           >
--           <path
--            strokeLinecap="round"
--            strokeLinejoin="round"
--            strokeWidth={2}
--            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
--           />
--          </svg>
--          <span>Mudar idioma</span>
--         </button>
--
--         <button
--          onClick={handleLogout}
--          className="w-full flex items-center gap-3 px-3 py-2.5 text-[#FF5252] rounded-lg hover:bg-[#FF5252]/10 transition-all duration-200 text-left group"
--         >
--          <svg
--           className="h-5 w-5"
--           fill="none"
--           viewBox="0 0 24 24"
--           stroke="currentColor"
-+           <svg
-+            className="h-5 w-5 text-text-secondary group-hover:text-mottu-500"
-+            fill="none"
-+            viewBox="0 0 24 24"
-+            stroke="currentColor"
-+           >
-+            <path
-+             strokeLinecap="round"
-+             strokeLinejoin="round"
-+             strokeWidth={2}
-+             d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-+            />
-+           </svg>
-+           <span>Mudar idioma</span>
-+          </button>
-+          <button
-+           onClick={handleLogout}
-+           className="w-full flex items-center gap-3 px-3 py-2.5 text-red-500 light:text-red-600 rounded-lg hover:bg-red-500/10 light:hover:bg-red-500/10 transition-all duration-200 text-left group"
-+           aria-label="Deslogar"
-           >
--           <path
--            strokeLinecap="round"
--            strokeLinejoin="round"
--            strokeWidth={2}
--            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
--           />
--          </svg>
--          <span>Deslogar</span>
--         </button>
-+           <svg
-+            className="h-5 w-5"
-+            fill="none"
-+            viewBox="0 0 24 24"
-+            stroke="currentColor"
-+           >
-+            <path
-+             strokeLinecap="round"
-+             strokeLinejoin="round"
-+             strokeWidth={2}
-+             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-+            />
-+           </svg>
-+           <span>Deslogar</span>
-+          </button>
-+         </div>
+-      </div>
+--     <div className="hidden sm:block text-[#3A3D3D]">•</div>
+--     <div className="text-[#E6E6E6] font-semibold">
+-+     <div className="hidden sm:block text-text-muted">•</div>
+-+     <div className="text-text-primary font-semibold">
+-       Total: {services.length} serviços ativos
+-      </div>
+-     </div>
+-diff --git a/src/components/hierarchical_filters.tsx b/src/components/hierarchical_filters.tsx
+-index d204242..4414ebc 100644
+---- a/src/components/hierarchical_filters.tsx
+-+++ b/src/components/hierarchical_filters.tsx
+-@@ -28,7 +28,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
+-  const [selectedStatus, setSelectedStatus] = useState("all");
+-  const [searchTerm, setSearchTerm] = useState("");
+- 
+-- // Mock data para supervisores e líderes baseados em filiais
+-  const supervisors = [
+-   {
+-    id: "sup1",
+-@@ -117,12 +116,10 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
+- 
+-  return (
+-   <div className="space-y-3">
+--   {/* Linha 1: Dropdowns e Busca */}
+-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+-     <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+-      <FunnelIcon className="h-4 w-4 md:h-5 md:w-5 text-text-muted" />
+- 
+--     {/* Dropdown Supervisor */}
+-      <div className="relative flex-1 sm:flex-initial">
+-       <select
+-        value={selectedSupervisor}
+-@@ -139,7 +136,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
+-       <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted pointer-events-none" />
+-      </div>
+- 
+--     {/* Dropdown Líder */}
+-      <div className="relative flex-1 sm:flex-initial">
+-       <select
+-        value={selectedLeader}
+-@@ -162,7 +158,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
+-      </div>
+-     </div>
+- 
+--    {/* Busca */}
+-     <form onSubmit={handleSearch} className="relative flex-1 sm:max-w-xs">
+-      <div className="relative">
+-       <MagnifyingGlassIcon className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted" />
+-@@ -177,7 +172,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
+-     </form>
+-    </div>
+- 
+--   {/* Linha 2: Status - Scroll horizontal em mobile */}
+-    <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+-     <div className="flex space-x-1 md:space-x-2 min-w-max md:min-w-0">
+-      {statusOptions.map((status) => (
+-diff --git a/src/components/kpi_card_list.tsx b/src/components/kpi_card_list.tsx
+-index dbee018..c41b1bb 100644
+---- a/src/components/kpi_card_list.tsx
+-+++ b/src/components/kpi_card_list.tsx
+-@@ -166,7 +166,7 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
+- 
+-       <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
+-        <div
+--        className={`p-2 rounded-lg bg-black/20 border border-[#2A2D2D] group-hover:border-emerald-400/20 transition-colors duration-300`}
+-+        className={`p-2 rounded-lg bg-dark-primary/20 light:bg-light-primary/20 border border-border-primary light:border-border-primary-light group-hover:border-mottu-400/20 transition-colors duration-300`}
+-        >
+-         <kpi.icon
+-          className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}
+-diff --git a/src/components/ranking_card.tsx b/src/components/ranking_card.tsx
+-index c32c57d..8671595 100644
+---- a/src/components/ranking_card.tsx
+-+++ b/src/components/ranking_card.tsx
+-@@ -289,7 +289,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
+-           </div>
+-          </div>
+- 
+--         {/* Faltas */}
+-          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
+-           <span className="text-text-muted text-xs">Faltas</span>
+-           <div className="flex items-center justify-between">
+-@@ -312,7 +311,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
+-           </div>
+-          </div>
+- 
+--         {/* SLA */}
+-          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
+-           <span className="text-text-muted text-xs">SLA</span>
+-           <div className="flex items-center justify-between">
+-diff --git a/tailwind.config.ts b/tailwind.config.ts
+-index 88a8997..3d60c08 100644
+---- a/tailwind.config.ts
+-+++ b/tailwind.config.ts
+-@@ -12,16 +12,23 @@ const config: Config = {
+-    colors: {
+-     // Dark backgrounds
+-     dark: {
+--     primary: "#0b0e0e",
+--     secondary: "#111414",
+--     tertiary: "#1a1d1d",
+--     hover: "#2a2d2d",
+-+     primary: "rgb(var(--color-dark-primary) / <alpha-value>)",
+-+     secondary: "rgb(var(--color-dark-secondary) / <alpha-value>)",
+-+     tertiary: "rgb(var(--color-dark-tertiary) / <alpha-value>)",
+-+     hover: "rgb(var(--color-dark-hover) / <alpha-value>)",
+-+    },
+-+    // Light backgrounds
+-+    light: {
+-+     primary: "rgb(var(--color-light-primary) / <alpha-value>)",
+-+     secondary: "rgb(var(--color-light-secondary) / <alpha-value>)",
+-+     tertiary: "rgb(var(--color-light-tertiary) / <alpha-value>)",
+-+     hover: "rgb(var(--color-light-hover) / <alpha-value>)",
+-     },
+-     // Text colors
+-     text: {
+--     primary: "#e6e6e6",
+--     secondary: "#a7afa9",
+--     muted: "#6b7570",
+-+     primary: "rgb(var(--color-text-primary) / <alpha-value>)",
+-+     secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
+-+     muted: "rgb(var(--color-text-muted) / <alpha-value>)",
+-     },
+-     // Mottu Green
+-     mottu: {
+diff --git a/src/components/dashboard_cluster.tsx b/src/components/dashboard_cluster.tsx
+index e54c849..88b0c03 100644
+--- a/src/components/dashboard_cluster.tsx
++++ b/src/components/dashboard_cluster.tsx
+@@ -569,8 +569,14 @@ const Dashboard2_Cluster = () => {
          </div>
--       </div>
--      )}
-+       )}
-+      </div>
-      </div>
-     </div>
- 
-     {/* Dashboard ativo */}
--    <div className="flex-1 overflow-auto bg-[#0B0E0E]">{renderDashboard()}</div>
-+    <div className="flex-1 overflow-auto bg-dark-primary light:bg-light-primary">
-+     {renderDashboard()}
-+    </div>
-    </div>
-   </div>
-  );
+         <div>
+          <span className="text-sm text-text-muted">Status:</span>
+-         <p className="font-medium capitalize text-text-primary">
+-          {selectedCluster.status}
++         <p className="font-medium text-text-primary">
++          {selectedCluster.status === "operational"
++           ? "Operacional"
++           : selectedCluster.status === "warning"
++           ? "Atenção"
++           : selectedCluster.status === "critical"
++           ? "Crítico"
++           : selectedCluster.status}
+          </p>
+         </div>
+        </div>
 diff --git a/src/components/dashboard_menu.tsx b/src/components/dashboard_menu.tsx
-index 960fd8b..4e01087 100644
+index 24de70d..ae692f2 100644
 --- a/src/components/dashboard_menu.tsx
 +++ b/src/components/dashboard_menu.tsx
-@@ -36,25 +36,25 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
+@@ -36,24 +36,26 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
  
   return (
    <div
--   className={`w-64 bg-[#111414] h-full flex flex-col transition-all duration-300 ease-in-out ${
-+   className={`w-64 bg-dark-secondary light:bg-light-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
+-   className={`w-64 bg-dark-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
++   className={`w-56 lg:w-64 bg-dark-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
      isOpen ? "translate-x-0" : "-translate-x-full"
--   } fixed left-0 top-0 z-50 shadow-2xl shadow-black/50 backdrop-blur-sm border-r border-[#1e3730]`}
-+   } fixed left-0 top-0 z-50 shadow-2xl light:shadow-light backdrop-blur-sm border-r border-border-primary light:border-border-primary-light`}
+    } md:translate-x-0 md:relative md:border-r md:border-border-primary`}
    >
-    {/* Header */}
--   <div className="p-6 border-b border-[#1e3730] bg-gradient-to-b from-[#1A1D1D] to-[#111414]">
-+   <div className="p-6 border-b border-border-primary light:border-border-primary-light bg-gradient-to-b from-dark-tertiary to-dark-secondary light:from-light-tertiary light:to-light-secondary">
-     <div className="flex items-center gap-3 mb-2">
--     <div className="w-10 h-10 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-lg shadow-[#00C853]/30">
--      <ChartBarIcon className="h-6 w-6 text-[#0B0E0E]" />
-+     <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
-+      <ChartBarIcon className="h-6 w-6 text-dark-primary" />
+-   <div className="flex items-center justify-between h-16 px-4 border-b border-border-primary flex-shrink-0">
+-    <div className="flex items-center gap-3">
+-     <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
+-      <ChartBarIcon className="h-6 w-6 text-dark-primary" />
++   <div className="flex items-center justify-between h-14 lg:h-16 px-3 lg:px-4 border-b border-border-primary flex-shrink-0">
++    <div className="flex items-center gap-2 lg:gap-3">
++     <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
++      <ChartBarIcon className="h-5 w-5 lg:h-6 lg:w-6 text-dark-primary" />
       </div>
       <div>
--      <h2 className="text-xl font-bold text-[#E6E6E6]">Dashboards</h2>
--      <p className="text-xs text-[#A7AFA9]">Visão operacional</p>
-+      <h2 className="text-xl font-bold text-text-primary">Dashboards</h2>
-+      <p className="text-xs text-text-secondary">Visão operacional</p>
+-      <h2 className="text-xl font-bold text-text-primary">Dashboards</h2>
++      <h2 className="text-lg lg:text-xl font-bold text-text-primary">
++       Dashboards
++      </h2>
+       <p className="text-xs text-text-secondary">Visão operacional</p>
       </div>
      </div>
     </div>
  
     {/* Itens do menu */}
--   <nav className="flex-1 p-4 space-y-2">
-+   <nav className="flex-1 p-4 space-y-2" aria-label="Menu de dashboards">
+-   <nav className="flex-1 p-4 space-y-2" aria-label="Menu de dashboards">
++   <nav className="flex-1 p-3 lg:p-4 space-y-2" aria-label="Menu de dashboards">
      {menuItems.map((item) => {
       const isActive = activeDashboard === item.id;
       const isComingSoon = item.id === "saude-geral";
-@@ -63,32 +63,44 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
-       <button
-        key={item.id}
-        onClick={() => onDashboardChange(item.id)}
--       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${
--        isActive
--         ? "bg-gradient-to-r from-[#00C853]/20 to-[#00E676]/10 border-l-4 border-[#00E676] text-[#E6E6E6] shadow-lg shadow-[#00C853]/10"
--         : "text-[#A7AFA9] hover:bg-[#1A1D1D] hover:text-[#00E676] border-l-4 border-transparent hover:border-[#00C853]/50 hover:shadow-md hover:shadow-[#00C853]/5"
-+       disabled={isComingSoon}
-+       aria-current={isActive ? "page" : undefined}
-+       aria-label={`${item.label}${isComingSoon ? " - Em breve" : ""}${
-+        isActive ? " - Ativo" : ""
-        }`}
-+       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden
-+        focus-visible:ring-2 focus-visible:ring-mottu-500 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-primary light:focus-visible:ring-offset-light-primary
-+        ${isComingSoon ? "cursor-not-allowed opacity-60" : ""}
-+        ${
-+         isActive
-+          ? "bg-gradient-to-r from-mottu-500/20 to-mottu-400/10 border-l-4 border-mottu-400 text-text-primary shadow-lg shadow-mottu-500/10"
-+          : "text-text-secondary hover:bg-dark-tertiary light:hover:bg-light-tertiary hover:text-mottu-400 border-l-4 border-transparent hover:border-mottu-500/50 hover:shadow-md hover:shadow-mottu-500/5"
-+        }`}
-       >
-        {/* Efeito de brilho sutil no hover */}
--       <div className="absolute inset-0 bg-gradient-to-r from-[#00C853]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-+       <div className="absolute inset-0 bg-gradient-to-r from-mottu-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
- 
-        <item.icon
-         className={`h-5 w-5 transition-all duration-300 relative z-10 ${
-          isActive
--          ? "text-[#00E676] scale-110"
--          : "text-[#6B7570] group-hover:text-[#00E676] group-hover:scale-105"
-+          ? "text-mottu-400 scale-110"
-+          : "text-text-muted group-hover:text-mottu-400 group-hover:scale-105"
-         }`}
-+        aria-hidden="true"
-        />
-        <span
-         className={`font-medium text-sm relative z-10 transition-all duration-300 ${
--         isActive ? "text-[#00E676]" : "group-hover:text-[#00E676]"
-+         isActive ? "text-mottu-400" : "group-hover:text-mottu-400"
-         }`}
-        >
-         {item.label}
-        </span>
- 
-        {isComingSoon && (
--        <span className="ml-auto text-[10px] bg-[#1A1D1D] text-[#00C853] px-2 py-1 rounded-full border border-[#00C853]/30 relative z-10 group-hover:bg-[#00C853]/10 group-hover:border-[#00C853]/50 transition-all duration-300">
-+        <span
-+         className="ml-auto text-[10px] bg-dark-tertiary light:bg-light-tertiary text-mottu-500 px-2 py-1 rounded-full border border-mottu-500/30 relative z-10 group-hover:bg-mottu-500/10 group-hover:border-mottu-500/50 transition-all duration-300"
-+         aria-hidden="true"
-+        >
-          Em breve
-         </span>
-        )}
-@@ -98,15 +110,15 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
-    </nav>
- 
-    {/* Footer */}
--   <div className="p-4 border-t border-[#1e3730] bg-[#0B0E0E]/50">
-+   <div className="p-4 border-t border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
-     <div className="flex items-center justify-between">
--     <div className="text-xs text-[#6B7570]">
-+     <div className="text-xs text-text-muted">
-       Sistema Operacional
-       <br />
--      <span className="text-[#00C853] font-semibold">v1.0.0</span>
-+      <span className="text-mottu-500 font-semibold">v1.0.0</span>
-      </div>
--     <div className="w-8 h-8 bg-gradient-to-br from-[#00C853] to-[#00E676] rounded-lg flex items-center justify-center shadow-md shadow-[#00C853]/30">
--      <span className="text-[#0B0E0E] font-bold text-xs">M</span>
-+     <div className="w-8 h-8 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-md shadow-mottu-500/30">
-+      <span className="text-dark-primary font-bold text-xs">M</span>
-      </div>
-     </div>
-    </div>
 diff --git a/src/components/header.tsx b/src/components/header.tsx
-index 8c24196..785291e 100644
+index d99fbca..4fdf6b3 100644
 --- a/src/components/header.tsx
 +++ b/src/components/header.tsx
-@@ -35,23 +35,23 @@ const Header: React.FC<HeaderProps> = ({
-  };
+@@ -36,29 +36,31 @@ const Header: React.FC<HeaderProps> = ({
  
   return (
--  <header className="bg-[#111414] border-b border-[#2A2D2D] shadow-lg shadow-black/20 flex-shrink-0">
-+  <header className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light shadow-lg light:shadow-light flex-shrink-0">
-    <div className="px-4 md:px-6 py-3 md:py-4 space-y-3 md:space-y-4">
-     {/* Alertas críticos */}
-     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
+   <header className="bg-dark-secondary border-b border-border-primary shadow-lg flex-shrink-0">
+-   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+-    <div className="flex h-16 items-center justify-between">
+-     <div className="flex items-center gap-3">
++   <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-5 space-y-4 lg:space-y-5">
++    <div className="flex h-12 lg:h-14 items-center justify-between">
++     <div className="flex items-center gap-3 lg:gap-4">
        {criticalAlertsCount > 0 && (
         <div className="relative animate-pulse-green">
--        <BellIcon className="h-5 w-5 text-[#FF5252]" />
--        <span className="absolute -top-1 -right-1 bg-[#FF5252] text-[#0B0E0E] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-[#FF5252]/50">
-+        <BellIcon className="h-5 w-5 text-red-500 light:text-red-600" />
-+        <span className="absolute -top-1 -right-1 bg-red-500 light:bg-red-600 text-dark-primary light:text-light-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
+-        <BellIcon className="h-5 w-5 text-red-500" />
+-        <span className="absolute -top-1 -right-1 bg-red-500 text-dark-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
++        <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-red-500" />
++        <span className="absolute -top-1 -right-1 bg-red-500 text-dark-primary text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
           {criticalAlertsCount}
          </span>
         </div>
        )}
  
--      <div className="flex items-center gap-2 text-sm text-[#A7AFA9]">
-+      <div className="flex items-center gap-2 text-sm text-text-secondary">
-        <ExclamationTriangleIcon className="h-4 w-4" />
--       <span className="font-semibold text-[#FF5252]">
-+       <span className="font-semibold text-red-500 light:text-red-600">
-         {criticalAlertsCount}
-        </span>
-        <span>críticos</span>
-@@ -82,19 +82,19 @@ const Header: React.FC<HeaderProps> = ({
+-      <div className="flex items-center gap-2 text-sm text-text-secondary">
+-       <ExclamationTriangleIcon className="h-4 w-4" />
+-       <span className="font-semibold text-red-500">{criticalAlertsCount}</span>
+-       <span>críticos</span>
++      <div className="flex items-center gap-2 lg:gap-3 text-sm lg:text-base text-text-secondary">
++       <ExclamationTriangleIcon className="h-5 w-5 lg:h-6 lg:w-6" />
++       <span className="font-bold text-red-500 text-lg lg:text-xl">
++        {criticalAlertsCount}
++       </span>
++       <span className="font-medium">críticos</span>
+       </div>
+      </div>
+     </div>
+ 
+     {/* KPIs */}
+-    <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+-     <div className="min-w-max md:min-w-0">
++    <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
++     <div className="min-w-max sm:min-w-0">
+       <KPICards services={services} />
+      </div>
+     </div>
+@@ -77,21 +79,21 @@ const Header: React.FC<HeaderProps> = ({
+     </div>
+ 
      {/* Estatísticas */}
-     <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm pb-1">
-      <div className="flex items-center gap-2">
--      <span className="w-2 h-2 bg-[#29B6F6] rounded-full shadow-sm shadow-[#29B6F6]/50"></span>
--      <span className="text-[#A7AFA9] font-medium">
-+      <span className="w-2 h-2 bg-blue-500 light:bg-blue-600 rounded-full shadow-sm shadow-blue-500/50"></span>
-+      <span className="text-text-secondary font-medium">
+-    <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm pb-1">
+-     <div className="flex items-center gap-2">
+-      <span className="w-2 h-2 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
+-      <span className="text-text-secondary font-medium">
++    <div className="flex flex-wrap items-center gap-3 lg:gap-5 text-sm lg:text-base pb-2">
++     <div className="flex items-center gap-2 lg:gap-2.5">
++      <span className="w-2.5 h-2.5 lg:w-3 lg:h-3 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
++      <span className="text-text-secondary font-semibold">
         {streetCallsCount} Chamados de Rua
        </span>
       </div>
-      <div className="flex items-center gap-2">
--      <span className="w-2 h-2 bg-[#FF5252] rounded-full shadow-sm shadow-[#FF5252]/50"></span>
--      <span className="text-[#A7AFA9] font-medium">
-+      <span className="w-2 h-2 bg-red-500 light:bg-red-600 rounded-full shadow-sm shadow-red-500/50"></span>
-+      <span className="text-text-secondary font-medium">
+-     <div className="flex items-center gap-2">
+-      <span className="w-2 h-2 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></span>
+-      <span className="text-text-secondary font-medium">
++     <div className="flex items-center gap-2 lg:gap-2.5">
++      <span className="w-2.5 h-2.5 lg:w-3 lg:h-3 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></span>
++      <span className="text-text-secondary font-semibold">
         {appropriationsCount} Apropriações
        </span>
       </div>
--     <div className="hidden sm:block text-[#3A3D3D]">•</div>
--     <div className="text-[#E6E6E6] font-semibold">
-+     <div className="hidden sm:block text-text-muted">•</div>
-+     <div className="text-text-primary font-semibold">
+      <div className="hidden sm:block text-text-muted">•</div>
+-     <div className="text-text-primary font-semibold">
++     <div className="text-text-primary font-bold">
        Total: {services.length} serviços ativos
       </div>
      </div>
-diff --git a/src/components/hierarchical_filters.tsx b/src/components/hierarchical_filters.tsx
-index d204242..4414ebc 100644
---- a/src/components/hierarchical_filters.tsx
-+++ b/src/components/hierarchical_filters.tsx
-@@ -28,7 +28,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
- 
-- // Mock data para supervisores e líderes baseados em filiais
-  const supervisors = [
-   {
-    id: "sup1",
-@@ -117,12 +116,10 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
- 
-  return (
-   <div className="space-y-3">
--   {/* Linha 1: Dropdowns e Busca */}
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
-     <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-      <FunnelIcon className="h-4 w-4 md:h-5 md:w-5 text-text-muted" />
- 
--     {/* Dropdown Supervisor */}
-      <div className="relative flex-1 sm:flex-initial">
-       <select
-        value={selectedSupervisor}
-@@ -139,7 +136,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
-       <ChevronDownIcon className="absolute right-2 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted pointer-events-none" />
-      </div>
- 
--     {/* Dropdown Líder */}
-      <div className="relative flex-1 sm:flex-initial">
-       <select
-        value={selectedLeader}
-@@ -162,7 +158,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
-      </div>
-     </div>
- 
--    {/* Busca */}
-     <form onSubmit={handleSearch} className="relative flex-1 sm:max-w-xs">
-      <div className="relative">
-       <MagnifyingGlassIcon className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 md:h-4 md:w-4 text-text-muted" />
-@@ -177,7 +172,6 @@ const HierarchicalFilters: React.FC<HierarchicalFiltersProps> = ({
-     </form>
-    </div>
- 
--   {/* Linha 2: Status - Scroll horizontal em mobile */}
-    <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-     <div className="flex space-x-1 md:space-x-2 min-w-max md:min-w-0">
-      {statusOptions.map((status) => (
 diff --git a/src/components/kpi_card_list.tsx b/src/components/kpi_card_list.tsx
-index dbee018..c41b1bb 100644
+index c41b1bb..74dddae 100644
 --- a/src/components/kpi_card_list.tsx
 +++ b/src/components/kpi_card_list.tsx
-@@ -166,7 +166,7 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
+@@ -152,30 +152,30 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
+  };
  
-       <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
+  return (
+-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
++  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
+    {kpis.map((kpi, index) => {
+     const TrendIcon = getTrendIcon(kpi.trend);
+ 
+     return (
+      <div
+       key={index}
+-      className={`group flex items-center space-x-3 px-3 py-3 rounded-xl border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-black/20 ${kpi.bgColor} ${kpi.borderColor} hover:border-emerald-400/30 relative overflow-hidden`}
++      className={`group flex flex-col sm:flex-row items-start sm:items-center sm:space-x-3 px-3 py-3 lg:px-4 lg:py-3.5 rounded-xl border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-black/20 ${kpi.bgColor} ${kpi.borderColor} hover:border-emerald-400/30 relative overflow-hidden`}
+      >
+       {/* Efeito de gradiente sutil no hover */}
+       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+ 
+-      <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
++      <div className="flex items-center space-x-2 sm:space-x-3 relative z-10 flex-1 min-w-0 w-full">
         <div
--        className={`p-2 rounded-lg bg-black/20 border border-[#2A2D2D] group-hover:border-emerald-400/20 transition-colors duration-300`}
-+        className={`p-2 rounded-lg bg-dark-primary/20 light:bg-light-primary/20 border border-border-primary light:border-border-primary-light group-hover:border-mottu-400/20 transition-colors duration-300`}
+-        className={`p-2 rounded-lg bg-dark-primary/20 light:bg-light-primary/20 border border-border-primary light:border-border-primary-light group-hover:border-mottu-400/20 transition-colors duration-300`}
++        className={`p-2 rounded-lg bg-dark-primary/20 border border-border-primary group-hover:border-mottu-400/20 transition-colors duration-300 flex-shrink-0`}
         >
          <kpi.icon
-          className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}
-diff --git a/src/components/ranking_card.tsx b/src/components/ranking_card.tsx
-index c32c57d..8671595 100644
---- a/src/components/ranking_card.tsx
-+++ b/src/components/ranking_card.tsx
-@@ -289,7 +289,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
-           </div>
-          </div>
+-         className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}
++         className={`h-5 w-5 lg:h-4 lg:w-4 ${kpi.color} transition-colors duration-300`}
+         />
+        </div>
  
--         {/* Faltas */}
-          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
-           <span className="text-text-muted text-xs">Faltas</span>
-           <div className="flex items-center justify-between">
-@@ -312,7 +311,6 @@ const RankingCard: React.FC<RankingCardProps> = ({ clusters }) => {
-           </div>
-          </div>
+        <div className="flex flex-col min-w-0 flex-1">
+         <div
+-         className={`text-lg font-bold ${kpi.color} leading-tight transition-colors duration-300`}
++         className={`text-xl sm:text-lg lg:text-xl font-bold ${kpi.color} leading-tight transition-colors duration-300`}
+         >
+          {kpi.value}
+         </div>
+@@ -186,7 +186,9 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
  
--         {/* SLA */}
-          <div className="flex flex-col p-2 bg-dark-tertiary/30 rounded-lg space-y-1">
-           <span className="text-text-muted text-xs">SLA</span>
-           <div className="flex items-center justify-between">
-diff --git a/tailwind.config.ts b/tailwind.config.ts
-index 88a8997..3d60c08 100644
---- a/tailwind.config.ts
-+++ b/tailwind.config.ts
-@@ -12,16 +12,23 @@ const config: Config = {
-    colors: {
-     // Dark backgrounds
-     dark: {
--     primary: "#0b0e0e",
--     secondary: "#111414",
--     tertiary: "#1a1d1d",
--     hover: "#2a2d2d",
-+     primary: "rgb(var(--color-dark-primary) / <alpha-value>)",
-+     secondary: "rgb(var(--color-dark-secondary) / <alpha-value>)",
-+     tertiary: "rgb(var(--color-dark-tertiary) / <alpha-value>)",
-+     hover: "rgb(var(--color-dark-hover) / <alpha-value>)",
-+    },
-+    // Light backgrounds
-+    light: {
-+     primary: "rgb(var(--color-light-primary) / <alpha-value>)",
-+     secondary: "rgb(var(--color-light-secondary) / <alpha-value>)",
-+     tertiary: "rgb(var(--color-light-tertiary) / <alpha-value>)",
-+     hover: "rgb(var(--color-light-hover) / <alpha-value>)",
-     },
-     // Text colors
-     text: {
--     primary: "#e6e6e6",
--     secondary: "#a7afa9",
--     muted: "#6b7570",
-+     primary: "rgb(var(--color-text-primary) / <alpha-value>)",
-+     secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
-+     muted: "rgb(var(--color-text-muted) / <alpha-value>)",
-     },
-     // Mottu Green
-     mottu: {
+        {/* Ícone de tendência */}
+        {TrendIcon && (
+-        <TrendIcon className={`h-3 w-3 ${kpi.color} opacity-70`} />
++        <TrendIcon
++         className={`h-4 w-4 lg:h-3 lg:w-3 ${kpi.color} opacity-70 flex-shrink-0`}
++        />
+        )}
+       </div>
+      </div>
+diff --git a/src/components/service_card.tsx b/src/components/service_card.tsx
+index 0fc1952..7d85b70 100644
+--- a/src/components/service_card.tsx
++++ b/src/components/service_card.tsx
+@@ -41,6 +41,19 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
+   }
+  };
+ 
++ const getStatusText = (status) => {
++  switch (status) {
++   case "completed":
++    return "Concluído";
++   case "in_progress":
++    return "Em Progresso";
++   case "critical":
++    return "Crítico";
++   default:
++    return "Pendente";
++  }
++ };
++
+  const getAlertIcon = (hasAlert) => {
+   if (hasAlert) {
+    return (
+@@ -165,16 +178,16 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
+   return (
+    <div
+     onClick={() => onClick(service)}
+-    className={`bg-dark-secondary border rounded-xl p-3 md:p-4 hover:shadow-dark-lg hover:border-mottu-500/30 transition-all duration-200 cursor-pointer group ${
++    className={`bg-dark-secondary border rounded-xl p-4 lg:p-5 hover:shadow-dark-lg hover:border-mottu-500/30 transition-all duration-200 cursor-pointer group ${
+      isCritical ? "border-red-500/50 bg-red-500/5" : "border-border-primary"
+     }`}
+    >
+-    <div className="flex items-center justify-between gap-3">
++    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+      {/* Lado esquerdo - Informações principais */}
+-     <div className="flex items-center space-x-2 md:space-x-4 flex-1 min-w-0">
++     <div className="flex items-start sm:items-center space-x-3 lg:space-x-4 flex-1 min-w-0 w-full sm:w-auto">
+       {/* Ícone com cor baseada em alerta/ordem e tipo de serviço */}
+       <div
+-       className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 border ${
++       className={`w-12 h-12 lg:w-14 lg:h-14 rounded-lg flex items-center justify-center flex-shrink-0 border ${
+         isCritical
+          ? "bg-red-500/10 border-red-500/30"
+          : service.status === "in_progress"
+@@ -197,7 +210,7 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
+ 
+       {/* Informações do serviço */}
+       <div className="flex-1 min-w-0">
+-       <div className="flex items-center flex-wrap gap-2 mb-1">
++       <div className="flex items-center flex-wrap gap-2 mb-1.5">
+         <h3 className="font-bold text-base md:text-lg text-text-primary group-hover:text-mottu-500 transition-colors">
+          #{service.id}
+         </h3>
+@@ -207,13 +220,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
+          )} flex items-center space-x-1 text-[10px] md:text-xs font-semibold`}
+         >
+          {getStatusIcon(service.status)}
+-         <span className="capitalize">{service.status.replace("_", " ")}</span>
++         <span>{getStatusText(service.status)}</span>
+         </span>
+-        {isCritical && (
+-         <span className="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] md:text-xs font-bold px-2 py-0.5 md:py-1 rounded-full">
+-          CRÍTICO
+-         </span>
+-        )}
+        </div>
+        <p className="text-xs md:text-sm font-medium text-text-secondary mb-1.5 md:mb-2 truncate">
+         {service.serviceName}
+diff --git a/src/components/service_detail_drawer.tsx b/src/components/service_detail_drawer.tsx
+index 7a21715..05a3111 100644
+--- a/src/components/service_detail_drawer.tsx
++++ b/src/components/service_detail_drawer.tsx
+@@ -18,6 +18,19 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
+   }
+  };
+ 
++ const getStatusText = (status) => {
++  switch (status) {
++   case "completed":
++    return "Concluído";
++   case "in_progress":
++    return "Em Progresso";
++   case "critical":
++    return "Crítico";
++   default:
++    return "Pendente";
++  }
++ };
++
+  return (
+   <>
+    {/* Backdrop with blur */}
+@@ -30,21 +43,21 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
+ 
+    {/* Centered Modal */}
+    <div
+-    className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 pointer-events-none ${
++    className={`bg-dark-secondary fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 pointer-events-none ${
+      isOpen ? "opacity-100" : "opacity-0"
+     }`}
+    >
+     <div
+-     className={`bg-dark-secondary rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto border border-border-primary ${
++     className={`bg-dark-secondary rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto border border-border-primary ${
+       isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+      }`}
+      onClick={(e) => e.stopPropagation()}
+     >
+      {/* Header */}
+-     <div className="bg-dark-tertiary border-b border-border-primary p-6 flex-shrink-0 rounded-t-2xl">
++     <div className="bg-dark-tertiary border-b border-border-primary p-5 lg:p-6 flex-shrink-0 rounded-t-2xl">
+       <div className="flex items-start justify-between mb-4">
+        <div className="flex-1">
+-        <h2 className="text-2xl font-bold text-text-primary mb-2">
++        <h2 className="text-xl lg:text-2xl font-bold text-text-primary mb-2">
+          Detalhes do Serviço
+         </h2>
+         <p className="text-sm text-text-secondary">
+@@ -54,7 +67,7 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
+ 
+        <button
+         onClick={onClose}
+-        className="ml-4 text-text-muted hover:text-text-primary transition-colors p-2 hover:bg-dark-hover rounded-lg"
++        className="ml-4 text-text-muted hover:text-text-primary transition-colors p-2 hover:bg-dark-primary/50 rounded-lg"
+         aria-label="Fechar"
+        >
+         <XMarkIcon className="h-6 w-6" />
+@@ -68,13 +81,13 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
+          service.status
+         )}`}
+        >
+-        {service.status.replace("_", " ")}
++        {getStatusText(service.status)}
+        </span>
+       </div>
+      </div>
+ 
+      {/* Info Cards */}
+-     <div className="bg-dark-secondary border-b border-border-primary p-6 grid grid-cols-2 md:grid-cols-4 gap-4 flex-shrink-0">
++     <div className="bg-dark-secondary border-b border-border-primary p-4 lg:p-6 grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 flex-shrink-0">
+       <div>
+        <p className="text-xs text-text-muted mb-1">Serviço ID</p>
+        <p className="font-semibold text-text-primary">#{service.id}</p>
+@@ -82,8 +95,8 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
+ 
+       <div>
+        <p className="text-xs text-text-muted mb-1">Status</p>
+-       <p className="font-semibold text-text-primary capitalize">
+-        {service.status.replace("_", " ")}
++       <p className="font-semibold text-text-primary">
++        {getStatusText(service.status)}
+        </p>
+       </div>
+ 
+diff --git a/src/components/service_grid.tsx b/src/components/service_grid.tsx
+index d8d3d6f..930aba5 100644
+--- a/src/components/service_grid.tsx
++++ b/src/components/service_grid.tsx
+@@ -15,23 +15,21 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
+ }) => {
+  return (
+   <div className="h-full overflow-y-auto bg-dark-primary">
+-   <div className="p-3 md:p-4 lg:p-6">
+-    <div className="space-y-2 md:space-y-3">
+-     {services.map((service) => (
+-      <ServiceCard
+-       key={service.id}
+-       service={service}
+-       onClick={onServiceSelect}
+-       isListMode={true}
+-      />
+-     ))}
+-    </div>
++   <div className="p-4 lg:p-6 xl:p-8 space-y-3 lg:space-y-4">
++    {services.map((service) => (
++     <ServiceCard
++      key={service.id}
++      service={service}
++      onClick={onServiceSelect}
++      isListMode={true}
++     />
++    ))}
+ 
+     {services.length === 0 && (
+-     <div className="text-center py-12">
++     <div className="text-center py-16 lg:py-20">
+       <div className="text-text-muted mb-4">
+        <svg
+-        className="mx-auto h-12 w-12"
++        className="mx-auto h-16 w-16 lg:h-20 lg:w-20"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor"
+@@ -44,10 +42,10 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
+         />
+        </svg>
+       </div>
+-      <h3 className="text-lg font-medium text-text-primary mb-2">
++      <h3 className="text-xl font-medium text-text-primary mb-2">
+        Nenhum serviço encontrado
+       </h3>
+-      <p className="text-text-secondary">
++      <p className="text-text-secondary text-sm">
+        Tente ajustar os filtros ou termo de busca.
+       </p>
+      </div>
+diff --git a/src/types/service.ts b/src/types/service.ts
+index 3b4bc8d..69c382a 100644
+--- a/src/types/service.ts
++++ b/src/types/service.ts
+@@ -1,6 +1,7 @@
+ import { LogEntry } from "./log_entry";
+ import { Alert } from "./alert";
+ import { HistoryEvent } from "./history_event";
++import { Location } from "./location";
+ 
+ export interface Service {
+  id: string;

@@ -18,6 +18,19 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
   }
  };
 
+ const getStatusText = (status) => {
+  switch (status) {
+   case "completed":
+    return "Concluído";
+   case "in_progress":
+    return "Em Progresso";
+   case "critical":
+    return "Crítico";
+   default:
+    return "Pendente";
+  }
+ };
+
  return (
   <>
    {/* Backdrop with blur */}
@@ -30,21 +43,21 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
 
    {/* Centered Modal */}
    <div
-    className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 pointer-events-none ${
+    className={`bg-dark-secondary fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 pointer-events-none ${
      isOpen ? "opacity-100" : "opacity-0"
     }`}
    >
     <div
-     className={`bg-dark-secondary rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto border border-border-primary ${
+     className={`bg-dark-secondary rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] mx-4 flex flex-col transform transition-all duration-300 pointer-events-auto border border-border-primary ${
       isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
      }`}
      onClick={(e) => e.stopPropagation()}
     >
      {/* Header */}
-     <div className="bg-dark-tertiary border-b border-border-primary p-6 flex-shrink-0 rounded-t-2xl">
+     <div className="bg-dark-tertiary border-b border-border-primary p-5 lg:p-6 flex-shrink-0 rounded-t-2xl">
       <div className="flex items-start justify-between mb-4">
        <div className="flex-1">
-        <h2 className="text-2xl font-bold text-text-primary mb-2">
+        <h2 className="text-xl lg:text-2xl font-bold text-text-primary mb-2">
          Detalhes do Serviço
         </h2>
         <p className="text-sm text-text-secondary">
@@ -54,7 +67,7 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
 
        <button
         onClick={onClose}
-        className="ml-4 text-text-muted hover:text-text-primary transition-colors p-2 hover:bg-dark-hover rounded-lg"
+        className="ml-4 text-text-muted hover:text-text-primary transition-colors p-2 hover:bg-dark-primary/50 rounded-lg"
         aria-label="Fechar"
        >
         <XMarkIcon className="h-6 w-6" />
@@ -68,13 +81,13 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
          service.status
         )}`}
        >
-        {service.status.replace("_", " ")}
+        {getStatusText(service.status)}
        </span>
       </div>
      </div>
 
      {/* Info Cards */}
-     <div className="bg-dark-secondary border-b border-border-primary p-6 grid grid-cols-2 md:grid-cols-4 gap-4 flex-shrink-0">
+     <div className="bg-dark-secondary border-b border-border-primary p-4 lg:p-6 grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 flex-shrink-0">
       <div>
        <p className="text-xs text-text-muted mb-1">Serviço ID</p>
        <p className="font-semibold text-text-primary">#{service.id}</p>
@@ -82,8 +95,8 @@ const ServiceDetailDrawer = ({ service, isOpen, onClose }) => {
 
       <div>
        <p className="text-xs text-text-muted mb-1">Status</p>
-       <p className="font-semibold text-text-primary capitalize">
-        {service.status.replace("_", " ")}
+       <p className="font-semibold text-text-primary">
+        {getStatusText(service.status)}
        </p>
       </div>
 

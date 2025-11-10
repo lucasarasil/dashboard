@@ -152,30 +152,30 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
  };
 
  return (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
    {kpis.map((kpi, index) => {
     const TrendIcon = getTrendIcon(kpi.trend);
 
     return (
      <div
       key={index}
-      className={`group flex items-center space-x-3 px-3 py-3 rounded-xl border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-black/20 ${kpi.bgColor} ${kpi.borderColor} hover:border-emerald-400/30 relative overflow-hidden`}
+      className={`group flex flex-col sm:flex-row items-start sm:items-center sm:space-x-3 px-3 py-3 lg:px-4 lg:py-3.5 rounded-xl border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-black/20 ${kpi.bgColor} ${kpi.borderColor} hover:border-emerald-400/30 relative overflow-hidden`}
      >
       {/* Efeito de gradiente sutil no hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      <div className="flex items-center space-x-3 relative z-10 flex-1 min-w-0">
+      <div className="flex items-center space-x-2 sm:space-x-3 relative z-10 flex-1 min-w-0 w-full">
        <div
-        className={`p-2 rounded-lg bg-dark-primary/20 light:bg-light-primary/20 border border-border-primary light:border-border-primary-light group-hover:border-mottu-400/20 transition-colors duration-300`}
+        className={`p-2 rounded-lg bg-dark-primary/20 border border-border-primary group-hover:border-mottu-400/20 transition-colors duration-300 flex-shrink-0`}
        >
         <kpi.icon
-         className={`h-4 w-4 ${kpi.color} transition-colors duration-300`}
+         className={`h-5 w-5 lg:h-4 lg:w-4 ${kpi.color} transition-colors duration-300`}
         />
        </div>
 
        <div className="flex flex-col min-w-0 flex-1">
         <div
-         className={`text-lg font-bold ${kpi.color} leading-tight transition-colors duration-300`}
+         className={`text-xl sm:text-lg lg:text-xl font-bold ${kpi.color} leading-tight transition-colors duration-300`}
         >
          {kpi.value}
         </div>
@@ -186,7 +186,9 @@ const KPICards: React.FC<KPICardsProps> = ({ services }) => {
 
        {/* Ícone de tendência */}
        {TrendIcon && (
-        <TrendIcon className={`h-3 w-3 ${kpi.color} opacity-70`} />
+        <TrendIcon
+         className={`h-4 w-4 lg:h-3 lg:w-3 ${kpi.color} opacity-70 flex-shrink-0`}
+        />
        )}
       </div>
      </div>

@@ -15,23 +15,21 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
 }) => {
  return (
   <div className="h-full overflow-y-auto bg-dark-primary">
-   <div className="p-3 md:p-4 lg:p-6">
-    <div className="space-y-2 md:space-y-3">
-     {services.map((service) => (
-      <ServiceCard
-       key={service.id}
-       service={service}
-       onClick={onServiceSelect}
-       isListMode={true}
-      />
-     ))}
-    </div>
+   <div className="p-4 lg:p-6 xl:p-8 space-y-3 lg:space-y-4">
+    {services.map((service) => (
+     <ServiceCard
+      key={service.id}
+      service={service}
+      onClick={onServiceSelect}
+      isListMode={true}
+     />
+    ))}
 
     {services.length === 0 && (
-     <div className="text-center py-12">
+     <div className="text-center py-16 lg:py-20">
       <div className="text-text-muted mb-4">
        <svg
-        className="mx-auto h-12 w-12"
+        className="mx-auto h-16 w-16 lg:h-20 lg:w-20"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -44,10 +42,10 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
         />
        </svg>
       </div>
-      <h3 className="text-lg font-medium text-text-primary mb-2">
+      <h3 className="text-xl font-medium text-text-primary mb-2">
        Nenhum serviço encontrado
       </h3>
-      <p className="text-text-secondary">
+      <p className="text-text-secondary text-sm">
        Tente ajustar os filtros ou termo de busca.
       </p>
      </div>

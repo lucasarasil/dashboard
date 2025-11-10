@@ -569,8 +569,14 @@ const Dashboard2_Cluster = () => {
         </div>
         <div>
          <span className="text-sm text-text-muted">Status:</span>
-         <p className="font-medium capitalize text-text-primary">
-          {selectedCluster.status}
+         <p className="font-medium text-text-primary">
+          {selectedCluster.status === "operational"
+           ? "Operacional"
+           : selectedCluster.status === "warning"
+           ? "Atenção"
+           : selectedCluster.status === "critical"
+           ? "Crítico"
+           : selectedCluster.status}
          </p>
         </div>
        </div>

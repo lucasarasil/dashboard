@@ -36,29 +36,31 @@ const Header: React.FC<HeaderProps> = ({
 
  return (
   <header className="bg-dark-secondary border-b border-border-primary shadow-lg flex-shrink-0">
-   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div className="flex h-16 items-center justify-between">
-     <div className="flex items-center gap-3">
+   <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-5 space-y-4 lg:space-y-5">
+    <div className="flex h-12 lg:h-14 items-center justify-between">
+     <div className="flex items-center gap-3 lg:gap-4">
       {criticalAlertsCount > 0 && (
        <div className="relative animate-pulse-green">
-        <BellIcon className="h-5 w-5 text-red-500" />
-        <span className="absolute -top-1 -right-1 bg-red-500 text-dark-primary text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
+        <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-red-500" />
+        <span className="absolute -top-1 -right-1 bg-red-500 text-dark-primary text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg shadow-red-500/50">
          {criticalAlertsCount}
         </span>
        </div>
       )}
 
-      <div className="flex items-center gap-2 text-sm text-text-secondary">
-       <ExclamationTriangleIcon className="h-4 w-4" />
-       <span className="font-semibold text-red-500">{criticalAlertsCount}</span>
-       <span>críticos</span>
+      <div className="flex items-center gap-2 lg:gap-3 text-sm lg:text-base text-text-secondary">
+       <ExclamationTriangleIcon className="h-5 w-5 lg:h-6 lg:w-6" />
+       <span className="font-bold text-red-500 text-lg lg:text-xl">
+        {criticalAlertsCount}
+       </span>
+       <span className="font-medium">críticos</span>
       </div>
      </div>
     </div>
 
     {/* KPIs */}
-    <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-     <div className="min-w-max md:min-w-0">
+    <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+     <div className="min-w-max sm:min-w-0">
       <KPICards services={services} />
      </div>
     </div>
@@ -77,21 +79,21 @@ const Header: React.FC<HeaderProps> = ({
     </div>
 
     {/* Estatísticas */}
-    <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm pb-1">
-     <div className="flex items-center gap-2">
-      <span className="w-2 h-2 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
-      <span className="text-text-secondary font-medium">
+    <div className="flex flex-wrap items-center gap-3 lg:gap-5 text-sm lg:text-base pb-2">
+     <div className="flex items-center gap-2 lg:gap-2.5">
+      <span className="w-2.5 h-2.5 lg:w-3 lg:h-3 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
+      <span className="text-text-secondary font-semibold">
        {streetCallsCount} Chamados de Rua
       </span>
      </div>
-     <div className="flex items-center gap-2">
-      <span className="w-2 h-2 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></span>
-      <span className="text-text-secondary font-medium">
+     <div className="flex items-center gap-2 lg:gap-2.5">
+      <span className="w-2.5 h-2.5 lg:w-3 lg:h-3 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></span>
+      <span className="text-text-secondary font-semibold">
        {appropriationsCount} Apropriações
       </span>
      </div>
      <div className="hidden sm:block text-text-muted">•</div>
-     <div className="text-text-primary font-semibold">
+     <div className="text-text-primary font-bold">
       Total: {services.length} serviços ativos
      </div>
     </div>

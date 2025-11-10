@@ -1,6 +1,7 @@
 import { LogEntry } from "./log_entry";
 import { Alert } from "./alert";
 import { HistoryEvent } from "./history_event";
+import { Location } from "./location";
 
 export interface Service {
  id: string;

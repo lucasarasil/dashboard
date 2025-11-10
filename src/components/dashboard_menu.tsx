@@ -36,24 +36,26 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
 
  return (
   <div
-   className={`w-64 bg-dark-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
+   className={`w-56 lg:w-64 bg-dark-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
     isOpen ? "translate-x-0" : "-translate-x-full"
    } md:translate-x-0 md:relative md:border-r md:border-border-primary`}
   >
-   <div className="flex items-center justify-between h-16 px-4 border-b border-border-primary flex-shrink-0">
-    <div className="flex items-center gap-3">
-     <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
-      <ChartBarIcon className="h-6 w-6 text-dark-primary" />
+   <div className="flex items-center justify-between h-14 lg:h-16 px-3 lg:px-4 border-b border-border-primary flex-shrink-0">
+    <div className="flex items-center gap-2 lg:gap-3">
+     <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
+      <ChartBarIcon className="h-5 w-5 lg:h-6 lg:w-6 text-dark-primary" />
      </div>
      <div>
-      <h2 className="text-xl font-bold text-text-primary">Dashboards</h2>
+      <h2 className="text-lg lg:text-xl font-bold text-text-primary">
+       Dashboards
+      </h2>
       <p className="text-xs text-text-secondary">Visão operacional</p>
      </div>
     </div>
    </div>
 
    {/* Itens do menu */}
-   <nav className="flex-1 p-4 space-y-2" aria-label="Menu de dashboards">
+   <nav className="flex-1 p-3 lg:p-4 space-y-2" aria-label="Menu de dashboards">
     {menuItems.map((item) => {
      const isActive = activeDashboard === item.id;
      const isComingSoon = item.id === "saude-geral";

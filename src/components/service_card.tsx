@@ -41,6 +41,19 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   }
  };
 
+ const getStatusText = (status) => {
+  switch (status) {
+   case "completed":
+    return "Concluído";
+   case "in_progress":
+    return "Em Progresso";
+   case "critical":
+    return "Crítico";
+   default:
+    return "Pendente";
+  }
+ };
+
  const getAlertIcon = (hasAlert) => {
   if (hasAlert) {
    return (
@@ -165,16 +178,16 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
   return (
    <div
     onClick={() => onClick(service)}
-    className={`bg-dark-secondary border rounded-xl p-3 md:p-4 hover:shadow-dark-lg hover:border-mottu-500/30 transition-all duration-200 cursor-pointer group ${
+    className={`bg-dark-secondary border rounded-xl p-4 lg:p-5 hover:shadow-dark-lg hover:border-mottu-500/30 transition-all duration-200 cursor-pointer group ${
      isCritical ? "border-red-500/50 bg-red-500/5" : "border-border-primary"
     }`}
    >
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
      {/* Lado esquerdo - Informações principais */}
-     <div className="flex items-center space-x-2 md:space-x-4 flex-1 min-w-0">
+     <div className="flex items-start sm:items-center space-x-3 lg:space-x-4 flex-1 min-w-0 w-full sm:w-auto">
       {/* Ícone com cor baseada em alerta/ordem e tipo de serviço */}
       <div
-       className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 border ${
+       className={`w-12 h-12 lg:w-14 lg:h-14 rounded-lg flex items-center justify-center flex-shrink-0 border ${
         isCritical
          ? "bg-red-500/10 border-red-500/30"
          : service.status === "in_progress"
@@ -197,7 +210,7 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
 
       {/* Informações do serviço */}
       <div className="flex-1 min-w-0">
-       <div className="flex items-center flex-wrap gap-2 mb-1">
+       <div className="flex items-center flex-wrap gap-2 mb-1.5">
         <h3 className="font-bold text-base md:text-lg text-text-primary group-hover:text-mottu-500 transition-colors">
          #{service.id}
         </h3>
@@ -207,13 +220,8 @@ const ServiceCard = ({ service, onClick, isListMode = false }) => {
          )} flex items-center space-x-1 text-[10px] md:text-xs font-semibold`}
         >
          {getStatusIcon(service.status)}
-         <span className="capitalize">{service.status.replace("_", " ")}</span>
+         <span>{getStatusText(service.status)}</span>
         </span>
-        {isCritical && (
-         <span className="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] md:text-xs font-bold px-2 py-0.5 md:py-1 rounded-full">
-          CRÍTICO
-         </span>
-        )}
        </div>
        <p className="text-xs md:text-sm font-medium text-text-secondary mb-1.5 md:mb-2 truncate">
         {service.serviceName}
