@@ -42,7 +42,12 @@ export function useClusters(options: UseClustersOptions = {}) {
 
   try {
    await new Promise((resolve) => setTimeout(resolve, 500));
-   setClusters([]);
+   // Importar mock data dinamicamente
+   const { generateMockClusters } = await import(
+    "@/shared/utils/cluster-mock.utils"
+   );
+   const mockClusters = generateMockClusters(8);
+   setClusters(mockClusters);
   } catch (err) {
    setError(err instanceof Error ? err : new Error("Unknown error"));
   } finally {
