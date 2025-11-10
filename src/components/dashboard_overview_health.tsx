@@ -7,6 +7,7 @@ import ActionModal from "./action_modal";
 
 import { generateMockServices } from "@/utils/mock_data";
 import { Service } from "@/types/service";
+import { LogEntry } from "@/types/log_entry";
 
 // Static supervisor and leader data used for branch mapping. Kept outside the
 // component so they are stable across renders and do not cause hook dependency
@@ -163,13 +164,18 @@ const Dashboard1_SaudeGeral = () => {
  // Registrar ação
  const handleActionSubmit = (actionData) => {
   if (selectedService) {
-   const newLog = {
-    id: Date.now(),
-    action: actionData.actionType,
-    details: actionData.comment,
-    user: actionData.responsible,
-    timestamp: new Date().toLocaleString("pt-BR"),
-    type: "manual_action",
+   const newLog: LogEntry = {
+    id: `log-${Date.now()}`,
+    timestamp: new Date(),
+    level: "info",
+    message: `${actionData.actionType}: ${actionData.comment}`,
+    service: selectedService.serviceName,
+    metadata: {
+     action: actionData.actionType,
+     details: actionData.comment,
+     user: actionData.responsible,
+     type: "manual_action",
+    },
    };
 
    setServices((prevServices) =>

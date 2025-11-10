@@ -36,13 +36,12 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
 
  return (
   <div
-   className={`w-64 bg-dark-secondary light:bg-light-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
+   className={`w-64 bg-dark-secondary h-full flex flex-col transition-all duration-300 ease-in-out ${
     isOpen ? "translate-x-0" : "-translate-x-full"
-   } fixed left-0 top-0 z-50 shadow-2xl light:shadow-light backdrop-blur-sm border-r border-border-primary light:border-border-primary-light`}
+   } md:translate-x-0 md:relative md:border-r md:border-border-primary`}
   >
-   {/* Header */}
-   <div className="p-6 border-b border-border-primary light:border-border-primary-light bg-gradient-to-b from-dark-tertiary to-dark-secondary light:from-light-tertiary light:to-light-secondary">
-    <div className="flex items-center gap-3 mb-2">
+   <div className="flex items-center justify-between h-16 px-4 border-b border-border-primary flex-shrink-0">
+    <div className="flex items-center gap-3">
      <div className="w-10 h-10 bg-gradient-to-br from-mottu-500 to-mottu-400 rounded-lg flex items-center justify-center shadow-lg shadow-mottu-500/30">
       <ChartBarIcon className="h-6 w-6 text-dark-primary" />
      </div>
@@ -110,7 +109,7 @@ const DashboardMenu: React.FC<DashboardMenuProps> = ({
    </nav>
 
    {/* Footer */}
-   <div className="p-4 border-t border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
+   <div className="p-4 border-t border-border-primary bg-dark-primary/50 light:bg-light-primary/50">
     <div className="flex items-center justify-between">
      <div className="text-xs text-text-muted">
       Sistema Operacional

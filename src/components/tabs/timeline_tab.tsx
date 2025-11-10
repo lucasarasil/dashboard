@@ -104,13 +104,19 @@ const TimelineTab: React.FC<TimelineTabProps> = ({ service }) => {
   if (Array.isArray(service.logs)) {
    events.push(
     ...service.logs.filter(isTimelineLike).map((log) => ({
-     id: normalizeId(log.id, `log-${log.action}-${log.timestamp}`),
-     action: log.action!,
-     timestamp: log.timestamp!,
-     responsible: log.responsible,
-     details: log.details,
-     user: log.user,
-     type: (log.type as TimelineEventType) ?? "manual",
+     id: normalizeId(
+      log.id,
+      `log-${log.metadata?.action ?? "action"}-${log.timestamp}`
+     ),
+     action: (log.metadata?.action as string) ?? log.message,
+     timestamp:
+      log.timestamp instanceof Date
+       ? log.timestamp.toISOString()
+       : log.timestamp,
+     responsible: (log.metadata?.user as string) ?? "System",
+     details: (log.metadata?.details as string) ?? log.message,
+     user: (log.metadata?.user as string) ?? "System",
+     type: (log.metadata?.type as TimelineEventType) ?? "manual",
     }))
    );
   }

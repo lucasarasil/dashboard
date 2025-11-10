@@ -10,40 +10,26 @@ const config: Config = {
  theme: {
   extend: {
    colors: {
-    // Dark backgrounds
-    dark: {
-     primary: "rgb(var(--color-dark-primary) / <alpha-value>)",
-     secondary: "rgb(var(--color-dark-secondary) / <alpha-value>)",
-     tertiary: "rgb(var(--color-dark-tertiary) / <alpha-value>)",
-     hover: "rgb(var(--color-dark-hover) / <alpha-value>)",
-    },
-    // Light backgrounds
-    light: {
-     primary: "rgb(var(--color-light-primary) / <alpha-value>)",
-     secondary: "rgb(var(--color-light-secondary) / <alpha-value>)",
-     tertiary: "rgb(var(--color-light-tertiary) / <alpha-value>)",
-     hover: "rgb(var(--color-light-hover) / <alpha-value>)",
-    },
-    // Text colors
-    text: {
-     primary: "rgb(var(--color-text-primary) / <alpha-value>)",
-     secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
-     muted: "rgb(var(--color-text-muted) / <alpha-value>)",
-    },
-    // Mottu Green
+    "dark-primary": "rgb(var(--color-dark-primary) / <alpha-value>)",
+    "dark-secondary": "rgb(var(--color-dark-secondary) / <alpha-value>)",
+    "dark-tertiary": "rgb(var(--color-dark-tertiary) / <alpha-value>)",
+    "text-primary": "rgb(var(--color-text-primary) / <alpha-value>)",
+    "text-secondary": "rgb(var(--color-text-secondary) / <alpha-value>)",
+    "text-muted": "rgb(var(--color-text-muted) / <alpha-value>)",
+    "border-primary": "rgb(var(--color-border-primary) / <alpha-value>)",
+    "border-secondary": "rgb(var(--color-border-secondary) / <alpha-value>)",
     mottu: {
      50: "#e8f5e9",
      100: "#c8e6c9",
      200: "#a5d6a7",
      300: "#81c784",
      400: "#66bb6a",
-     500: "#00c853",
+     500: "rgb(var(--color-mottu-500) / <alpha-value>)",
      600: "#00b248",
      700: "#009b3d",
      800: "#008532",
      900: "#006e27",
     },
-    // Mottu Yellow
     yellow: {
      50: "#fffde7",
      100: "#fff9c4",
@@ -56,11 +42,15 @@ const config: Config = {
      800: "#e6a800",
      900: "#cc9600",
     },
-    // Borders
-    border: {
-     primary: "#2a2d2d",
-     secondary: "#3a3d3d",
-     divider: "#1f2222",
+    red: {
+     400: "#ff5252",
+     500: "#ef4444",
+     600: "#dc2626",
+    },
+    blue: {
+     400: "#29b6f6",
+     500: "#3b82f6",
+     600: "#2563eb",
     },
    },
    boxShadow: {

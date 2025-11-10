@@ -56,7 +56,7 @@ const DashboardContainer: React.FC = () => {
   switch (activeDashboard) {
    case "saude-geral":
     return (
-     <div className="flex-1 flex items-center justify-center bg-dark-primary light:bg-light-primary">
+     <div className="flex-1 flex items-center justify-center bg-dark-primary text-text-primary">
       <div className="text-center">
        <div className="text-text-muted mb-4">
         <svg
@@ -92,15 +92,7 @@ const DashboardContainer: React.FC = () => {
  };
 
  return (
-  <div className="h-screen bg-dark-primary light:bg-light-primary flex relative w-full">
-   {/* Overlay */}
-   {isMenuOpen && (
-    <div
-     className="fixed inset-0 bg-black/60 light:bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300"
-     onClick={() => setIsMenuOpen(false)}
-    />
-   )}
-
+  <div className="flex h-screen bg-dark-primary text-text-primary overflow-hidden">
    {/* Menu lateral */}
    <DashboardMenu
     activeDashboard={activeDashboard}
@@ -109,14 +101,14 @@ const DashboardContainer: React.FC = () => {
    />
 
    {/* Conteúdo principal */}
-   <div className="flex-1 overflow-hidden flex flex-col">
+   <div className="flex-1 flex flex-col overflow-hidden">
     {/* Barra superior */}
-    <div className="bg-dark-secondary light:bg-light-secondary border-b border-border-primary light:border-border-primary-light px-4 py-3 flex items-center justify-between shadow-lg light:shadow-light relative">
+    <div className="bg-dark-secondary border-b border-border-primary px-4 py-3 flex items-center justify-between shadow-lg relative">
      {/* Botão menu */}
      <div className="flex items-center gap-3">
       <button
        onClick={() => setIsMenuOpen(!isMenuOpen)}
-       className="p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
+       className="p-2 rounded-lg hover:bg-dark-tertiary transition-all duration-200 group"
        title={isMenuOpen ? "Fechar menu" : "Abrir menu"}
        aria-label={isMenuOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
       >
@@ -142,7 +134,7 @@ const DashboardContainer: React.FC = () => {
       <div className="relative" ref={profileMenuRef}>
        <button
         onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-        className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 group"
+        className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-tertiary transition-all duration-200 group"
         aria-haspopup="true"
         aria-expanded={isProfileMenuOpen}
         aria-label="Abrir menu de perfil"
@@ -152,7 +144,7 @@ const DashboardContainer: React.FC = () => {
          alt="Avatar do usuário"
          width={36}
          height={36}
-         className="rounded-full border-2 border-border-primary light:border-border-primary-light group-hover:border-mottu-500 transition-all duration-200"
+         className="rounded-full border-2 border-border-primary group-hover:border-mottu-500 transition-all duration-200"
          priority
         />
         <span className="text-text-primary text-sm font-medium hidden sm:block">
@@ -165,8 +157,8 @@ const DashboardContainer: React.FC = () => {
         />
        </button>
        {isProfileMenuOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 bg-dark-secondary light:bg-light-secondary border border-border-primary light:border-border-primary-light rounded-xl shadow-2xl light:shadow-light z-50 overflow-hidden animate-slide-up">
-         <div className="p-4 border-b border-border-primary light:border-border-primary-light bg-dark-primary/50 light:bg-light-primary/50">
+        <div className="absolute right-0 top-full mt-2 w-72 bg-dark-secondary border border-border-primary rounded-xl shadow-2xl overflow-hidden animate-slide-up">
+         <div className="p-4 border-b border-border-primary bg-dark-primary/50">
           <div className="flex items-center gap-3">
            <Image
             src={userData.avatar}
@@ -189,7 +181,7 @@ const DashboardContainer: React.FC = () => {
          <div className="p-2">
           <button
            onClick={handleLanguageChange}
-           className="w-full flex items-center gap-3 px-3 py-2.5 text-text-primary rounded-lg hover:bg-dark-tertiary light:hover:bg-light-tertiary transition-all duration-200 text-left group"
+           className="w-full flex items-center gap-3 px-3 py-2.5 text-text-primary rounded-lg hover:bg-dark-tertiary transition-all duration-200 text-left group"
            aria-label="Mudar idioma"
           >
            <svg
@@ -209,7 +201,7 @@ const DashboardContainer: React.FC = () => {
           </button>
           <button
            onClick={handleLogout}
-           className="w-full flex items-center gap-3 px-3 py-2.5 text-red-500 light:text-red-600 rounded-lg hover:bg-red-500/10 light:hover:bg-red-500/10 transition-all duration-200 text-left group"
+           className="w-full flex items-center gap-3 px-3 py-2.5 text-red-500 rounded-lg hover:bg-red-500/10 transition-all duration-200 text-left group"
            aria-label="Deslogar"
           >
            <svg
@@ -235,7 +227,7 @@ const DashboardContainer: React.FC = () => {
     </div>
 
     {/* Dashboard ativo */}
-    <div className="flex-1 overflow-auto bg-dark-primary light:bg-light-primary">
+    <div className="flex-1 overflow-auto bg-dark-primary">
      {renderDashboard()}
     </div>
    </div>

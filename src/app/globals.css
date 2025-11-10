@@ -1,240 +1,143 @@
 @import "tailwindcss";
 
-@theme {
- /* === PALETA MOTTU DARK MODE === */
-
- /* Backgrounds - Dark */
- --color-dark-primary: #0b0e0e;
- --color-dark-secondary: #111414;
- --color-dark-tertiary: #1a1d1d;
-
- /* Backgrounds - Light */
- --color-light-primary: #ffffff;
- --color-light-secondary: #f5f7f6;
- --color-light-tertiary: #e8ebea;
-
- /* Textos - Dark Mode */
- --color-text-primary: #e6e6e6;
- --color-text-secondary: #a7afa9;
- --color-text-muted: #6b7570;
-
- /* Textos - Light Mode */
- --color-text-primary-light: #1a1d1d;
- --color-text-secondary-light: #4a5350;
- --color-text-muted-light: #6b7570;
-
- /* Mottu Green (Accent principal) */
- --color-mottu-green-50: #e8f5e9;
- --color-mottu-green-100: #c8e6c9;
- --color-mottu-green-200: #a5d6a7;
- --color-mottu-green-300: #81c784;
- --color-mottu-green-400: #66bb6a;
- --color-mottu-green-500: #00c853;
- --color-mottu-green-600: #00b248;
- --color-mottu-green-700: #009b3d;
- --color-mottu-green-800: #008532;
- --color-mottu-green-900: #006e27;
-
- /* Mottu Yellow (Accent secundário) */
- --color-mottu-yellow-50: #fffde7;
- --color-mottu-yellow-100: #fff9c4;
- --color-mottu-yellow-200: #fff59d;
- --color-mottu-yellow-300: #fff176;
- --color-mottu-yellow-400: #ffee58;
- --color-mottu-yellow-500: #f9d923;
- --color-mottu-yellow-600: #f9c910;
- --color-mottu-yellow-700: #f9b900;
- --color-mottu-yellow-800: #e6a800;
- --color-mottu-yellow-900: #cc9600;
-
- /* Status Colors (Dark Mode Friendly) */
- --color-error: #ff5252;
- --color-warning: #ffb74d;
- --color-success: #00c853;
- --color-info: #29b6f6;
-
- /* Borders & Dividers */
- --color-border-primary: #2a2d2d;
- --color-border-secondary: #3a3d3d;
- --color-divider: #1f2222;
-
- /* Borders & Dividers - Light Mode */
- --color-border-primary-light: #d0d5d3;
- --color-border-secondary-light: #b8bfbc;
- --color-divider-light: #e8ebea;
-
- /* Shadows */
- --shadow-dark: rgba(0, 0, 0, 0.3);
- --shadow-light: rgba(0, 0, 0, 0.1);
-}
-
 @layer base {
  * {
   font-family: var(--font-inter, "Inter"), sans-serif;
  }
 
  /* Dark mode (default) */
- body {
-  background-color: #0b0e0e;
-  color: #e6e6e6;
+ :root {
+  /* Backgrounds - Dark */
+  --color-dark-primary: 11 14 14;
+  --color-dark-secondary: 17 20 20;
+  --color-dark-tertiary: 26 29 29;
+
+  /* Textos - Dark */
+  --color-text-primary: 230 230 230;
+  --color-text-secondary: 167 175 169;
+  --color-text-muted: 107 117 112;
+
+  /* Borders - Dark */
+  --color-border-primary: 42 45 45;
+  --color-border-secondary: 58 61 61;
+
+  /* Mottu Colors */
+  --color-mottu-500: 0 200 83;
  }
 
  /* Light mode */
- .light body {
-  background-color: #ffffff;
-  color: #1a1d1d;
+ .light {
+  /* Backgrounds - Light */
+  --color-dark-primary: 255 255 255;
+  --color-dark-secondary: 245 247 246;
+  --color-dark-tertiary: 232 235 234;
+
+  /* Textos - Light */
+  --color-text-primary: 26 29 29;
+  --color-text-secondary: 74 83 80;
+  --color-text-muted: 107 117 112;
+
+  /* Borders - Light */
+  --color-border-primary: 208 213 211;
+  --color-border-secondary: 184 191 188;
  }
 
- /* Scrollbar customizada dark */
+ body {
+  background-color: rgb(var(--color-dark-primary));
+  color: rgb(var(--color-text-primary));
+  transition: background-color 0.3s ease, color 0.3s ease;
+ }
+
+ /* Scrollbar */
  ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
  }
 
  ::-webkit-scrollbar-track {
-  background: #111414;
- }
-
- .light ::-webkit-scrollbar-track {
-  background: #f5f7f6;
+  background: rgb(var(--color-dark-secondary));
  }
 
  ::-webkit-scrollbar-thumb {
-  background: #2a2d2d;
+  background: rgb(var(--color-border-primary));
   border-radius: 5px;
  }
 
- .light ::-webkit-scrollbar-thumb {
-  background: #d0d5d3;
- }
-
  ::-webkit-scrollbar-thumb:hover {
-  background: #3a3d3d;
- }
-
- .light ::-webkit-scrollbar-thumb:hover {
-  background: #b8bfbc;
+  background: rgb(var(--color-border-secondary));
  }
 }
 
 @layer components {
- /* === DESIGN SYSTEM: COLOR PSYCHOLOGY === */
- /* 
-  * VERDE MOTTU (#00C853): Sucesso, ações positivas, saúde boa
-  * AMARELO (#F9D923): Atenção, moderado, requer observação
-  * VERMELHO (#FF5252): Crítico, erro, urgente
-  * AZUL (#29B6F6): Informação, neutro, dados
-  * ROXO (#9C27B0): Apropriações, processos especiais
-  */
-
- /* === THRESHOLDS PADRONIZADOS === */
- /*
-  * Saúde/SLA/Adesão (quanto maior, melhor):
-  *   >= 90%: Verde (excelente)
-  *   >= 80%: Verde claro (bom)
-  *   >= 70%: Amarelo (atenção)
-  *   < 70%: Vermelho (crítico)
-  *
-  * Atrasos/Faltas/Problemas (quanto menor, melhor):
-  *   < 5%: Verde (excelente)
-  *   < 10%: Verde claro (bom)
-  *   < 20%: Amarelo (atenção)
-  *   >= 20%: Vermelho (crítico)
-  */
-
- /* === CARDS === */
+ /* Cards */
  .card {
-  @apply bg-[#111414] rounded-xl border border-[#2A2D2D] shadow-lg shadow-black/20;
+  background-color: rgb(var(--color-dark-secondary));
+  border-color: rgb(var(--color-border-primary));
+  @apply rounded-xl border shadow-lg;
  }
 
- .card-elevated {
-  @apply bg-[#1A1D1D] rounded-xl border border-[#3A3D3D] shadow-xl shadow-black/30;
- }
-
- /* === BUTTONS === */
+ /* Buttons */
  .btn-primary {
-  @apply bg-[#00C853] text-[#0B0E0E] px-4 py-2 rounded-lg font-semibold 
-           hover:bg-[#00B248] active:bg-[#009B3D] 
-           transition-all duration-200 
-           shadow-lg shadow-[#00C853]/20 hover:shadow-[#00C853]/30;
+  background-color: rgb(var(--color-mottu-500));
+  color: rgb(var(--color-dark-primary));
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(0, 200, 83, 0.2),
+   0 4px 6px -2px rgba(0, 200, 83, 0.1);
+ }
+
+ .btn-primary:hover {
+  background-color: #00b248;
+  box-shadow: 0 10px 15px -3px rgba(0, 200, 83, 0.3),
+   0 4px 6px -2px rgba(0, 200, 83, 0.15);
+ }
+
+ .btn-primary:active {
+  background-color: #009b3d;
  }
 
  .btn-secondary {
-  @apply bg-[#1A1D1D] text-[#E6E6E6] px-4 py-2 rounded-lg font-medium 
-           border border-[#3A3D3D] 
-           hover:bg-[#2A2D2D] hover:border-[#00C853]/40
-           transition-all duration-200;
+  background-color: rgb(var(--color-dark-tertiary));
+  color: rgb(var(--color-text-primary));
+  border-color: rgb(var(--color-border-primary));
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border-width: 1px;
+  transition: all 0.2s;
  }
 
- .btn-outline {
-  @apply bg-transparent text-[#00C853] px-4 py-2 rounded-lg font-medium 
-           border border-[#00C853] 
-           hover:bg-[#00C853]/10 
-           transition-all duration-200;
+ .btn-secondary:hover {
+  background-color: rgb(var(--color-dark-secondary));
+  border-color: rgba(0, 200, 83, 0.4);
  }
 
- /* === STATUS BADGES === */
+ /* Status badges */
  .status-badge {
   @apply px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5;
  }
 
  .status-success {
-  @apply bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/20;
+  background-color: rgba(0, 200, 83, 0.1);
+  color: rgb(var(--color-mottu-500));
+  border: 1px solid rgba(0, 200, 83, 0.2);
  }
 
  .status-warning {
-  @apply bg-[#F9D923]/10 text-[#F9D923] border border-[#F9D923]/20;
+  background-color: rgba(249, 217, 35, 0.1);
+  color: #e6a800;
+  border: 1px solid rgba(249, 217, 35, 0.2);
  }
 
  .status-error {
-  @apply bg-[#FF5252]/10 text-[#FF5252] border border-[#FF5252]/20;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
  }
 
- .status-info {
-  @apply bg-[#29B6F6]/10 text-[#29B6F6] border border-[#29B6F6]/20;
- }
-
- /* === TABS === */
- .tab-active {
-  @apply border-[#00C853] text-[#00C853] bg-[#00C853]/5;
- }
-
- .tab-inactive {
-  @apply border-transparent text-[#A7AFA9] 
-           hover:text-[#E6E6E6] hover:border-[#3A3D3D];
- }
-
- /* === INPUTS === */
- .input-dark {
-  @apply bg-[#111414] border border-[#2A2D2D] rounded-lg 
-           text-[#E6E6E6] placeholder:text-[#6B7570]
-           focus:border-[#00C853] focus:ring-2 focus:ring-[#00C853]/20
-           transition-all duration-200;
- }
-
- /* === KPI CARDS === */
- .kpi-card {
-  @apply bg-[#111414] rounded-lg border border-[#2A2D2D] p-4
-           hover:border-[#3A3D3D] hover:shadow-lg hover:shadow-black/30
-           transition-all duration-200;
- }
-
- .kpi-card-critical {
-  @apply bg-[#FF5252]/5 border-[#FF5252]/20 
-           hover:border-[#FF5252]/30 hover:shadow-[#FF5252]/10;
- }
-
- .kpi-card-warning {
-  @apply bg-[#F9D923]/5 border-[#F9D923]/20 
-           hover:border-[#F9D923]/30 hover:shadow-[#F9D923]/10;
- }
-
- .kpi-card-success {
-  @apply bg-[#00C853]/5 border-[#00C853]/20 
-           hover:border-[#00C853]/30 hover:shadow-[#00C853]/10;
- }
-
- /* === UTILITY === */
+ /* Scrollbar hide */
  .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -243,24 +146,7 @@
  .scrollbar-hide::-webkit-scrollbar {
   display: none;
  }
-
- .glass-effect {
-  @apply bg-[#111414]/80 backdrop-blur-md border border-[#2A2D2D]/50;
- }
-
- .gradient-mottu {
-  background: linear-gradient(135deg, #00c853 0%, #009b3d 100%);
- }
-
- .text-gradient-mottu {
-  background: linear-gradient(135deg, #00c853 0%, #f9d923 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
- }
-}
-
-/* === ANIMAÇÕES === */
+} /* Animations */
 @keyframes pulse-green {
  0%,
  100% {
