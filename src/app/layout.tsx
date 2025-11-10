@@ -1,26 +1,15 @@
+// Root Layout com Providers
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
-import { ThemeProvider } from "@/contexts/theme_context";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/contexts/theme_context";
+import { RepositoryProvider } from "@/presentation/contexts/RepositoryContext";
 
-const geistSans = Geist({
- variable: "--font-geist-sans",
- subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
- variable: "--font-geist-mono",
- subsets: ["latin"],
-});
-
-const inter = Inter({
- variable: "--font-inter",
- subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
- title: "Kickoff Núcleo de Comando",
- description: "MVP - Kickoff Núcleo de Comando",
+ title: "Mottu Dashboard",
+ description: "Dashboard de gerenciamento de operações Mottu",
 };
 
 export default function RootLayout({
@@ -29,11 +18,11 @@ export default function RootLayout({
  children: React.ReactNode;
 }>) {
  return (
-  <html lang="pt-BR" className="dark" suppressHydrationWarning>
-   <body
-    className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased bg-dark-primary text-text-primary`}
-   >
-    <ThemeProvider>{children}</ThemeProvider>
+  <html lang="pt-BR" suppressHydrationWarning>
+   <body className={inter.className}>
+    <ThemeProvider>
+     <RepositoryProvider>{children}</RepositoryProvider>
+    </ThemeProvider>
    </body>
   </html>
  );
